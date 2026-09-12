@@ -75,10 +75,6 @@ router.delete(
   deleteAddress
 );
 
-// ==========================================================
-// SET DEFAULT ADDRESS
-// PATCH /api/addresses/:id/default
-// ==========================================================
 
 router.patch(
   "/:id/default",
