@@ -21,11 +21,11 @@ const addressSchema = new mongoose.Schema(
     // LOCATION REFERENCE
     // ======================================================
 
-    location: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Location",
-      default: null,
-    },
+    // location: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Location",
+    //   default: null,
+    // },
 
     // ======================================================
     // ADDRESS TYPE
