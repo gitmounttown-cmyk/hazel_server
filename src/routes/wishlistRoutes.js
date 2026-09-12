@@ -2,73 +2,69 @@ const express = require("express");
 
 const router = express.Router();
 
+// *==========================================================*
+// *CONTROLLERS*
+// *==========================================================*
+
 const {
   addToWishlist,
   getWishlist,
-  removeWishlistItem,
-  removeByVariant,
+  removeFromWishlist,
+  checkWishlist,
   clearWishlist,
+  getWishlistCount,
 } = require("../controllers/wishlistController");
 
-// Change this import if your auth middleware has
-// a different filename/export.
-const {
-  verifyToken,
-} = require("../middleware/authMiddleware");
+// *==========================================================*
+// *AUTH MIDDLEWARE*
+// *==========================================================*
 
-// ==========================================================
-// ADD TO WISHLIST
-// POST /api/wishlist/add
-// ==========================================================
+const { verifyToken } = require("../middleware/authMiddleware");
 
-router.post(
-  "/add",
-  verifyToken,
-  addToWishlist
-);
+// *==========================================================*
+// *ADD PRODUCT TO WISHLIST*
+// *POST /api/wishlist/add
+// *==========================================================*
 
-// ==========================================================
-// GET WISHLIST
-// GET /api/wishlist
-// ==========================================================
+router.post("/add", verifyToken, addToWishlist);
 
-router.get(
-  "/all",
-  verifyToken,
-  getWishlist
-);
+// *==========================================================*
+// *GET USER WISHLIST*
+// *GET /api/wishlist/all
+// *==========================================================*
 
-// ==========================================================
-// REMOVE WISHLIST ITEM
-// DELETE /api/wishlist/item/:itemId
-// ==========================================================
+router.get("/all", verifyToken, getWishlist);
 
-router.delete(
-  "/item/:itemId",
-  verifyToken,
-  removeWishlistItem
-);
+// *==========================================================*
+// *GET WISHLIST COUNT*
+// *GET /api/wishlist/count
+// *==========================================================*
 
-// ==========================================================
-// REMOVE BY VARIANT
-// DELETE /api/wishlist/variant/:variantId
-// ==========================================================
+router.get("/count", verifyToken, getWishlistCount);
 
-router.delete(
-  "/variant/:variantId",
-  verifyToken,
-  removeByVariant
-);
+// *==========================================================*
+// *CHECK PRODUCT IN WISHLIST*
+// *GET /api/wishlist/check/:productId
+// *==========================================================*
 
-// ==========================================================
-// CLEAR WISHLIST
-// DELETE /api/wishlist/clear
-// ==========================================================
+router.get("/check/:productId", verifyToken, checkWishlist);
 
-router.delete(
-  "/clear",
-  verifyToken,
-  clearWishlist
-);
+// *==========================================================*
+// *REMOVE PRODUCT FROM WISHLIST*
+// *DELETE /api/wishlist/remove/:productId
+// *==========================================================*
+
+router.delete("/remove/:productId", verifyToken, removeFromWishlist);
+
+// *==========================================================*
+// *CLEAR WISHLIST*
+// *DELETE /api/wishlist/clear
+// *==========================================================*
+
+router.delete("/clear", verifyToken, clearWishlist);
+
+// *==========================================================*
+// *EXPORT ROUTER*
+// *==========================================================*
 
 module.exports = router;
