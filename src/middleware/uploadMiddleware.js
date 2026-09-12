@@ -6,35 +6,22 @@ const fs = require("fs");
 // UPLOAD DIRECTORIES
 // ============================================================
 
-const categoryUploadDir = path.join(
-  process.cwd(),
-  "uploads/categories"
-);
+const categoryUploadDir = path.join(process.cwd(), "uploads/categories");
 
-const subCategoryUploadDir = path.join(
-  process.cwd(),
-  "uploads/subcategories"
-);
+const subCategoryUploadDir = path.join(process.cwd(), "uploads/subcategories");
 
-const productUploadDir = path.join(
-  process.cwd(),
-  "uploads/products"
-);
+const productUploadDir = path.join(process.cwd(), "uploads/products");
 
-const newArrivalUploadDir = path.join(
-  process.cwd(),
-  "uploads/new-arrivals"
-);
+const newArrivalUploadDir = path.join(process.cwd(), "uploads/new-arrivals");
 
 const trendingProductUploadDir = path.join(
   process.cwd(),
-  "uploads/trending-products"
+  "uploads/trending-products",
 );
 
-const bannerUploadDir = path.join(
-  process.cwd(),
-  "uploads/banners"
-);
+const bannerUploadDir = path.join(process.cwd(), "uploads/banners");
+
+const profileUploadDir = path.join(process.cwd(), "uploads/profiles");
 
 const videoUploadDir = path.join(
   process.cwd(),
@@ -52,7 +39,11 @@ const videoUploadDir = path.join(
   newArrivalUploadDir,
   trendingProductUploadDir,
   bannerUploadDir,
+<<<<<<< Updated upstream
   videoUploadDir,
+=======
+  profileUploadDir,
+>>>>>>> Stashed changes
 ].forEach((directory) => {
   if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, {
@@ -66,14 +57,10 @@ const videoUploadDir = path.join(
 // ============================================================
 
 const generateFileName = (file) => {
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   const uniqueName =
-    `${Date.now()}-` +
-    `${Math.round(Math.random() * 1e9)}` +
-    extension;
+    `${Date.now()}-` + `${Math.round(Math.random() * 1e9)}` + extension;
 
   return uniqueName;
 };
@@ -83,16 +70,9 @@ const generateFileName = (file) => {
 // ============================================================
 
 const imageFileFilter = (req, file, cb) => {
-  const allowedExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".webp",
-  ];
+  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("IMAGE UPLOAD");
@@ -104,10 +84,8 @@ const imageFileFilter = (req, file, cb) => {
 
   if (!allowedExtensions.includes(extension)) {
     return cb(
-      new Error(
-        "Only JPG, JPEG, PNG and WEBP images are allowed"
-      ),
-      false
+      new Error("Only JPG, JPEG, PNG and WEBP images are allowed"),
+      false,
     );
   }
 
@@ -130,9 +108,7 @@ const productMediaFileFilter = (req, file, cb) => {
     ".mov",
   ];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("PRODUCT MEDIA UPLOAD");
@@ -145,9 +121,9 @@ const productMediaFileFilter = (req, file, cb) => {
   if (!allowedExtensions.includes(extension)) {
     return cb(
       new Error(
-        "Only JPG, JPEG, PNG, WEBP images and MP4, WEBM, MOV videos are allowed"
+        "Only JPG, JPEG, PNG, WEBP images and MP4, WEBM, MOV videos are allowed",
       ),
-      false
+      false,
     );
   }
 
@@ -292,6 +268,16 @@ const bannerStorage = multer.diskStorage({
   },
 });
 
+const profileStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, profileUploadDir);
+  },
+
+  filename: function (req, file, cb) {
+    cb(null, generateFileName(file));
+  },
+});
+
 // ============================================================
 // VIDEO STORAGE
 // ============================================================
@@ -412,6 +398,16 @@ const uploadBannerImage = multer({
   },
 });
 
+const uploadProfileImage = multer({
+  storage: profileStorage,
+  fileFilter: imageFileFilter,
+
+  limits: {
+    ...imageUploadLimits,
+    files: 1,
+  },
+});
+
 // ============================================================
 // VIDEO UPLOAD
 // ============================================================
@@ -446,10 +442,7 @@ const deleteUploadedFile = (file) => {
       );
     }
   } catch (error) {
-    console.error(
-      "Failed to delete uploaded file:",
-      error.message
-    );
+    console.error("Failed to delete uploaded file:", error.message);
   }
 };
 
@@ -495,12 +488,7 @@ const deleteFileByUrl = (fileUrl) => {
 // MULTER ERROR HANDLER
 // ============================================================
 
-const handleUploadError = (
-  err,
-  req,
-  res,
-  next
-) => {
+const handleUploadError = (err, req, res, next) => {
   if (!err) {
     return next();
   }
@@ -518,24 +506,26 @@ const handleUploadError = (
     if (err.code === "LIMIT_FILE_COUNT") {
       return res.status(400).json({
         success: false,
-        message:
-          "Maximum allowed files exceeded",
+        message: "Maximum allowed files exceeded",
       });
     }
 
     if (err.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({
         success: false,
+<<<<<<< Updated upstream
         message:
           "Uploaded file size cannot exceed 100 MB",
+=======
+        message: "Product media file size cannot exceed 100 MB",
+>>>>>>> Stashed changes
       });
     }
 
     if (err.code === "LIMIT_UNEXPECTED_FILE") {
       return res.status(400).json({
         success: false,
-        message:
-          `Unexpected file field: ${err.field}`,
+        message: `Unexpected file field: ${err.field}`,
       });
     }
 
@@ -576,6 +566,7 @@ module.exports = {
   uploadNewArrivalImage,
   uploadTrendingProductImage,
   uploadBannerImage,
+<<<<<<< Updated upstream
 
   // VIDEO UPLOAD
   uploadVideo,
@@ -587,3 +578,9 @@ module.exports = {
   // ERROR HANDLER
   handleUploadError,
 };
+=======
+  uploadProfileImage,
+  handleUploadError,
+  deleteUploadedFile,
+};
+>>>>>>> Stashed changes

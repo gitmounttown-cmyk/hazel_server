@@ -11,9 +11,7 @@ const otpService = require("../services/OTPService");
 // GOOGLE CLIENT
 // ============================================================
 
-const googleClient = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID
-);
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // // ============================================================
 // // GENERATE JWT
@@ -43,10 +41,7 @@ const normalizeMobileNumber = (mobileNumber) => {
     return null;
   }
 
-  return mobileNumber
-    .toString()
-    .replace(/\D/g, "")
-    .slice(-10);
+  return mobileNumber.toString().replace(/\D/g, "").slice(-10);
 };
 
 // ============================================================
@@ -121,10 +116,7 @@ exports.sendOTP = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Unable to send OTP.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
@@ -228,10 +220,7 @@ exports.verifyOTP = async (req, res) => {
     // 7. Check OTP Expiration
     // ----------------------------------------------------------
 
-    if (
-      !otpRecord.expiresAt ||
-      otpRecord.expiresAt <= new Date()
-    ) {
+    if (!otpRecord.expiresAt || otpRecord.expiresAt <= new Date()) {
       await OTP.findByIdAndDelete(otpRecord._id);
 
       return res.status(400).json({
@@ -244,16 +233,12 @@ exports.verifyOTP = async (req, res) => {
     // 8. Check Maximum Attempts
     // ----------------------------------------------------------
 
-    if (
-      otpRecord.attempts >=
-      otpRecord.maxAttempts
-    ) {
+    if (otpRecord.attempts >= otpRecord.maxAttempts) {
       await OTP.findByIdAndDelete(otpRecord._id);
 
       return res.status(429).json({
         success: false,
-        message:
-          "Maximum OTP attempts exceeded. Please request a new OTP.",
+        message: "Maximum OTP attempts exceeded. Please request a new OTP.",
       });
     }
 
@@ -266,20 +251,15 @@ exports.verifyOTP = async (req, res) => {
 
       await otpRecord.save();
 
-      const remainingAttempts =
-        otpRecord.maxAttempts -
-        otpRecord.attempts;
+      const remainingAttempts = otpRecord.maxAttempts - otpRecord.attempts;
 
       // Delete OTP after last failed attempt
       if (remainingAttempts <= 0) {
-        await OTP.findByIdAndDelete(
-          otpRecord._id
-        );
+        await OTP.findByIdAndDelete(otpRecord._id);
 
         return res.status(429).json({
           success: false,
-          message:
-            "Maximum OTP attempts exceeded. Please request a new OTP.",
+          message: "Maximum OTP attempts exceeded. Please request a new OTP.",
         });
       }
 
@@ -323,13 +303,11 @@ exports.verifyOTP = async (req, res) => {
     // ----------------------------------------------------------
     // 13. Check Existing User Status
     // ----------------------------------------------------------
-
     else {
       if (!user.isActive) {
         return res.status(403).json({
           success: false,
-          message:
-            "Your account is inactive. Please contact support.",
+          message: "Your account is inactive. Please contact support.",
         });
       }
 
@@ -370,18 +348,12 @@ exports.verifyOTP = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(
-      "VERIFY OTP CONTROLLER ERROR:",
-      error
-    );
+    console.error("VERIFY OTP CONTROLLER ERROR:", error);
 
     return res.status(500).json({
       success: false,
       message: "Unable to verify OTP.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
@@ -445,18 +417,12 @@ exports.resendOTP = async (req, res) => {
       }),
     });
   } catch (error) {
-    console.error(
-      "RESEND OTP CONTROLLER ERROR:",
-      error
-    );
+    console.error("RESEND OTP CONTROLLER ERROR:", error);
 
     return res.status(500).json({
       success: false,
       message: "Unable to resend OTP.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
@@ -508,17 +474,13 @@ exports.googleSignIn = async (req, res) => {
 
     const googleId = payload.sub;
 
-    const email = payload.email
-      ? payload.email.toLowerCase().trim()
-      : null;
+    const email = payload.email ? payload.email.toLowerCase().trim() : null;
 
     const name = payload.name || null;
 
-    const profileImage =
-      payload.picture || null;
+    const profileImage = payload.picture || null;
 
-    const emailVerified =
-      payload.email_verified;
+    const emailVerified = payload.email_verified;
 
     // ----------------------------------------------------------
     // 5. Validate Google Information
@@ -527,8 +489,7 @@ exports.googleSignIn = async (req, res) => {
     if (!googleId || !email) {
       return res.status(400).json({
         success: false,
-        message:
-          "Unable to get required Google account information.",
+        message: "Unable to get required Google account information.",
       });
     }
 
@@ -591,7 +552,6 @@ exports.googleSignIn = async (req, res) => {
     // ----------------------------------------------------------
     // 9. Existing User
     // ----------------------------------------------------------
-
     else {
       // --------------------------------------------------------
       // Check Active Status
@@ -600,8 +560,7 @@ exports.googleSignIn = async (req, res) => {
       if (!user.isActive) {
         return res.status(403).json({
           success: false,
-          message:
-            "Your account is inactive. Please contact support.",
+          message: "Your account is inactive. Please contact support.",
         });
       }
 
@@ -671,29 +630,21 @@ exports.googleSignIn = async (req, res) => {
       user: {
         id: user._id,
         name: user.name || null,
-        mobileNumber:
-          user.mobileNumber || null,
+        mobileNumber: user.mobileNumber || null,
         email: user.email || null,
         role: user.role,
-        profileImage:
-          user.profileImage || null,
+        profileImage: user.profileImage || null,
         isVerified: user.isVerified,
         isActive: user.isActive,
       },
     });
   } catch (error) {
-    console.error(
-      "GOOGLE SIGN-IN ERROR:",
-      error
-    );
+    console.error("GOOGLE SIGN-IN ERROR:", error);
 
     return res.status(401).json({
       success: false,
       message: "Google authentication failed.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
@@ -704,16 +655,11 @@ exports.googleSignIn = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const userId =
-      req.user.id || req.user._id;
+    const userId = req.user.id || req.user._id;
 
-    const {
-      name,
-      email,
-    } = req.body;
+    const { name, email } = req.body || {};
 
-    const user =
-      await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({
@@ -742,45 +688,33 @@ exports.updateProfile = async (req, res) => {
     // Update Profile Image
     // ----------------------------------------------------------
 
-    if (
-      req.body.profileImage !== undefined
-    ) {
-      user.profileImage =
-        req.body.profileImage;
+    if (req.file) {
+      user.profileImage = `/uploads/profiles/${req.file.filename}`;
     }
 
     await user.save();
 
     return res.status(200).json({
       success: true,
-      message:
-        "Profile updated successfully",
+      message: "Profile updated successfully",
 
       user: {
         id: user._id,
         name: user.name,
-        mobileNumber:
-          user.mobileNumber,
+        mobileNumber: user.mobileNumber,
         email: user.email,
         role: user.role,
-        profileImage:
-          user.profileImage,
-        isVerified:
-          user.isVerified,
-        isActive:
-          user.isActive,
+        profileImage: user.profileImage,
+        isVerified: user.isVerified,
+        isActive: user.isActive,
       },
     });
   } catch (error) {
-    console.error(
-      "Update Profile Error:",
-      error
-    );
+    console.error("Update Profile Error:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to update profile",
+      message: "Failed to update profile",
       error: error.message,
     });
   }
@@ -807,17 +741,13 @@ exports.getMe = async (req, res) => {
     // Get User ID
     // ----------------------------------------------------------
 
-    const userId =
-      req.user._id ||
-      req.user.id;
+    const userId = req.user._id || req.user.id;
 
     // ----------------------------------------------------------
     // Fetch User
     // ----------------------------------------------------------
 
-    const user =
-      await User.findById(userId)
-        .select("-password");
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -833,8 +763,7 @@ exports.getMe = async (req, res) => {
     if (!user.isActive) {
       return res.status(403).json({
         success: false,
-        message:
-          "Your account is inactive.",
+        message: "Your account is inactive.",
       });
     }
 
@@ -848,32 +777,21 @@ exports.getMe = async (req, res) => {
       user: {
         id: user._id,
         name: user.name || null,
-        mobileNumber:
-          user.mobileNumber || null,
+        mobileNumber: user.mobileNumber || null,
         email: user.email || null,
         role: user.role,
-        profileImage:
-          user.profileImage || null,
-        isVerified:
-          user.isVerified,
-        isActive:
-          user.isActive,
+        profileImage: user.profileImage || null,
+        isVerified: user.isVerified,
+        isActive: user.isActive,
       },
     });
   } catch (error) {
-    console.error(
-      "GET ME ERROR:",
-      error
-    );
+    console.error("GET ME ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Unable to fetch user information.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      message: "Unable to fetch user information.",
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
@@ -902,19 +820,12 @@ exports.logout = async (req, res) => {
       message: "Logout successful.",
     });
   } catch (error) {
-    console.error(
-      "LOGOUT ERROR:",
-      error
-    );
+    console.error("LOGOUT ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Unable to logout.",
-      error:
-        process.env.NODE_ENV !== "production"
-          ? error.message
-          : undefined,
+      message: "Unable to logout.",
+      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
     });
   }
 };
