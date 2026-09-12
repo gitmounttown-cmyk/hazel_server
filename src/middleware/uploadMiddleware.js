@@ -36,6 +36,11 @@ const bannerUploadDir = path.join(
   "uploads/banners"
 );
 
+const videoUploadDir = path.join(
+  process.cwd(),
+  "uploads/videos"
+);
+
 // ============================================================
 // CREATE DIRECTORIES
 // ============================================================
@@ -47,6 +52,7 @@ const bannerUploadDir = path.join(
   newArrivalUploadDir,
   trendingProductUploadDir,
   bannerUploadDir,
+  videoUploadDir,
 ].forEach((directory) => {
   if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, {
@@ -110,13 +116,10 @@ const imageFileFilter = (req, file, cb) => {
 
 // ============================================================
 // PRODUCT MEDIA FILTER
+// Images + Videos
 // ============================================================
 
-const productMediaFileFilter = (
-  req,
-  file,
-  cb
-) => {
+const productMediaFileFilter = (req, file, cb) => {
   const allowedExtensions = [
     ".jpg",
     ".jpeg",
@@ -143,6 +146,60 @@ const productMediaFileFilter = (
     return cb(
       new Error(
         "Only JPG, JPEG, PNG, WEBP images and MP4, WEBM, MOV videos are allowed"
+      ),
+      false
+    );
+  }
+
+  cb(null, true);
+};
+
+// ============================================================
+// VIDEO FILTER
+// ============================================================
+
+const videoFileFilter = (req, file, cb) => {
+  const allowedExtensions = [
+    ".mp4",
+    ".webm",
+    ".mov",
+    ".avi",
+    ".mkv",
+  ];
+
+  const allowedMimeTypes = [
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
+    "video/x-msvideo",
+    "video/x-matroska",
+  ];
+
+  const extension = path
+    .extname(file.originalname)
+    .toLowerCase();
+
+  console.log("==========================================");
+  console.log("VIDEO UPLOAD");
+  console.log("Field name :", file.fieldname);
+  console.log("File name  :", file.originalname);
+  console.log("Extension  :", extension);
+  console.log("MIME type  :", file.mimetype);
+  console.log("==========================================");
+
+  if (!allowedExtensions.includes(extension)) {
+    return cb(
+      new Error(
+        "Only MP4, WEBM, MOV, AVI and MKV videos are allowed"
+      ),
+      false
+    );
+  }
+
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    return cb(
+      new Error(
+        "Invalid video file type"
       ),
       false
     );
@@ -236,6 +293,20 @@ const bannerStorage = multer.diskStorage({
 });
 
 // ============================================================
+// VIDEO STORAGE
+// ============================================================
+
+const videoStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, videoUploadDir);
+  },
+
+  filename: function (req, file, cb) {
+    cb(null, generateFileName(file));
+  },
+});
+
+// ============================================================
 // UPLOAD LIMITS
 // ============================================================
 
@@ -247,12 +318,17 @@ const productMediaUploadLimits = {
   fileSize: 100 * 1024 * 1024,
 };
 
+const videoUploadLimits = {
+  fileSize: 100 * 1024 * 1024,
+};
+
 // ============================================================
 // CATEGORY UPLOAD
 // ============================================================
 
 const uploadCategoryImage = multer({
   storage: categoryStorage,
+
   fileFilter: imageFileFilter,
 
   limits: {
@@ -267,6 +343,7 @@ const uploadCategoryImage = multer({
 
 const uploadSubCategoryImage = multer({
   storage: subCategoryStorage,
+
   fileFilter: imageFileFilter,
 
   limits: {
@@ -281,6 +358,7 @@ const uploadSubCategoryImage = multer({
 
 const uploadProductMedia = multer({
   storage: productStorage,
+
   fileFilter: productMediaFileFilter,
 
   limits: {
@@ -290,11 +368,12 @@ const uploadProductMedia = multer({
 });
 
 // ============================================================
-// NEW ARRIVAL
+// NEW ARRIVAL UPLOAD
 // ============================================================
 
 const uploadNewArrivalImage = multer({
   storage: newArrivalStorage,
+
   fileFilter: imageFileFilter,
 
   limits: {
@@ -304,11 +383,12 @@ const uploadNewArrivalImage = multer({
 });
 
 // ============================================================
-// TRENDING PRODUCT
+// TRENDING PRODUCT UPLOAD
 // ============================================================
 
 const uploadTrendingProductImage = multer({
   storage: trendingProductStorage,
+
   fileFilter: imageFileFilter,
 
   limits: {
@@ -318,15 +398,31 @@ const uploadTrendingProductImage = multer({
 });
 
 // ============================================================
-// BANNER
+// BANNER UPLOAD
 // ============================================================
 
 const uploadBannerImage = multer({
   storage: bannerStorage,
+
   fileFilter: imageFileFilter,
 
   limits: {
     ...imageUploadLimits,
+    files: 1,
+  },
+});
+
+// ============================================================
+// VIDEO UPLOAD
+// ============================================================
+
+const uploadVideo = multer({
+  storage: videoStorage,
+
+  fileFilter: videoFileFilter,
+
+  limits: {
+    ...videoUploadLimits,
     files: 1,
   },
 });
@@ -343,10 +439,53 @@ const deleteUploadedFile = (file) => {
   try {
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
+
+      console.log(
+        "Deleted uploaded file:",
+        file.path
+      );
     }
   } catch (error) {
     console.error(
       "Failed to delete uploaded file:",
+      error.message
+    );
+  }
+};
+
+// ============================================================
+// DELETE FILE BY URL
+// ============================================================
+
+const deleteFileByUrl = (fileUrl) => {
+  if (!fileUrl) {
+    return;
+  }
+
+  try {
+    const cleanUrl = fileUrl.split("?")[0];
+
+    const relativePath = cleanUrl.replace(
+      /^\/+/,
+      ""
+    );
+
+    const filePath = path.join(
+      process.cwd(),
+      relativePath
+    );
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+
+      console.log(
+        "Deleted file:",
+        filePath
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Failed to delete file:",
       error.message
     );
   }
@@ -366,9 +505,14 @@ const handleUploadError = (
     return next();
   }
 
-  // ----------------------------------------------------------
+  console.error(
+    "UPLOAD ERROR:",
+    err
+  );
+
+  // ==========================================================
   // MULTER ERRORS
-  // ----------------------------------------------------------
+  // ==========================================================
 
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_COUNT") {
@@ -383,7 +527,7 @@ const handleUploadError = (
       return res.status(400).json({
         success: false,
         message:
-          "Product media file size cannot exceed 100 MB",
+          "Uploaded file size cannot exceed 100 MB",
       });
     }
 
@@ -395,19 +539,28 @@ const handleUploadError = (
       });
     }
 
+    if (err.code === "LIMIT_PART_COUNT") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Too many form-data parts",
+      });
+    }
+
     return res.status(400).json({
       success: false,
       message: err.message,
     });
   }
 
-  // ----------------------------------------------------------
+  // ==========================================================
   // NORMAL FILE FILTER ERROR
-  // ----------------------------------------------------------
+  // ==========================================================
 
   return res.status(400).json({
     success: false,
-    message: err.message || "File upload failed",
+    message:
+      err.message || "File upload failed",
   });
 };
 
@@ -416,12 +569,21 @@ const handleUploadError = (
 // ============================================================
 
 module.exports = {
+  // IMAGE UPLOADS
   uploadCategoryImage,
   uploadSubCategoryImage,
   uploadProductMedia,
   uploadNewArrivalImage,
   uploadTrendingProductImage,
   uploadBannerImage,
-  handleUploadError,
+
+  // VIDEO UPLOAD
+  uploadVideo,
+
+  // HELPERS
   deleteUploadedFile,
+  deleteFileByUrl,
+
+  // ERROR HANDLER
+  handleUploadError,
 };
