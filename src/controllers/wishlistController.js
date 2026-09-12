@@ -1,41 +1,31 @@
+
 const mongoose = require("mongoose");
 
 const Wishlist = require("../models/wishlistModel");
 const Product = require("../models/productModel");
-const ProductVariant = require("../models/productVariantModel");
 
 // ==========================================================
-// ADD TO WISHLIST
+// ADD PRODUCT TO WISHLIST
 // POST /api/wishlist/add
 // ==========================================================
 
-exports.addToWishlist = async (req, res) => {
+const addToWishlist = async (req, res) => {
   try {
-    const userId = req.user?.id;
-
-    const {
-      productId,
-      variantId,
-    } = req.body;
-
-    // ------------------------------------------------------
-    // AUTHENTICATION
-    // ------------------------------------------------------
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
+    const userId = req.user.id;
+    const { productId } = req.body;
 
     // ------------------------------------------------------
     // VALIDATE PRODUCT ID
     // ------------------------------------------------------
 
-    if (
-      !mongoose.Types.ObjectId.isValid(productId)
-    ) {
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
         success: false,
         message: "Invalid product ID",
@@ -43,25 +33,10 @@ exports.addToWishlist = async (req, res) => {
     }
 
     // ------------------------------------------------------
-    // VALIDATE VARIANT ID
+    // CHECK PRODUCT EXISTS
     // ------------------------------------------------------
 
-    if (
-      !mongoose.Types.ObjectId.isValid(variantId)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid variant ID",
-      });
-    }
-
-    // ------------------------------------------------------
-    // FIND PRODUCT
-    // ------------------------------------------------------
-
-    const product = await Product.findById(
-      productId
-    );
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({
@@ -71,163 +46,69 @@ exports.addToWishlist = async (req, res) => {
     }
 
     // ------------------------------------------------------
-    // FIND VARIANT
-    // ------------------------------------------------------
-
-    const variant =
-      await ProductVariant.findOne({
-        _id: variantId,
-        product: productId,
-      });
-
-    if (!variant) {
-      return res.status(404).json({
-        success: false,
-        message: "Product variant not found",
-      });
-    }
-
-    // ------------------------------------------------------
     // FIND USER WISHLIST
     // ------------------------------------------------------
 
-    let wishlist =
-      await Wishlist.findOne({
-        user: userId,
-        status: "active",
-      });
+    let wishlist = await Wishlist.findOne({
+      user: userId,
+    });
 
     // ------------------------------------------------------
-    // CREATE WISHLIST
+    // CREATE WISHLIST IF NOT EXISTS
     // ------------------------------------------------------
 
     if (!wishlist) {
       wishlist = new Wishlist({
         user: userId,
         items: [],
+        status: "active",
       });
     }
 
     // ------------------------------------------------------
-    // CHECK DUPLICATE VARIANT
+    // CHECK PRODUCT ALREADY EXISTS
     // ------------------------------------------------------
 
-    const existingItem =
-      wishlist.items.find(
-        (item) =>
-          item.variant.toString() ===
-          variantId.toString()
-      );
-
-    if (existingItem) {
-      return res.status(200).json({
-        success: true,
-        message: "Product already exists in wishlist",
-        wishlist,
-      });
-    }
-
-    // ------------------------------------------------------
-    // PRODUCT IMAGE
-    // ------------------------------------------------------
-
-    let productImage = "";
-
-    if (
-      Array.isArray(product.images) &&
-      product.images.length > 0
-    ) {
-      const firstImage = product.images[0];
-
-      if (
-        typeof firstImage === "string"
-      ) {
-        productImage = firstImage;
-      } else {
-        productImage =
-          firstImage.url ||
-          firstImage.imageUrl ||
-          "";
-      }
-    }
-
-    // ------------------------------------------------------
-    // SIZE
-    // ------------------------------------------------------
-
-    let sizeName = "";
-
-    if (variant.size) {
-      if (
-        typeof variant.size === "object"
-      ) {
-        sizeName =
-          variant.size.name || "";
-      } else {
-        sizeName =
-          variant.size.toString();
-      }
-    }
-
-    // ------------------------------------------------------
-    // COLOR
-    // ------------------------------------------------------
-
-    let colorName = "";
-
-    if (variant.color) {
-      if (
-        typeof variant.color === "object"
-      ) {
-        colorName =
-          variant.color.name || "";
-      } else {
-        colorName =
-          variant.color.toString();
-      }
-    }
-
-    // ------------------------------------------------------
-    // PRICE
-    // ------------------------------------------------------
-
-    const price = Number(
-      variant.salePrice ??
-        variant.price ??
-        product.salePrice ??
-        product.price ??
-        0
+    const alreadyExists = wishlist.items.some(
+      (item) => item.product.toString() === productId.toString()
     );
 
+    if (alreadyExists) {
+      return res.status(409).json({
+        success: false,
+        message: "Product already exists in wishlist",
+      });
+    }
+
     // ------------------------------------------------------
-    // ADD WISHLIST ITEM
+    // ADD PRODUCT ID
     // ------------------------------------------------------
 
     wishlist.items.push({
-      product: product._id,
-      variant: variant._id,
-      price,
-      productName:
-        product.name ||
-        product.productName ||
-        "",
-      image: productImage,
-      size: sizeName,
-      color: colorName,
+      product: productId,
     });
 
     await wishlist.save();
 
+    // ------------------------------------------------------
+    // POPULATE PRODUCT
+    // ------------------------------------------------------
+
+    await wishlist.populate({
+      path: "items.product",
+    });
+
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
+
     return res.status(201).json({
       success: true,
-      message: "Product added to wishlist",
+      message: "Product added to wishlist successfully",
       wishlist,
     });
   } catch (error) {
-    console.error(
-      "ADD WISHLIST ERROR:",
-      error
-    );
+    console.error("ADD TO WISHLIST ERROR:", error);
 
     return res.status(500).json({
       success: false,
@@ -238,91 +119,98 @@ exports.addToWishlist = async (req, res) => {
 };
 
 // ==========================================================
-// GET WISHLIST
+// GET USER WISHLIST
 // GET /api/wishlist
 // ==========================================================
 
-exports.getWishlist = async (req, res) => {
+const getWishlist = async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user.id;
 
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
+    // ------------------------------------------------------
+    // FIND WISHLIST AND POPULATE PRODUCT
+    // ------------------------------------------------------
 
-    const wishlist =
-      await Wishlist.findOne({
-        user: userId,
-        status: "active",
-      })
-        .populate("items.product")
-        .populate("items.variant");
+    const wishlist = await Wishlist.findOne({
+      user: userId,
+    }).populate({
+      path: "items.product",
+    });
+
+    // ------------------------------------------------------
+    // WISHLIST NOT FOUND
+    // ------------------------------------------------------
 
     if (!wishlist) {
       return res.status(200).json({
         success: true,
         message: "Wishlist is empty",
         wishlist: {
+          user: userId,
           items: [],
+          status: "active",
         },
+        count: 0,
       });
     }
 
+    // ------------------------------------------------------
+    // REMOVE DELETED PRODUCTS
+    // ------------------------------------------------------
+
+    wishlist.items = wishlist.items.filter(
+      (item) => item.product !== null
+    );
+
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
+
     return res.status(200).json({
       success: true,
+      message: "Wishlist fetched successfully",
       wishlist,
+      count: wishlist.items.length,
     });
   } catch (error) {
-    console.error(
-      "GET WISHLIST ERROR:",
-      error
-    );
+    console.error("GET WISHLIST ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to get wishlist",
+      message: "Failed to fetch wishlist",
       error: error.message,
     });
   }
 };
 
 // ==========================================================
-// REMOVE WISHLIST ITEM
-// DELETE /api/wishlist/item/:itemId
+// REMOVE PRODUCT FROM WISHLIST
+// DELETE /api/wishlist/remove/:productId
 // ==========================================================
 
-exports.removeWishlistItem = async (
-  req,
-  res
-) => {
+const removeFromWishlist = async (req, res) => {
   try {
-    const userId = req.user?.id;
-    const { itemId } = req.params;
+    const userId = req.user.id;
+    const { productId } = req.params;
 
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
+    // ------------------------------------------------------
+    // VALIDATE PRODUCT ID
+    // ------------------------------------------------------
 
-    if (
-      !mongoose.Types.ObjectId.isValid(itemId)
-    ) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid wishlist item ID",
+        message: "Invalid product ID",
       });
     }
 
-    const wishlist =
-      await Wishlist.findOne({
-        user: userId,
-        status: "active",
-      });
+    // ------------------------------------------------------
+    // FIND WISHLIST
+    // ------------------------------------------------------
+
+    const wishlist = await Wishlist.findOne({
+      user: userId,
+    });
 
     if (!wishlist) {
       return res.status(404).json({
@@ -331,123 +219,122 @@ exports.removeWishlistItem = async (
       });
     }
 
-    const item =
-      wishlist.items.id(itemId);
+    // ------------------------------------------------------
+    // CHECK PRODUCT EXISTS IN WISHLIST
+    // ------------------------------------------------------
 
-    if (!item) {
+    const productExists = wishlist.items.some(
+      (item) => item.product.toString() === productId.toString()
+    );
+
+    if (!productExists) {
       return res.status(404).json({
         success: false,
-        message: "Wishlist item not found",
+        message: "Product not found in wishlist",
       });
     }
 
-    item.deleteOne();
+    // ------------------------------------------------------
+    // REMOVE PRODUCT
+    // ------------------------------------------------------
+
+    wishlist.items = wishlist.items.filter(
+      (item) => item.product.toString() !== productId.toString()
+    );
 
     await wishlist.save();
 
+    // ------------------------------------------------------
+    // POPULATE PRODUCT
+    // ------------------------------------------------------
+
+    await wishlist.populate({
+      path: "items.product",
+    });
+
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
+
     return res.status(200).json({
       success: true,
-      message: "Product removed from wishlist",
+      message: "Product removed from wishlist successfully",
       wishlist,
+      count: wishlist.items.length,
     });
   } catch (error) {
-    console.error(
-      "REMOVE WISHLIST ERROR:",
-      error
-    );
+    console.error("REMOVE FROM WISHLIST ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to remove wishlist item",
+      message: "Failed to remove product from wishlist",
       error: error.message,
     });
   }
 };
 
 // ==========================================================
-// REMOVE BY PRODUCT VARIANT
-// DELETE /api/wishlist/variant/:variantId
+// CHECK PRODUCT IN WISHLIST
+// GET /api/wishlist/check/:productId
 // ==========================================================
 
-exports.removeByVariant = async (
-  req,
-  res
-) => {
+const checkWishlist = async (req, res) => {
   try {
-    const userId = req.user?.id;
-    const { variantId } = req.params;
+    const userId = req.user.id;
+    const { productId } = req.params;
 
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
+    // ------------------------------------------------------
+    // VALIDATE PRODUCT ID
+    // ------------------------------------------------------
 
-    if (
-      !mongoose.Types.ObjectId.isValid(
-        variantId
-      )
-    ) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid variant ID",
+        message: "Invalid product ID",
       });
     }
 
-    const wishlist =
-      await Wishlist.findOne({
-        user: userId,
-        status: "active",
-      });
+    // ------------------------------------------------------
+    // FIND WISHLIST
+    // ------------------------------------------------------
+
+    const wishlist = await Wishlist.findOne({
+      user: userId,
+    }).select("items");
+
+    // ------------------------------------------------------
+    // WISHLIST NOT FOUND
+    // ------------------------------------------------------
 
     if (!wishlist) {
-      return res.status(404).json({
-        success: false,
-        message: "Wishlist not found",
+      return res.status(200).json({
+        success: true,
+        isWishlisted: false,
       });
     }
 
-    const originalLength =
-      wishlist.items.length;
+    // ------------------------------------------------------
+    // CHECK PRODUCT
+    // ------------------------------------------------------
 
-    wishlist.items =
-      wishlist.items.filter(
-        (item) =>
-          item.variant.toString() !==
-          variantId.toString()
-      );
+    const isWishlisted = wishlist.items.some(
+      (item) => item.product.toString() === productId.toString()
+    );
 
-    if (
-      wishlist.items.length ===
-      originalLength
-    ) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Product variant not found in wishlist",
-      });
-    }
-
-    await wishlist.save();
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
 
     return res.status(200).json({
       success: true,
-      message:
-        "Product removed from wishlist",
-      wishlist,
+      isWishlisted,
     });
   } catch (error) {
-    console.error(
-      "REMOVE WISHLIST VARIANT ERROR:",
-      error
-    );
+    console.error("CHECK WISHLIST ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to remove product",
+      message: "Failed to check wishlist",
       error: error.message,
     });
   }
@@ -458,25 +345,17 @@ exports.removeByVariant = async (
 // DELETE /api/wishlist/clear
 // ==========================================================
 
-exports.clearWishlist = async (
-  req,
-  res
-) => {
+const clearWishlist = async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user.id;
 
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
+    // ------------------------------------------------------
+    // FIND WISHLIST
+    // ------------------------------------------------------
 
-    const wishlist =
-      await Wishlist.findOne({
-        user: userId,
-        status: "active",
-      });
+    const wishlist = await Wishlist.findOne({
+      user: userId,
+    });
 
     if (!wishlist) {
       return res.status(404).json({
@@ -485,26 +364,83 @@ exports.clearWishlist = async (
       });
     }
 
+    // ------------------------------------------------------
+    // CLEAR ITEMS
+    // ------------------------------------------------------
+
     wishlist.items = [];
 
     await wishlist.save();
 
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
+
     return res.status(200).json({
       success: true,
-      message: "Wishlist cleared",
+      message: "Wishlist cleared successfully",
       wishlist,
+      count: 0,
     });
   } catch (error) {
-    console.error(
-      "CLEAR WISHLIST ERROR:",
-      error
-    );
+    console.error("CLEAR WISHLIST ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to clear wishlist",
+      message: "Failed to clear wishlist",
       error: error.message,
     });
   }
 };
+
+// ==========================================================
+// GET WISHLIST COUNT
+// GET /api/wishlist/count
+// ==========================================================
+
+const getWishlistCount = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // ------------------------------------------------------
+    // FIND WISHLIST
+    // ------------------------------------------------------
+
+    const wishlist = await Wishlist.findOne({
+      user: userId,
+    }).select("items");
+
+    const count = wishlist ? wishlist.items.length : 0;
+
+    // ------------------------------------------------------
+    // RESPONSE
+    // ------------------------------------------------------
+
+    return res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    console.error("GET WISHLIST COUNT ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get wishlist count",
+      error: error.message,
+    });
+  }
+};
+
+// ==========================================================
+// EXPORT
+// ==========================================================
+
+module.exports = {
+  addToWishlist,
+  getWishlist,
+  removeFromWishlist,
+  checkWishlist,
+  clearWishlist,
+  getWishlistCount,
+};
+

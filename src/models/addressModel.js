@@ -13,7 +13,7 @@ const addressSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required:false,
       index: true,
     },
 
@@ -21,11 +21,11 @@ const addressSchema = new mongoose.Schema(
     // LOCATION REFERENCE
     // ======================================================
 
-    location: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Location",
-      default: null,
-    },
+    // location: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Location",
+    //   default: null,
+    // },
 
     // ======================================================
     // ADDRESS TYPE
@@ -47,7 +47,7 @@ const addressSchema = new mongoose.Schema(
 
     fullName: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 
@@ -57,7 +57,7 @@ const addressSchema = new mongoose.Schema(
 
     mobileNumber: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 
@@ -77,7 +77,7 @@ const addressSchema = new mongoose.Schema(
 
     houseNo: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 
@@ -117,7 +117,7 @@ const addressSchema = new mongoose.Schema(
 
     city: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 
@@ -137,7 +137,7 @@ const addressSchema = new mongoose.Schema(
 
     state: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 
@@ -157,7 +157,7 @@ const addressSchema = new mongoose.Schema(
 
     pincode: {
       type: String,
-      required: true,
+      required:false,
       trim: true,
     },
 

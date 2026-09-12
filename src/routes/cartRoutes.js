@@ -5,20 +5,19 @@ const router = express.Router();
 const {
   addToCart,
   getCart,
-  updateCartItem,
-  removeCartItem,
-  increaseCartItem,
-  decreaseCartItem,
+  updateCartQuantity,
+  removeFromCart,
   clearCart,
-} = require("../controllers/CartController");
+  getCartCount,
+} = require("../controllers/cartController");
 
-// Change this path to match your actual auth middleware
-const { verifyToken } = require("../middleware/authMiddleware");
+const {
+  verifyToken,
+} = require("../middleware/authMiddleware");
 
-// ==========================================================
+// ============================================================
 // ADD PRODUCT TO CART
-// POST /api/cart/add
-// ==========================================================
+// ============================================================
 
 router.post(
   "/add",
@@ -26,10 +25,9 @@ router.post(
   addToCart
 );
 
-// ==========================================================
-// GET USER CART
-// GET /api/cart
-// ==========================================================
+// ============================================================
+// GET CART
+// ============================================================
 
 router.get(
   "/all",
@@ -37,54 +35,39 @@ router.get(
   getCart
 );
 
-// ==========================================================
-// UPDATE CART ITEM QUANTITY
-// PUT /api/cart/item/:itemId
-// ==========================================================
+// ============================================================
+// GET CART COUNT
+// ============================================================
+
+router.get(
+  "/count",
+  verifyToken,
+  getCartCount
+);
+
+// ============================================================
+// UPDATE CART QUANTITY
+// ============================================================
 
 router.put(
-  "/item/:itemId",
+  "/update/:itemId",
   verifyToken,
-  updateCartItem
+  updateCartQuantity
 );
 
-// ==========================================================
-// INCREASE QUANTITY
-// PATCH /api/cart/item/:itemId/increase
-// ==========================================================
-
-router.patch(
-  "/item/:itemId/increase",
-  verifyToken,
-  increaseCartItem
-);
-
-// ==========================================================
-// DECREASE QUANTITY
-// PATCH /api/cart/item/:itemId/decrease
-// ==========================================================
-
-router.patch(
-  "/item/:itemId/decrease",
-  verifyToken,
-  decreaseCartItem
-);
-
-// ==========================================================
+// ============================================================
 // REMOVE CART ITEM
-// DELETE /api/cart/item/:itemId
-// ==========================================================
+// ============================================================
 
 router.delete(
-  "/item/:itemId",
+  "/remove/:itemId",
   verifyToken,
-  removeCartItem
+  removeFromCart
 );
 
-// ==========================================================
+// ============================================================
 // CLEAR CART
-// DELETE /api/cart/clear
-// ==========================================================
+// ============================================================
 
 router.delete(
   "/clear",
