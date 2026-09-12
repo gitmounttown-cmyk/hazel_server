@@ -1,28 +1,31 @@
+
 const express = require("express");
 
-const router =
-  express.Router();
+const router = express.Router();
+
+// ==========================================================
+// AUTH MIDDLEWARE
+// ==========================================================
+
+const { verifyToken } = require("../middleware/authMiddleware");
+
+// ==========================================================
+// ADDRESS CONTROLLER
+// ==========================================================
 
 const {
   createAddress,
-  getAddresses,
+  getAllAddresses,
   getAddressById,
   updateAddress,
   deleteAddress,
   setDefaultAddress,
-} = require(
-  "../controllers/addressController"
-);
-
-const {
-  verifyToken,
-} = require(
-  "../middleware/authMiddleware"
-);
+  getDefaultAddress,
+} = require("../controllers/addressController");
 
 // ==========================================================
 // CREATE ADDRESS
-// POST /api/addresses
+// POST /api/address/create
 // ==========================================================
 
 router.post(
@@ -33,57 +36,73 @@ router.post(
 
 // ==========================================================
 // GET ALL ADDRESSES
-// GET /api/addresses
+// GET /api/address/all
 // ==========================================================
 
 router.get(
   "/all",
   verifyToken,
-  getAddresses
+  getAllAddresses
 );
 
 // ==========================================================
-// GET ADDRESS BY ID
-// GET /api/addresses/:id
+// GET DEFAULT ADDRESS
+// GET /api/address/default
 // ==========================================================
 
 router.get(
-  "/:id",
+  "/default",
   verifyToken,
-  getAddressById
+  getDefaultAddress
+);
+
+// ==========================================================
+// SET DEFAULT ADDRESS
+// PUT /api/address/default/:addressId
+// ==========================================================
+
+router.put(
+  "/default/:addressId",
+  verifyToken,
+  setDefaultAddress
 );
 
 // ==========================================================
 // UPDATE ADDRESS
-// PUT /api/addresses/:id
+// PUT /api/address/update/:addressId
 // ==========================================================
 
 router.put(
-  "/update/:id",
+  "/update/:addressId",
   verifyToken,
   updateAddress
 );
 
 // ==========================================================
 // DELETE ADDRESS
-// DELETE /api/addresses/:id
+// DELETE /api/address/delete/:addressId
 // ==========================================================
 
 router.delete(
-  "/delete/:id",
+  "/delete/:addressId",
   verifyToken,
   deleteAddress
 );
 
 // ==========================================================
-// SET DEFAULT ADDRESS
-// PATCH /api/addresses/:id/default
+// GET SINGLE ADDRESS
+// GET /api/address/:addressId
 // ==========================================================
 
-router.patch(
-  "/:id/default",
+router.get(
+  "/:addressId",
   verifyToken,
-  setDefaultAddress
+  getAddressById
 );
 
+// ==========================================================
+// EXPORT ROUTER
+// ==========================================================
+
 module.exports = router;
+
