@@ -8,7 +8,7 @@ const connectDB = async () => {
     if (process.env.NODE_ENV === "production") {
       mongoURI = process.env.MONGODB_ATLAS;
     } else {
-      mongoURI = process.env.MONGODB_LOCAL;
+      mongoURI = process.env.MONGODB_ATLAS;
     }
 
     // Check MongoDB URI
