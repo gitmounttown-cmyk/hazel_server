@@ -8,7 +8,7 @@ const generateOTP = require("../utils/generateOTP");
 const OTP_EXPIRY_MINUTES = 5;
 
 // ============================================================
-// SEND OTP - DEVELOPMENT VERSION
+// SEND OTP
 // ============================================================
 
 exports.sendOTP = async ({
@@ -32,7 +32,7 @@ exports.sendOTP = async ({
     );
 
     // ----------------------------------------------------------
-    // 3. Delete Existing OTP
+    // 3. Delete Existing Unverified OTP
     // ----------------------------------------------------------
 
     await OTP.deleteMany({
@@ -56,21 +56,50 @@ exports.sendOTP = async ({
     });
 
     // ----------------------------------------------------------
-    // 5. DEVELOPMENT ONLY
+    // 5. Development Terminal
     // ----------------------------------------------------------
 
+    console.log("");
     console.log("====================================");
     console.log("        HAZEL DEVELOPMENT OTP");
     console.log("====================================");
-    console.log("Mobile Number :", mobileNumber);
-    console.log("Purpose       :", purpose);
-    console.log("OTP           :", otp);
-    console.log("Expires At    :", expiresAt);
+    console.log(
+      "Mobile Number :",
+      mobileNumber
+    );
+    console.log(
+      "Purpose       :",
+      purpose
+    );
+    console.log(
+      "OTP           :",
+      otp
+    );
+    console.log(
+      "Expires At    :",
+      expiresAt
+    );
     console.log("====================================");
+    console.log("");
+
+    // ----------------------------------------------------------
+    // 6. RETURN DATA
+    // ----------------------------------------------------------
 
     return {
       success: true,
-      message: "OTP generated successfully",
+      message: "OTP generated successfully.",
+
+      // IMPORTANT:
+      // OTP is returned ONLY during development.
+      // Production will not return OTP.
+
+      otp:
+        process.env.NODE_ENV !== "production"
+          ? otp
+          : undefined,
+
+      expiresAt,
     };
   } catch (error) {
     console.error(

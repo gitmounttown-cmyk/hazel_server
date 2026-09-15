@@ -1,9 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { OAuth2Client } = require("google-auth-library");
-
 const User = require("../models/userModel");
 const OTP = require("../models/OTPModel");
-const generateOTP = require("../utils/generateOTP");
+
 const generateToken = require("../utils/generateToken");
 const otpService = require("../services/OTPService");
 
@@ -11,7 +8,9 @@ const otpService = require("../services/OTPService");
 // GOOGLE CLIENT
 // ============================================================
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
 
 // // ============================================================
 // // GENERATE JWT
@@ -36,7 +35,9 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // NORMALIZE MOBILE NUMBER
 // ============================================================
 
-const normalizeMobileNumber = (mobileNumber) => {
+const normalizeMobileNumber = (
+  mobileNumber
+) => {
   if (!mobileNumber) {
     return null;
   }
@@ -48,8 +49,12 @@ const normalizeMobileNumber = (mobileNumber) => {
 // VALIDATE INDIAN MOBILE NUMBER
 // ============================================================
 
-const isValidMobileNumber = (mobileNumber) => {
-  return /^[6-9]\d{9}$/.test(mobileNumber);
+const isValidMobileNumber = (
+  mobileNumber
+) => {
+  return /^[6-9]\d{9}$/.test(
+    mobileNumber
+  );
 };
 
 // ============================================================
@@ -61,62 +66,83 @@ exports.sendOTP = async (req, res) => {
     let { mobileNumber } = req.body;
 
     // ----------------------------------------------------------
-    // 1. Check Mobile Number
+    // 1. Required field
     // ----------------------------------------------------------
 
     if (!mobileNumber) {
       return res.status(400).json({
         success: false,
-        message: "Mobile number is required.",
+        message:
+          "Mobile number is required.",
       });
     }
 
     // ----------------------------------------------------------
-    // 2. Normalize Mobile Number
+    // 2. Normalize
     // ----------------------------------------------------------
 
-    mobileNumber = normalizeMobileNumber(mobileNumber);
+    mobileNumber =
+      normalizeMobileNumber(
+        mobileNumber
+      );
 
     // ----------------------------------------------------------
-    // 3. Validate Mobile Number
+    // 3. Validate
     // ----------------------------------------------------------
 
-    if (!isValidMobileNumber(mobileNumber)) {
+    if (
+      !isValidMobileNumber(
+        mobileNumber
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Please enter a valid 10-digit mobile number.",
+        message:
+          "Please enter a valid 10-digit mobile number.",
       });
     }
 
     // ----------------------------------------------------------
-    // 4. Generate / Send OTP
+    // 4. Generate OTP
     // ----------------------------------------------------------
 
-    const otpResult = await otpService.sendOTP({
-      mobileNumber,
-      purpose: "LOGIN",
-    });
+    const otpResult =
+      await otpService.sendOTP({
+        mobileNumber,
+        purpose: "LOGIN",
+      });
 
     // ----------------------------------------------------------
-    // 5. Development Response
+    // 5. Development response
     // ----------------------------------------------------------
 
     return res.status(200).json({
       success: true,
-      message: "OTP generated successfully.",
 
-      ...(process.env.NODE_ENV !== "production" && {
+      message:
+        "OTP generated successfully.",
+
+      // Only development
+      ...(process.env.NODE_ENV !==
+        "production" && {
         otp: otpResult.otp,
-        expiresAt: otpResult.expiresAt,
+        expiresAt:
+          otpResult.expiresAt,
       }),
     });
   } catch (error) {
-    console.error("SEND OTP CONTROLLER ERROR:", error);
+    console.error(
+      "SEND OTP CONTROLLER ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
       message: "Unable to send OTP.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };
@@ -125,115 +151,193 @@ exports.sendOTP = async (req, res) => {
 // VERIFY OTP
 // ============================================================
 
-exports.verifyOTP = async (req, res) => {
+exports.verifyOTP = async (
+  req,
+  res
+) => {
   try {
-    let { mobileNumber, otp } = req.body;
+    let {
+      mobileNumber,
+      otp,
+    } = req.body;
 
     // ----------------------------------------------------------
-    // 1. Check Required Fields
+    // 1. Required fields
     // ----------------------------------------------------------
 
-    if (!mobileNumber || !otp) {
+    if (
+      !mobileNumber ||
+      !otp
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Mobile number and OTP are required.",
+        message:
+          "Mobile number and OTP are required.",
       });
     }
 
     // ----------------------------------------------------------
-    // 2. Normalize Mobile Number
+    // 2. Normalize mobile
     // ----------------------------------------------------------
 
-    mobileNumber = normalizeMobileNumber(mobileNumber);
+    mobileNumber =
+      normalizeMobileNumber(
+        mobileNumber
+      );
 
     // ----------------------------------------------------------
-    // 3. Validate Mobile Number
+    // 3. Validate mobile
     // ----------------------------------------------------------
 
-    if (!isValidMobileNumber(mobileNumber)) {
+    if (
+      !isValidMobileNumber(
+        mobileNumber
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Please enter a valid mobile number.",
+        message:
+          "Please enter a valid mobile number.",
       });
     }
 
     // ----------------------------------------------------------
-    // 4. Validate OTP Format
+    // 4. Normalize OTP
     // ----------------------------------------------------------
 
     otp = otp.toString().trim();
 
+    // ----------------------------------------------------------
+    // 5. Validate OTP format
+    // ----------------------------------------------------------
+
     if (!/^\d{6}$/.test(otp)) {
       return res.status(400).json({
         success: false,
-        message: "OTP must be a 6-digit number.",
+        message:
+          "OTP must be a 6-digit number.",
       });
     }
 
     // ----------------------------------------------------------
-    // 5. Find Latest Active OTP
+    // 6. Find latest active OTP
     // ----------------------------------------------------------
 
-    const otpRecord = await OTP.findOne({
-      mobileNumber,
-      purpose: "LOGIN",
-      isVerified: false,
-    }).sort({
-      createdAt: -1,
-    });
+    const otpRecord =
+      await OTP.findOne({
+        mobileNumber,
+        purpose: "LOGIN",
+        isVerified: false,
+      }).sort({
+        createdAt: -1,
+      });
 
     // ----------------------------------------------------------
     // DEBUG
     // ----------------------------------------------------------
 
-    console.log("====================================");
-    console.log("VERIFY OTP DEBUG");
-    console.log("Mobile Number :", mobileNumber);
-    console.log("Entered OTP   :", otp);
+    console.log("");
+    console.log(
+      "===================================="
+    );
+    console.log(
+      "        VERIFY OTP DEBUG"
+    );
+    console.log(
+      "===================================="
+    );
+    console.log(
+      "Mobile Number :",
+      mobileNumber
+    );
+    console.log(
+      "Entered OTP   :",
+      otp
+    );
 
     if (otpRecord) {
-      console.log("OTP ID        :", otpRecord._id);
-      console.log("Stored OTP    :", otpRecord.otp);
-      console.log("Purpose       :", otpRecord.purpose);
-      console.log("Expires At    :", otpRecord.expiresAt);
-      console.log("Attempts      :", otpRecord.attempts);
-      console.log("Max Attempts  :", otpRecord.maxAttempts);
-      console.log("Is Verified   :", otpRecord.isVerified);
+      console.log(
+        "OTP ID        :",
+        otpRecord._id
+      );
+
+      console.log(
+        "Stored OTP    :",
+        otpRecord.otp
+      );
+
+      console.log(
+        "Purpose       :",
+        otpRecord.purpose
+      );
+
+      console.log(
+        "Expires At    :",
+        otpRecord.expiresAt
+      );
+
+      console.log(
+        "Attempts      :",
+        otpRecord.attempts
+      );
+
+      console.log(
+        "Max Attempts  :",
+        otpRecord.maxAttempts
+      );
+
+      console.log(
+        "Is Verified   :",
+        otpRecord.isVerified
+      );
     } else {
-      console.log("OTP Record    : NOT FOUND");
+      console.log(
+        "OTP Record    : NOT FOUND"
+      );
     }
 
-    console.log("====================================");
+    console.log(
+      "===================================="
+    );
+    console.log("");
 
     // ----------------------------------------------------------
-    // 6. OTP Not Found
+    // 7. OTP not found
     // ----------------------------------------------------------
 
     if (!otpRecord) {
       return res.status(400).json({
         success: false,
-        message: "OTP not found or already used.",
+        message:
+          "OTP not found or already used. Please request a new OTP.",
       });
     }
 
     // ----------------------------------------------------------
-    // 7. Check OTP Expiration
+    // 8. Check expiry
     // ----------------------------------------------------------
 
-    if (!otpRecord.expiresAt || otpRecord.expiresAt <= new Date()) {
+    if (
+      !otpRecord.expiresAt ||
+      otpRecord.expiresAt <= new Date()
+    ) {
       await OTP.findByIdAndDelete(otpRecord._id);
 
       return res.status(400).json({
         success: false,
-        message: "OTP has expired. Please request a new OTP.",
+        message:
+          "OTP has expired. Please request a new OTP.",
       });
     }
 
     // ----------------------------------------------------------
-    // 8. Check Maximum Attempts
+    // 9. Check maximum attempts
     // ----------------------------------------------------------
 
-    if (otpRecord.attempts >= otpRecord.maxAttempts) {
+    if (
+      otpRecord.attempts >=
+      otpRecord.maxAttempts
+    ) {
       await OTP.findByIdAndDelete(otpRecord._id);
 
       return res.status(429).json({
@@ -243,10 +347,12 @@ exports.verifyOTP = async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // 9. Compare OTP
+    // 10. Compare OTP
     // ----------------------------------------------------------
 
-    if (otpRecord.otp !== otp) {
+    if (
+      otpRecord.otp !== otp
+    ) {
       otpRecord.attempts += 1;
 
       await otpRecord.save();
@@ -255,7 +361,9 @@ exports.verifyOTP = async (req, res) => {
 
       // Delete OTP after last failed attempt
       if (remainingAttempts <= 0) {
-        await OTP.findByIdAndDelete(otpRecord._id);
+        await OTP.findByIdAndDelete(
+          otpRecord._id
+        );
 
         return res.status(429).json({
           success: false,
@@ -271,7 +379,7 @@ exports.verifyOTP = async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // 10. Mark OTP as Verified
+    // 11. Mark OTP verified
     // ----------------------------------------------------------
 
     otpRecord.isVerified = true;
@@ -279,15 +387,16 @@ exports.verifyOTP = async (req, res) => {
     await otpRecord.save();
 
     // ----------------------------------------------------------
-    // 11. Find Existing User
+    // 12. Find existing user
     // ----------------------------------------------------------
 
-    let user = await User.findOne({
-      mobileNumber,
-    });
+    let user =
+      await User.findOne({
+        mobileNumber,
+      });
 
     // ----------------------------------------------------------
-    // 12. Create New Customer
+    // 13. Create customer if not found
     // ----------------------------------------------------------
 
     if (!user) {
@@ -303,11 +412,13 @@ exports.verifyOTP = async (req, res) => {
     // ----------------------------------------------------------
     // 13. Check Existing User Status
     // ----------------------------------------------------------
+
     else {
       if (!user.isActive) {
         return res.status(403).json({
           success: false,
-          message: "Your account is inactive. Please contact support.",
+          message:
+            "Your account is inactive. Please contact support.",
         });
       }
 
@@ -348,12 +459,18 @@ exports.verifyOTP = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("VERIFY OTP CONTROLLER ERROR:", error);
+    console.error(
+      "VERIFY OTP CONTROLLER ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
       message: "Unable to verify OTP.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };
@@ -417,12 +534,18 @@ exports.resendOTP = async (req, res) => {
       }),
     });
   } catch (error) {
-    console.error("RESEND OTP CONTROLLER ERROR:", error);
+    console.error(
+      "RESEND OTP CONTROLLER ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
       message: "Unable to resend OTP.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };
@@ -474,13 +597,17 @@ exports.googleSignIn = async (req, res) => {
 
     const googleId = payload.sub;
 
-    const email = payload.email ? payload.email.toLowerCase().trim() : null;
+    const email = payload.email
+      ? payload.email.toLowerCase().trim()
+      : null;
 
     const name = payload.name || null;
 
-    const profileImage = payload.picture || null;
+    const profileImage =
+      payload.picture || null;
 
-    const emailVerified = payload.email_verified;
+    const emailVerified =
+      payload.email_verified;
 
     // ----------------------------------------------------------
     // 5. Validate Google Information
@@ -489,7 +616,8 @@ exports.googleSignIn = async (req, res) => {
     if (!googleId || !email) {
       return res.status(400).json({
         success: false,
-        message: "Unable to get required Google account information.",
+        message:
+          "Unable to get required Google account information.",
       });
     }
 
@@ -550,11 +678,11 @@ exports.googleSignIn = async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // 9. Existing User
+    // 14. Existing user
     // ----------------------------------------------------------
     else {
       // --------------------------------------------------------
-      // Check Active Status
+      // Check active status
       // --------------------------------------------------------
 
       if (!user.isActive) {
@@ -565,86 +693,66 @@ exports.googleSignIn = async (req, res) => {
       }
 
       // --------------------------------------------------------
-      // Link Google Account
-      // --------------------------------------------------------
-
-      if (!user.googleId) {
-        user.googleId = googleId;
-      }
-
-      // --------------------------------------------------------
-      // Update Email
-      // --------------------------------------------------------
-
-      if (!user.email) {
-        user.email = email;
-      }
-
-      // --------------------------------------------------------
-      // Update Name
-      // --------------------------------------------------------
-
-      if (!user.name && name) {
-        user.name = name;
-      }
-
-      // --------------------------------------------------------
-      // Update Profile Image
-      // --------------------------------------------------------
-
-      if (!user.profileImage && profileImage) {
-        user.profileImage = profileImage;
-      }
-
-      // --------------------------------------------------------
-      // Mark User Verified
+      // Update verification
       // --------------------------------------------------------
 
       user.isVerified = true;
 
       // --------------------------------------------------------
-      // Update Last Login
+      // Update login time
       // --------------------------------------------------------
 
-      user.lastLoginAt = new Date();
+      user.lastLoginAt =
+        new Date();
 
       await user.save();
     }
 
     // ----------------------------------------------------------
-    // 10. Generate Your Application JWT
+    // 15. Generate JWT
     // ----------------------------------------------------------
 
-    const token = generateToken(user);
+    const token =
+      generateToken(user);
 
     // ----------------------------------------------------------
-    // 11. Return Login Response
+    // 16. Response
     // ----------------------------------------------------------
 
     return res.status(200).json({
       success: true,
-      message: "Google sign-in successful.",
+
+      message:
+        "Login successful.",
 
       token,
 
       user: {
         id: user._id,
         name: user.name || null,
-        mobileNumber: user.mobileNumber || null,
+        mobileNumber:
+          user.mobileNumber || null,
         email: user.email || null,
         role: user.role,
-        profileImage: user.profileImage || null,
+        profileImage:
+          user.profileImage || null,
         isVerified: user.isVerified,
         isActive: user.isActive,
       },
     });
   } catch (error) {
-    console.error("GOOGLE SIGN-IN ERROR:", error);
+    console.error(
+      "GOOGLE SIGN-IN ERROR:",
+      error
+    );
 
     return res.status(401).json({
       success: false,
       message: "Google authentication failed.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };
@@ -655,11 +763,16 @@ exports.googleSignIn = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.user.id || req.user._id;
+    const userId =
+      req.user.id || req.user._id;
 
-    const { name, email } = req.body || {};
+    const {
+      name,
+      email,
+    } = req.body;
 
-    const user = await User.findById(userId);
+    const user =
+      await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({
@@ -688,87 +801,111 @@ exports.updateProfile = async (req, res) => {
     // Update Profile Image
     // ----------------------------------------------------------
 
-    if (req.file) {
-      user.profileImage = `/uploads/profiles/${req.file.filename}`;
+    if (
+      req.body.profileImage !== undefined
+    ) {
+      user.profileImage =
+        req.body.profileImage;
     }
 
     await user.save();
 
     return res.status(200).json({
       success: true,
-      message: "Profile updated successfully",
+      message:
+        "Profile updated successfully",
 
       user: {
         id: user._id,
         name: user.name,
-        mobileNumber: user.mobileNumber,
+        mobileNumber:
+          user.mobileNumber,
         email: user.email,
         role: user.role,
-        profileImage: user.profileImage,
-        isVerified: user.isVerified,
-        isActive: user.isActive,
+        profileImage:
+          user.profileImage,
+        isVerified:
+          user.isVerified,
+        isActive:
+          user.isActive,
       },
     });
   } catch (error) {
-    console.error("Update Profile Error:", error);
+    console.error(
+      "Update Profile Error:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      message: "Failed to update profile",
+      message:
+        "Failed to update profile",
       error: error.message,
     });
   }
 };
 
 // ============================================================
-// GET CURRENT USER
+// RESEND OTP
 // ============================================================
 
-exports.getMe = async (req, res) => {
+exports.resendOTP = async (
+  req,
+  res
+) => {
   try {
+    let { mobileNumber } =
+      req.body;
+
     // ----------------------------------------------------------
-    // Check Authentication
+    // 1. Required
     // ----------------------------------------------------------
 
-    if (!req.user) {
-      return res.status(401).json({
+    if (!mobileNumber) {
+      return res.status(400).json({
         success: false,
-        message: "Unauthorized.",
+        message:
+          "Mobile number is required.",
       });
     }
 
     // ----------------------------------------------------------
-    // Get User ID
+    // 2. Normalize
     // ----------------------------------------------------------
 
-    const userId = req.user._id || req.user.id;
+    const userId =
+      req.user._id ||
+      req.user.id;
 
     // ----------------------------------------------------------
-    // Fetch User
+    // 3. Validate
     // ----------------------------------------------------------
 
-    const user = await User.findById(userId).select("-password");
+    const user =
+      await User.findById(userId)
+        .select("-password");
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message:
+          "Please enter a valid mobile number.",
       });
     }
 
     // ----------------------------------------------------------
-    // Check Active Status
+    // 4. Generate new OTP
     // ----------------------------------------------------------
 
     if (!user.isActive) {
       return res.status(403).json({
         success: false,
-        message: "Your account is inactive.",
+        message:
+          "Your account is inactive.",
       });
-    }
 
     // ----------------------------------------------------------
-    // Response
+    // 5. Response
     // ----------------------------------------------------------
 
     return res.status(200).json({
@@ -777,21 +914,32 @@ exports.getMe = async (req, res) => {
       user: {
         id: user._id,
         name: user.name || null,
-        mobileNumber: user.mobileNumber || null,
+        mobileNumber:
+          user.mobileNumber || null,
         email: user.email || null,
         role: user.role,
-        profileImage: user.profileImage || null,
-        isVerified: user.isVerified,
-        isActive: user.isActive,
+        profileImage:
+          user.profileImage || null,
+        isVerified:
+          user.isVerified,
+        isActive:
+          user.isActive,
       },
     });
   } catch (error) {
-    console.error("GET ME ERROR:", error);
+    console.error(
+      "GET ME ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      message: "Unable to fetch user information.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      message:
+        "Unable to fetch user information.",
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };
@@ -820,12 +968,19 @@ exports.logout = async (req, res) => {
       message: "Logout successful.",
     });
   } catch (error) {
-    console.error("LOGOUT ERROR:", error);
+    console.error(
+      "LOGOUT ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      message: "Unable to logout.",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
+      message:
+        "Unable to logout.",
+      error:
+        process.env.NODE_ENV !== "production"
+          ? error.message
+          : undefined,
     });
   }
 };

@@ -6,10 +6,6 @@ const {
   sendOTP,
   verifyOTP,
   resendOTP,
-  googleSignIn, // 👈 Add this
-  updateProfile,
-  getMe,
-  logout,
 } = require("../controllers/authController");
 const { uploadProfileImage } = require("../middleware/uploadMiddleware");
 const { verifyToken } = require("../middleware/authMiddleware");
@@ -17,17 +13,24 @@ const { verifyToken } = require("../middleware/authMiddleware");
 // ============================================================
 // SEND OTP
 // ============================================================
-router.post("/send-otp", sendOTP);
+
+router.post(
+  "/send-otp",
+  sendOTP
+);
 
 // ============================================================
 // VERIFY OTP
 // ============================================================
-router.post("/verify-otp", verifyOTP);
+
+router.post(
+  "/verify-otp",
+  verifyOTP
+);
 
 // ============================================================
 // RESEND OTP
 // ============================================================
-router.post("/resend-otp", resendOTP);
 
 // ============================================================
 // GOOGLE SIGN-IN
@@ -52,8 +55,14 @@ router.get("/me", verifyToken, getMe);
 // LOGOUT
 // ============================================================
 router.post("/logout", verifyToken, logout);
+router.post(
+  "/resend-otp",
+  resendOTP
+);
 
 // ============================================================
 // EXPORT
 // ============================================================
+module.exports = router;
+
 module.exports = router;
