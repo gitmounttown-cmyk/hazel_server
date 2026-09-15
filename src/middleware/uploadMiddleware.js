@@ -23,10 +23,7 @@ const bannerUploadDir = path.join(process.cwd(), "uploads/banners");
 
 const profileUploadDir = path.join(process.cwd(), "uploads/profiles");
 
-const videoUploadDir = path.join(
-  process.cwd(),
-  "uploads/videos"
-);
+const videoUploadDir = path.join(process.cwd(), "uploads/videos");
 
 // ============================================================
 // CREATE DIRECTORIES
@@ -39,11 +36,8 @@ const videoUploadDir = path.join(
   newArrivalUploadDir,
   trendingProductUploadDir,
   bannerUploadDir,
-<<<<<<< Updated upstream
   videoUploadDir,
-=======
   profileUploadDir,
->>>>>>> Stashed changes
 ].forEach((directory) => {
   if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, {
@@ -135,13 +129,7 @@ const productMediaFileFilter = (req, file, cb) => {
 // ============================================================
 
 const videoFileFilter = (req, file, cb) => {
-  const allowedExtensions = [
-    ".mp4",
-    ".webm",
-    ".mov",
-    ".avi",
-    ".mkv",
-  ];
+  const allowedExtensions = [".mp4", ".webm", ".mov", ".avi", ".mkv"];
 
   const allowedMimeTypes = [
     "video/mp4",
@@ -151,9 +139,7 @@ const videoFileFilter = (req, file, cb) => {
     "video/x-matroska",
   ];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("VIDEO UPLOAD");
@@ -165,20 +151,13 @@ const videoFileFilter = (req, file, cb) => {
 
   if (!allowedExtensions.includes(extension)) {
     return cb(
-      new Error(
-        "Only MP4, WEBM, MOV, AVI and MKV videos are allowed"
-      ),
-      false
+      new Error("Only MP4, WEBM, MOV, AVI and MKV videos are allowed"),
+      false,
     );
   }
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    return cb(
-      new Error(
-        "Invalid video file type"
-      ),
-      false
-    );
+    return cb(new Error("Invalid video file type"), false);
   }
 
   cb(null, true);
@@ -436,10 +415,7 @@ const deleteUploadedFile = (file) => {
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
 
-      console.log(
-        "Deleted uploaded file:",
-        file.path
-      );
+      console.log("Deleted uploaded file:", file.path);
     }
   } catch (error) {
     console.error("Failed to delete uploaded file:", error.message);
@@ -458,29 +434,17 @@ const deleteFileByUrl = (fileUrl) => {
   try {
     const cleanUrl = fileUrl.split("?")[0];
 
-    const relativePath = cleanUrl.replace(
-      /^\/+/,
-      ""
-    );
+    const relativePath = cleanUrl.replace(/^\/+/, "");
 
-    const filePath = path.join(
-      process.cwd(),
-      relativePath
-    );
+    const filePath = path.join(process.cwd(), relativePath);
 
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
 
-      console.log(
-        "Deleted file:",
-        filePath
-      );
+      console.log("Deleted file:", filePath);
     }
   } catch (error) {
-    console.error(
-      "Failed to delete file:",
-      error.message
-    );
+    console.error("Failed to delete file:", error.message);
   }
 };
 
@@ -493,10 +457,7 @@ const handleUploadError = (err, req, res, next) => {
     return next();
   }
 
-  console.error(
-    "UPLOAD ERROR:",
-    err
-  );
+  console.error("UPLOAD ERROR:", err);
 
   // ==========================================================
   // MULTER ERRORS
@@ -513,12 +474,7 @@ const handleUploadError = (err, req, res, next) => {
     if (err.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({
         success: false,
-<<<<<<< Updated upstream
-        message:
-          "Uploaded file size cannot exceed 100 MB",
-=======
         message: "Product media file size cannot exceed 100 MB",
->>>>>>> Stashed changes
       });
     }
 
@@ -532,8 +488,7 @@ const handleUploadError = (err, req, res, next) => {
     if (err.code === "LIMIT_PART_COUNT") {
       return res.status(400).json({
         success: false,
-        message:
-          "Too many form-data parts",
+        message: "Too many form-data parts",
       });
     }
 
@@ -549,8 +504,7 @@ const handleUploadError = (err, req, res, next) => {
 
   return res.status(400).json({
     success: false,
-    message:
-      err.message || "File upload failed",
+    message: err.message || "File upload failed",
   });
 };
 
@@ -566,7 +520,6 @@ module.exports = {
   uploadNewArrivalImage,
   uploadTrendingProductImage,
   uploadBannerImage,
-<<<<<<< Updated upstream
 
   // VIDEO UPLOAD
   uploadVideo,
@@ -577,10 +530,6 @@ module.exports = {
 
   // ERROR HANDLER
   handleUploadError,
-};
-=======
   uploadProfileImage,
   handleUploadError,
-  deleteUploadedFile,
 };
->>>>>>> Stashed changes
