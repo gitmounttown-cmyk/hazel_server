@@ -7,8 +7,6 @@ const {
   verifyOTP,
   resendOTP,
 } = require("../controllers/authController");
-const { uploadProfileImage } = require("../middleware/uploadMiddleware");
-const { verifyToken } = require("../middleware/authMiddleware");
 
 // ============================================================
 // SEND OTP
@@ -32,29 +30,6 @@ router.post(
 // RESEND OTP
 // ============================================================
 
-// ============================================================
-// GOOGLE SIGN-IN
-// ============================================================
-router.post("/google", googleSignIn);
-
-// ============================================================
-// UPDATE PROFILE
-// ============================================================
-router.put(
-  "/profile",
-  verifyToken,
-  uploadProfileImage.single("profileImage"),
-  updateProfile,
-);
-// ============================================================
-// CURRENT USER
-// ============================================================
-router.get("/me", verifyToken, getMe);
-
-// ============================================================
-// LOGOUT
-// ============================================================
-router.post("/logout", verifyToken, logout);
 router.post(
   "/resend-otp",
   resendOTP
@@ -63,6 +38,5 @@ router.post(
 // ============================================================
 // EXPORT
 // ============================================================
-module.exports = router;
 
 module.exports = router;
