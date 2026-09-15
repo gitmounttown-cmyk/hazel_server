@@ -2,10 +2,19 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    // ==========================================================
+    // NAME
+    // ==========================================================
+
     name: {
       type: String,
       trim: true,
+      default: null,
     },
+
+    // ==========================================================
+    // MOBILE NUMBER
+    // ==========================================================
 
     mobileNumber: {
       type: String,
@@ -13,6 +22,10 @@ const userSchema = new mongoose.Schema(
       sparse: true,
       trim: true,
     },
+
+    // ==========================================================
+    // EMAIL
+    // ==========================================================
 
     email: {
       type: String,
@@ -22,15 +35,28 @@ const userSchema = new mongoose.Schema(
       sparse: true,
     },
 
+    // ==========================================================
+    // GOOGLE ID
+    // ==========================================================
+
     googleId: {
       type: String,
       unique: true,
       sparse: true,
     },
 
+    // ==========================================================
+    // PROFILE IMAGE
+    // ==========================================================
+
     profileImage: {
       type: String,
+      default: null,
     },
+
+    // ==========================================================
+    // ROLE
+    // ==========================================================
 
     role: {
       type: String,
@@ -42,18 +68,31 @@ const userSchema = new mongoose.Schema(
       default: "customer",
     },
 
+    // ==========================================================
+    // VERIFIED
+    // ==========================================================
+
     isVerified: {
       type: Boolean,
       default: false,
     },
+
+    // ==========================================================
+    // ACTIVE STATUS
+    // ==========================================================
 
     isActive: {
       type: Boolean,
       default: true,
     },
 
+    // ==========================================================
+    // LAST LOGIN
+    // ==========================================================
+
     lastLoginAt: {
       type: Date,
+      default: null,
     },
   },
   {
@@ -61,7 +100,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(
-  "User",
-  userSchema
-);
+module.exports =
+  mongoose.models.User ||
+  mongoose.model("User", userSchema);
