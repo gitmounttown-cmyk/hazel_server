@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const Wishlist = require("../models/wishlistModel");
@@ -11,7 +10,7 @@ const Product = require("../models/productModel");
 
 const addToWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
     const { productId } = req.body;
 
     // ------------------------------------------------------
@@ -70,7 +69,7 @@ const addToWishlist = async (req, res) => {
     // ------------------------------------------------------
 
     const alreadyExists = wishlist.items.some(
-      (item) => item.product.toString() === productId.toString()
+      (item) => item.product.toString() === productId.toString(),
     );
 
     if (alreadyExists) {
@@ -125,7 +124,7 @@ const addToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
 
     // ------------------------------------------------------
     // FIND WISHLIST AND POPULATE PRODUCT
@@ -158,9 +157,7 @@ const getWishlist = async (req, res) => {
     // REMOVE DELETED PRODUCTS
     // ------------------------------------------------------
 
-    wishlist.items = wishlist.items.filter(
-      (item) => item.product !== null
-    );
+    wishlist.items = wishlist.items.filter((item) => item.product !== null);
 
     // ------------------------------------------------------
     // RESPONSE
@@ -190,7 +187,7 @@ const getWishlist = async (req, res) => {
 
 const removeFromWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
     const { productId } = req.params;
 
     // ------------------------------------------------------
@@ -224,7 +221,7 @@ const removeFromWishlist = async (req, res) => {
     // ------------------------------------------------------
 
     const productExists = wishlist.items.some(
-      (item) => item.product.toString() === productId.toString()
+      (item) => item.product.toString() === productId.toString(),
     );
 
     if (!productExists) {
@@ -239,7 +236,7 @@ const removeFromWishlist = async (req, res) => {
     // ------------------------------------------------------
 
     wishlist.items = wishlist.items.filter(
-      (item) => item.product.toString() !== productId.toString()
+      (item) => item.product.toString() !== productId.toString(),
     );
 
     await wishlist.save();
@@ -280,7 +277,7 @@ const removeFromWishlist = async (req, res) => {
 
 const checkWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
     const { productId } = req.params;
 
     // ------------------------------------------------------
@@ -318,7 +315,7 @@ const checkWishlist = async (req, res) => {
     // ------------------------------------------------------
 
     const isWishlisted = wishlist.items.some(
-      (item) => item.product.toString() === productId.toString()
+      (item) => item.product.toString() === productId.toString(),
     );
 
     // ------------------------------------------------------
@@ -347,7 +344,7 @@ const checkWishlist = async (req, res) => {
 
 const clearWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
 
     // ------------------------------------------------------
     // FIND WISHLIST
@@ -400,7 +397,7 @@ const clearWishlist = async (req, res) => {
 
 const getWishlistCount = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
 
     // ------------------------------------------------------
     // FIND WISHLIST
@@ -443,4 +440,3 @@ module.exports = {
   clearWishlist,
   getWishlistCount,
 };
-
