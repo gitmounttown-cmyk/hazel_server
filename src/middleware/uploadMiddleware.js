@@ -6,40 +6,24 @@ const fs = require("fs");
 // UPLOAD DIRECTORIES
 // ============================================================
 
-const categoryUploadDir = path.join(
-  process.cwd(),
-  "uploads/categories"
-);
+const categoryUploadDir = path.join(process.cwd(), "uploads/categories");
 
-const subCategoryUploadDir = path.join(
-  process.cwd(),
-  "uploads/subcategories"
-);
+const subCategoryUploadDir = path.join(process.cwd(), "uploads/subcategories");
 
-const productUploadDir = path.join(
-  process.cwd(),
-  "uploads/products"
-);
+const productUploadDir = path.join(process.cwd(), "uploads/products");
 
-const newArrivalUploadDir = path.join(
-  process.cwd(),
-  "uploads/new-arrivals"
-);
+const newArrivalUploadDir = path.join(process.cwd(), "uploads/new-arrivals");
 
 const trendingProductUploadDir = path.join(
   process.cwd(),
-  "uploads/trending-products"
+  "uploads/trending-products",
 );
 
-const bannerUploadDir = path.join(
-  process.cwd(),
-  "uploads/banners"
-);
+const bannerUploadDir = path.join(process.cwd(), "uploads/banners");
 
-const videoUploadDir = path.join(
-  process.cwd(),
-  "uploads/videos"
-);
+const profileUploadDir = path.join(process.cwd(), "uploads/profiles");
+
+const videoUploadDir = path.join(process.cwd(), "uploads/videos");
 
 // ============================================================
 // CREATE DIRECTORIES
@@ -53,6 +37,7 @@ const videoUploadDir = path.join(
   trendingProductUploadDir,
   bannerUploadDir,
   videoUploadDir,
+  profileUploadDir,
 ].forEach((directory) => {
   if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, {
@@ -66,14 +51,10 @@ const videoUploadDir = path.join(
 // ============================================================
 
 const generateFileName = (file) => {
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   const uniqueName =
-    `${Date.now()}-` +
-    `${Math.round(Math.random() * 1e9)}` +
-    extension;
+    `${Date.now()}-` + `${Math.round(Math.random() * 1e9)}` + extension;
 
   return uniqueName;
 };
@@ -83,16 +64,9 @@ const generateFileName = (file) => {
 // ============================================================
 
 const imageFileFilter = (req, file, cb) => {
-  const allowedExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".webp",
-  ];
+  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("IMAGE UPLOAD");
@@ -104,10 +78,8 @@ const imageFileFilter = (req, file, cb) => {
 
   if (!allowedExtensions.includes(extension)) {
     return cb(
-      new Error(
-        "Only JPG, JPEG, PNG and WEBP images are allowed"
-      ),
-      false
+      new Error("Only JPG, JPEG, PNG and WEBP images are allowed"),
+      false,
     );
   }
 
@@ -130,9 +102,7 @@ const productMediaFileFilter = (req, file, cb) => {
     ".mov",
   ];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("PRODUCT MEDIA UPLOAD");
@@ -145,9 +115,9 @@ const productMediaFileFilter = (req, file, cb) => {
   if (!allowedExtensions.includes(extension)) {
     return cb(
       new Error(
-        "Only JPG, JPEG, PNG, WEBP images and MP4, WEBM, MOV videos are allowed"
+        "Only JPG, JPEG, PNG, WEBP images and MP4, WEBM, MOV videos are allowed",
       ),
-      false
+      false,
     );
   }
 
@@ -159,13 +129,7 @@ const productMediaFileFilter = (req, file, cb) => {
 // ============================================================
 
 const videoFileFilter = (req, file, cb) => {
-  const allowedExtensions = [
-    ".mp4",
-    ".webm",
-    ".mov",
-    ".avi",
-    ".mkv",
-  ];
+  const allowedExtensions = [".mp4", ".webm", ".mov", ".avi", ".mkv"];
 
   const allowedMimeTypes = [
     "video/mp4",
@@ -175,9 +139,7 @@ const videoFileFilter = (req, file, cb) => {
     "video/x-matroska",
   ];
 
-  const extension = path
-    .extname(file.originalname)
-    .toLowerCase();
+  const extension = path.extname(file.originalname).toLowerCase();
 
   console.log("==========================================");
   console.log("VIDEO UPLOAD");
@@ -189,20 +151,13 @@ const videoFileFilter = (req, file, cb) => {
 
   if (!allowedExtensions.includes(extension)) {
     return cb(
-      new Error(
-        "Only MP4, WEBM, MOV, AVI and MKV videos are allowed"
-      ),
-      false
+      new Error("Only MP4, WEBM, MOV, AVI and MKV videos are allowed"),
+      false,
     );
   }
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    return cb(
-      new Error(
-        "Invalid video file type"
-      ),
-      false
-    );
+    return cb(new Error("Invalid video file type"), false);
   }
 
   cb(null, true);
@@ -285,6 +240,16 @@ const trendingProductStorage = multer.diskStorage({
 const bannerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, bannerUploadDir);
+  },
+
+  filename: function (req, file, cb) {
+    cb(null, generateFileName(file));
+  },
+});
+
+const profileStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, profileUploadDir);
   },
 
   filename: function (req, file, cb) {
@@ -412,6 +377,16 @@ const uploadBannerImage = multer({
   },
 });
 
+const uploadProfileImage = multer({
+  storage: profileStorage,
+  fileFilter: imageFileFilter,
+
+  limits: {
+    ...imageUploadLimits,
+    files: 1,
+  },
+});
+
 // ============================================================
 // VIDEO UPLOAD
 // ============================================================
@@ -440,16 +415,10 @@ const deleteUploadedFile = (file) => {
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
 
-      console.log(
-        "Deleted uploaded file:",
-        file.path
-      );
+      console.log("Deleted uploaded file:", file.path);
     }
   } catch (error) {
-    console.error(
-      "Failed to delete uploaded file:",
-      error.message
-    );
+    console.error("Failed to delete uploaded file:", error.message);
   }
 };
 
@@ -465,29 +434,17 @@ const deleteFileByUrl = (fileUrl) => {
   try {
     const cleanUrl = fileUrl.split("?")[0];
 
-    const relativePath = cleanUrl.replace(
-      /^\/+/,
-      ""
-    );
+    const relativePath = cleanUrl.replace(/^\/+/, "");
 
-    const filePath = path.join(
-      process.cwd(),
-      relativePath
-    );
+    const filePath = path.join(process.cwd(), relativePath);
 
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
 
-      console.log(
-        "Deleted file:",
-        filePath
-      );
+      console.log("Deleted file:", filePath);
     }
   } catch (error) {
-    console.error(
-      "Failed to delete file:",
-      error.message
-    );
+    console.error("Failed to delete file:", error.message);
   }
 };
 
@@ -495,20 +452,12 @@ const deleteFileByUrl = (fileUrl) => {
 // MULTER ERROR HANDLER
 // ============================================================
 
-const handleUploadError = (
-  err,
-  req,
-  res,
-  next
-) => {
+const handleUploadError = (err, req, res, next) => {
   if (!err) {
     return next();
   }
 
-  console.error(
-    "UPLOAD ERROR:",
-    err
-  );
+  console.error("UPLOAD ERROR:", err);
 
   // ==========================================================
   // MULTER ERRORS
@@ -518,32 +467,28 @@ const handleUploadError = (
     if (err.code === "LIMIT_FILE_COUNT") {
       return res.status(400).json({
         success: false,
-        message:
-          "Maximum allowed files exceeded",
+        message: "Maximum allowed files exceeded",
       });
     }
 
     if (err.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({
         success: false,
-        message:
-          "Uploaded file size cannot exceed 100 MB",
+        message: "Product media file size cannot exceed 100 MB",
       });
     }
 
     if (err.code === "LIMIT_UNEXPECTED_FILE") {
       return res.status(400).json({
         success: false,
-        message:
-          `Unexpected file field: ${err.field}`,
+        message: `Unexpected file field: ${err.field}`,
       });
     }
 
     if (err.code === "LIMIT_PART_COUNT") {
       return res.status(400).json({
         success: false,
-        message:
-          "Too many form-data parts",
+        message: "Too many form-data parts",
       });
     }
 
@@ -559,8 +504,7 @@ const handleUploadError = (
 
   return res.status(400).json({
     success: false,
-    message:
-      err.message || "File upload failed",
+    message: err.message || "File upload failed",
   });
 };
 
@@ -585,5 +529,7 @@ module.exports = {
   deleteFileByUrl,
 
   // ERROR HANDLER
+  handleUploadError,
+  uploadProfileImage,
   handleUploadError,
 };

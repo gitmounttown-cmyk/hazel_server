@@ -15,9 +15,7 @@ const {
   handleUploadError,
 } = require("../middleware/uploadMiddleware");
 
-// =====================================================
-// CREATE VIDEO
-// =====================================================
+
 router.post(
   "/create",
   uploadVideo.single("video"),
