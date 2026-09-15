@@ -11,7 +11,6 @@ const {
   cancelOrder,
   updateTracking,
   deleteOrder,
-  
 } = require("../controllers/orderController");
 
 const { verifyToken } = require("../middleware/authMiddleware");
@@ -24,38 +23,25 @@ router.post("/create", verifyToken, createOrder);
 
 router.get("/my-orders", verifyToken, getMyOrders);
 
-router.get("/:id", verifyToken, getOrderById);
-
-router.patch("/cancel/:id", verifyToken, cancelOrder);
+router.get("/admin/all", verifyToken, getAllOrders);
 
 // =============================================================
 // ADMIN
 // =============================================================
 
-router.get("/admin/all", verifyToken, getAllOrders);
+router.patch("/status/:id", verifyToken, updateOrderStatus);
 
-router.patch(
-  "/status/:id",
-  verifyToken,
-  updateOrderStatus
-);
+router.patch("/tracking/:id", verifyToken, updateTracking);
 
-router.patch(
-  "/tracking/:id",
-  verifyToken,
-  updateTracking
-);
-
-router.delete(
-  "/delete/:id",
-  verifyToken,
-  deleteOrder
-);
+router.delete("/delete/:id", verifyToken, deleteOrder);
 
 // router.patch(
 //   "/:id/restore",
 //   protect,
 //   restoreOrder
 // );
+router.patch("/cancel/:id", verifyToken, cancelOrder);
+
+router.get("/:id", verifyToken, getOrderById);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const {
   getMe,
   logout,
 } = require("../controllers/authController");
-
+const { uploadProfileImage } = require("../middleware/uploadMiddleware");
 const { verifyToken } = require("../middleware/authMiddleware");
 
 // ============================================================
@@ -37,8 +37,12 @@ router.post("/google", googleSignIn);
 // ============================================================
 // UPDATE PROFILE
 // ============================================================
-router.put("/profile", verifyToken, updateProfile);
-
+router.put(
+  "/profile",
+  verifyToken,
+  uploadProfileImage.single("profileImage"),
+  updateProfile,
+);
 // ============================================================
 // CURRENT USER
 // ============================================================
