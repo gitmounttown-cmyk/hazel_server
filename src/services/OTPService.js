@@ -94,10 +94,10 @@ exports.sendOTP = async ({
       // OTP is returned ONLY during development.
       // Production will not return OTP.
 
-      otp:
-        process.env.NODE_ENV !== "production"
-          ? otp
-          : undefined,
+      // otp: process.env.NODE_ENV !== "production"
+      //     ? otp
+      //     : undefined,
+          otp:  otp,
 
       expiresAt,
     };
