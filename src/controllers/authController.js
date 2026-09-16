@@ -105,7 +105,7 @@ exports.sendOTP = async (req, res) => {
       //   expiresAt:
       //     otpResult.expiresAt,
       // }),
-      otp: otpResult.loginOTP,
+      otp: otpResult.otp,
       expiresAt:
         otpResult.expiresAt,
     });
