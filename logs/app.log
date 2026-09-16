@@ -1,0 +1,43 @@
+[2026-09-16T06:20:22.236Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-16T06:20:22.261Z] INFO: ========================================
+[2026-09-16T06:20:22.264Z] INFO: Hazel application starting
+[2026-09-16T06:20:22.267Z] INFO: Node version: v20.20.2
+[2026-09-16T06:20:22.271Z] INFO: Environment: production
+[2026-09-16T06:20:22.275Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:20:22.276Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:20:22.280Z] INFO: PORT: 5004
+[2026-09-16T06:20:22.283Z] INFO: ========================================
+[2026-09-16T06:20:35.230Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-16T06:20:35.231Z] ERROR: C:\Users\User05\Documents\newgit\hazel_server\src\services\OTPService.js:112
+<<<<<<< HEAD
+^^
+
+SyntaxError: Unexpected token '<<'
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\controllers\authController.js:5:20)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-09-16T06:21:59.154Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-16T06:21:59.165Z] INFO: ========================================
+[2026-09-16T06:21:59.165Z] INFO: Hazel application starting
+[2026-09-16T06:21:59.166Z] INFO: Node version: v20.20.2
+[2026-09-16T06:21:59.172Z] INFO: Environment: production
+[2026-09-16T06:21:59.173Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:21:59.175Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:21:59.175Z] INFO: PORT: 5004
+[2026-09-16T06:21:59.176Z] INFO: ========================================
+[2026-09-16T06:22:04.480Z] INFO: App loaded successfully
+[2026-09-16T06:22:04.481Z] INFO: Connecting to MongoDB...
+[2026-09-16T06:22:04.482Z] INFO: Environment: production
+[2026-09-16T06:22:04.482Z] INFO: MongoDB URI exists: true
+[2026-09-16T06:22:04.508Z] INFO: Server running on port 5004
+[2026-09-16T06:22:04.509Z] INFO: Hazel backend started successfully
+[2026-09-16T06:22:05.120Z] INFO: MongoDB Connected Successfully!!
+[2026-09-16T06:22:05.533Z] ERROR: (node:10632) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
