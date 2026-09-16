@@ -108,9 +108,16 @@ exports.sendOTP = async ({
 
     const response = {
       success: true,
+      message: "OTP generated successfully.",
 
-      message:
-        "OTP sent successfully.",
+      // IMPORTANT:
+      // OTP is returned ONLY during development.
+      // Production will not return OTP.
+
+      otp:
+        process.env.NODE_ENV !== "production"
+          ? otp
+          : undefined,
 
       expiresAt,
     };
