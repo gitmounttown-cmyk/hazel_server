@@ -3,12 +3,10 @@ const mongoose = require("mongoose");
 const Order = require("../models/orderModel");
 const OrderItem = require("../models/orderItemModel");
 const Product = require("../models/productModel");
-const ProductVariant = require("../models/productVariantModel");
+// const ProductVariant = require("../models/productVariantModel");
 const Address = require("../models/addressModel");
 const Coupon = require("../models/couponModel");
 const Notification = require("../models/notificationModel");
-
-
 
 // ==========================================================
 // GET USER ID
@@ -89,8 +87,7 @@ exports.createOrder = async (req, res) => {
       "WALLET",
     ];
 
-    const normalizedPaymentMethod =
-      String(paymentMethod).trim().toUpperCase();
+    const normalizedPaymentMethod = String(paymentMethod).trim().toUpperCase();
 
     if (!allowedPaymentMethods.includes(normalizedPaymentMethod)) {
       return res.status(400).json({
@@ -129,17 +126,11 @@ exports.createOrder = async (req, res) => {
     // ADDRESS SNAPSHOT
     // ======================================================
 
-    const addressLine1 = [
-      address.houseNo,
-      address.street,
-    ]
+    const addressLine1 = [address.houseNo, address.street]
       .filter(Boolean)
       .join(", ");
 
-    const addressLine2 = [
-      address.area,
-      address.landmark,
-    ]
+    const addressLine2 = [address.area, address.landmark]
       .filter(Boolean)
       .join(", ");
 
@@ -190,8 +181,7 @@ exports.createOrder = async (req, res) => {
 
       return res.status(400).json({
         success: false,
-        message:
-          "House number / street is missing in the selected address",
+        message: "House number / street is missing in the selected address",
       });
     }
 
@@ -261,7 +251,6 @@ exports.createOrder = async (req, res) => {
           message: "variantId is required",
         });
       }
-
       if (!mongoose.Types.ObjectId.isValid(item.variantId)) {
         await session.abortTransaction();
 
@@ -271,10 +260,25 @@ exports.createOrder = async (req, res) => {
         });
       }
 
-      if (
-        item.quantity === undefined ||
-        item.quantity === null
-      ) {
+      if (!item.sizeId) {
+        await session.abortTransaction();
+
+        return res.status(400).json({
+          success: false,
+          message: "sizeId is required",
+        });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(item.sizeId)) {
+        await session.abortTransaction();
+
+        return res.status(400).json({
+          success: false,
+          message: `Invalid size ID: ${item.sizeId}`,
+        });
+      }
+
+      if (item.quantity === undefined || item.quantity === null) {
         await session.abortTransaction();
 
         return res.status(400).json({
@@ -290,8 +294,7 @@ exports.createOrder = async (req, res) => {
 
         return res.status(400).json({
           success: false,
-          message:
-            "Quantity must be a positive whole number",
+          message: "Quantity must be a positive whole number",
         });
       }
 
@@ -299,20 +302,19 @@ exports.createOrder = async (req, res) => {
       // GET VARIANT
       // ====================================================
 
-      const variant = await ProductVariant.findById(
-        item.variantId
-      )
-        .populate("size", "name")
-        .populate("color", "name")
-        .session(session);
+      const product = await Product.findOne({
+        "variants._id": item.variantId,
+        isDeleted: { $ne: true },
+      }).session(session);
+
+      const variant = product?.variants.id(item.variantId);
 
       if (!variant) {
         await session.abortTransaction();
 
         return res.status(404).json({
           success: false,
-          message:
-            `Variant ${item.variantId} not found`,
+          message: `Variant ${item.variantId} not found`,
         });
       }
 
@@ -320,52 +322,39 @@ exports.createOrder = async (req, res) => {
       // CHECK VARIANT STATUS
       // ====================================================
 
-      if (
-        variant.isActive !== undefined &&
-        variant.isActive === false
-      ) {
+      if (variant.isActive !== undefined && variant.isActive === false) {
         await session.abortTransaction();
 
         return res.status(400).json({
           success: false,
-          message:
-            `Variant ${item.variantId} is currently inactive`,
+          message: `Variant ${item.variantId} is currently inactive`,
         });
       }
 
       // ====================================================
       // STOCK
       // ====================================================
+      const selectedSize = variant.sizes.id(item.sizeId);
 
-      const stock = Number(variant.stock || 0);
+      if (!selectedSize) {
+        await session.abortTransaction();
+
+        return res.status(404).json({
+          success: false,
+          message: `Size ${item.sizeId} not found for variant ${item.variantId}`,
+        });
+      }
+
+      const stock = Number(selectedSize.stockQuantity || 0);
 
       if (stock < quantity) {
         await session.abortTransaction();
 
         return res.status(400).json({
           success: false,
-          message:
-            `Insufficient stock for variant ${item.variantId}`,
+          message: `Insufficient stock for ${variant.color} - ${selectedSize.size}`,
           availableStock: stock,
           requestedQuantity: quantity,
-        });
-      }
-
-      // ====================================================
-      // PRODUCT
-      // ====================================================
-
-      const product = await Product.findById(
-        variant.product
-      ).session(session);
-
-      if (!product) {
-        await session.abortTransaction();
-
-        return res.status(404).json({
-          success: false,
-          message:
-            `Product not found for variant ${item.variantId}`,
         });
       }
 
@@ -373,16 +362,12 @@ exports.createOrder = async (req, res) => {
       // PRODUCT STATUS
       // ====================================================
 
-      if (
-        product.isActive !== undefined &&
-        product.isActive === false
-      ) {
+      if (product.isActive !== undefined && product.isActive === false) {
         await session.abortTransaction();
 
         return res.status(400).json({
           success: false,
-          message:
-            `Product ${product.name} is currently inactive`,
+          message: `Product ${product.name} is currently inactive`,
         });
       }
 
@@ -395,22 +380,17 @@ exports.createOrder = async (req, res) => {
           variant.price ??
           product.sellingPrice ??
           product.price ??
-          0
+          0,
       );
 
-      const mrp = Number(
-        variant.mrp ??
-          product.mrp ??
-          sellingPrice
-      );
+      const mrp = Number(variant.mrp ?? product.mrp ?? sellingPrice);
 
       if (sellingPrice <= 0) {
         await session.abortTransaction();
 
         return res.status(400).json({
           success: false,
-          message:
-            `Invalid selling price for product ${product.name}`,
+          message: `Invalid selling price for product ${product.name}`,
         });
       }
 
@@ -430,36 +410,20 @@ exports.createOrder = async (req, res) => {
 
       if (variant.image) {
         image = variant.image;
-      } else if (
-        Array.isArray(variant.images) &&
-        variant.images.length > 0
-      ) {
+      } else if (Array.isArray(variant.images) && variant.images.length > 0) {
         image = variant.images[0];
       } else if (product.thumbnail) {
         image = product.thumbnail;
       } else if (product.image) {
         image = product.image;
-      } else if (
-        Array.isArray(product.images) &&
-        product.images.length > 0
-      ) {
+      } else if (Array.isArray(product.images) && product.images.length > 0) {
         image = product.images[0];
       }
 
       // ====================================================
       // SIZE
       // ====================================================
-
-      let size = "";
-
-      if (
-        variant.size &&
-        typeof variant.size === "object"
-      ) {
-        size = variant.size.name || "";
-      } else if (variant.sizeName) {
-        size = variant.sizeName;
-      }
+      const size = selectedSize.size || "";
 
       // ====================================================
       // COLOR
@@ -467,10 +431,7 @@ exports.createOrder = async (req, res) => {
 
       let color = "";
 
-      if (
-        variant.color &&
-        typeof variant.color === "object"
-      ) {
+      if (variant.color && typeof variant.color === "object") {
         color = variant.color.name || "";
       } else if (variant.colorName) {
         color = variant.colorName;
@@ -483,11 +444,8 @@ exports.createOrder = async (req, res) => {
       orderItemsData.push({
         product: product._id,
         variant: variant._id,
-
-        productName:
-          product.name ||
-          product.productName ||
-          "",
+        sizeId: selectedSize._id,
+        productName: product.name || product.productName || "",
 
         sku: variant.sku || "",
 
@@ -515,14 +473,8 @@ exports.createOrder = async (req, res) => {
 
     let discountAmount = 0;
 
-    if (
-      couponCode &&
-      String(couponCode).trim() !== ""
-    ) {
-      const normalizedCouponCode =
-        String(couponCode)
-          .trim()
-          .toUpperCase();
+    if (couponCode && String(couponCode).trim() !== "") {
+      const normalizedCouponCode = String(couponCode).trim().toUpperCase();
 
       coupon = await Coupon.findOne({
         code: normalizedCouponCode,
@@ -545,10 +497,7 @@ exports.createOrder = async (req, res) => {
 
       const now = new Date();
 
-      if (
-        coupon.startDate &&
-        now < coupon.startDate
-      ) {
+      if (coupon.startDate && now < coupon.startDate) {
         await session.abortTransaction();
 
         return res.status(400).json({
@@ -557,10 +506,7 @@ exports.createOrder = async (req, res) => {
         });
       }
 
-      if (
-        coupon.endDate &&
-        now > coupon.endDate
-      ) {
+      if (coupon.endDate && now > coupon.endDate) {
         await session.abortTransaction();
 
         return res.status(400).json({
@@ -599,8 +545,7 @@ exports.createOrder = async (req, res) => {
 
         return res.status(400).json({
           success: false,
-          message:
-            `Minimum order amount is ₹${coupon.minimumOrderAmount}`,
+          message: `Minimum order amount is ₹${coupon.minimumOrderAmount}`,
         });
       }
 
@@ -617,8 +562,7 @@ exports.createOrder = async (req, res) => {
 
         return res.status(400).json({
           success: false,
-          message:
-            `Maximum order amount is ₹${coupon.maximumOrderAmount}`,
+          message: `Maximum order amount is ₹${coupon.maximumOrderAmount}`,
         });
       }
 
@@ -626,13 +570,8 @@ exports.createOrder = async (req, res) => {
       // DISCOUNT
       // ====================================================
 
-      if (
-        coupon.discountType === "PERCENTAGE"
-      ) {
-        discountAmount =
-          (subtotal *
-            Number(coupon.discountValue || 0)) /
-          100;
+      if (coupon.discountType === "PERCENTAGE") {
+        discountAmount = (subtotal * Number(coupon.discountValue || 0)) / 100;
 
         if (
           coupon.maxDiscountAmount !== null &&
@@ -640,54 +579,33 @@ exports.createOrder = async (req, res) => {
         ) {
           discountAmount = Math.min(
             discountAmount,
-            Number(coupon.maxDiscountAmount)
+            Number(coupon.maxDiscountAmount),
           );
         }
-      } else if (
-        coupon.discountType === "FIXED"
-      ) {
-        discountAmount = Number(
-          coupon.discountValue || 0
-        );
+      } else if (coupon.discountType === "FIXED") {
+        discountAmount = Number(coupon.discountValue || 0);
       }
 
       // Discount cannot exceed subtotal
-      discountAmount = Math.min(
-        discountAmount,
-        subtotal
-      );
+      discountAmount = Math.min(discountAmount, subtotal);
 
       // Prevent negative values
-      discountAmount = Math.max(
-        discountAmount,
-        0
-      );
+      discountAmount = Math.max(discountAmount, 0);
     }
 
     // ======================================================
     // SHIPPING
     // ======================================================
 
-    const amountAfterDiscount =
-      Math.max(
-        subtotal - discountAmount,
-        0
-      );
+    const amountAfterDiscount = Math.max(subtotal - discountAmount, 0);
 
-    const shippingCharge =
-      amountAfterDiscount >= 999
-        ? 0
-        : 50;
+    const shippingCharge = amountAfterDiscount >= 999 ? 0 : 50;
 
     // ======================================================
     // TAX
     // ======================================================
 
-    const taxableAmount =
-      Math.max(
-        subtotal - discountAmount,
-        0
-      );
+    const taxableAmount = Math.max(subtotal - discountAmount, 0);
 
     // Currently zero.
     // You can integrate GST calculation later.
@@ -697,10 +615,7 @@ exports.createOrder = async (req, res) => {
     // FINAL TOTAL
     // ======================================================
 
-    const totalAmount =
-      taxableAmount +
-      shippingCharge +
-      taxAmount;
+    const totalAmount = taxableAmount + shippingCharge + taxAmount;
 
     // ======================================================
     // CREATE ORDER
@@ -721,28 +636,20 @@ exports.createOrder = async (req, res) => {
 
       totalAmount,
 
-      coupon:
-        coupon?._id || null,
+      coupon: coupon?._id || null,
 
-      couponCode:
-        coupon?.code || "",
+      couponCode: coupon?.code || "",
 
-      paymentMethod:
-        normalizedPaymentMethod,
+      paymentMethod: normalizedPaymentMethod,
 
       paymentStatus: "PENDING",
 
       orderStatus: "PENDING",
 
-      customerNote:
-        String(customerNote || "").trim(),
+      customerNote: String(customerNote || "").trim(),
     };
 
-    const createdOrders =
-      await Order.create(
-        [orderData],
-        { session }
-      );
+    const createdOrders = await Order.create([orderData], { session });
 
     const order = createdOrders[0];
 
@@ -752,57 +659,59 @@ exports.createOrder = async (req, res) => {
 
     const createdItems = [];
 
-    for (
-      const item of orderItemsData
-    ) {
+    for (const item of orderItemsData) {
       // ====================================================
       // CREATE ORDER ITEM
       // ====================================================
 
-      const createdOrderItems =
-        await OrderItem.create(
-          [
-            {
-              ...item,
-              order: order._id,
-            },
-          ],
-          { session }
-        );
-
-      const orderItem =
-        createdOrderItems[0];
-
-      createdItems.push(
-        orderItem._id
+      const createdOrderItems = await OrderItem.create(
+        [
+          {
+            ...item,
+            order: order._id,
+          },
+        ],
+        { session },
       );
+
+      const orderItem = createdOrderItems[0];
+
+      createdItems.push(orderItem._id);
 
       // ====================================================
       // REDUCE STOCK SAFELY
       // ====================================================
 
-      const updatedVariant =
-        await ProductVariant.findOneAndUpdate(
-          {
-            _id: item.variant,
-            stock: {
-              $gte: item.quantity,
-            },
+      const updatedProduct = await Product.findOneAndUpdate(
+        {
+          _id: item.product,
+          "variants._id": item.variant,
+          "variants.sizes._id": item.sizeId,
+          "variants.sizes.stockQuantity": {
+            $gte: item.quantity,
           },
-          {
-            $inc: {
-              stock: -item.quantity,
-            },
+        },
+        {
+          $inc: {
+            "variants.$[variant].sizes.$[size].stockQuantity": -item.quantity,
           },
-          {
-            new: true,
-            session,
-          }
-        );
-
-      if (!updatedVariant) {
+        },
+        {
+          new: true,
+          session,
+          arrayFilters: [
+            {
+              "variant._id": item.variant,
+            },
+            {
+              "size._id": item.sizeId,
+            },
+          ],
+        },
+      );
+      if (!updatedProduct) {
         throw new Error(
-          `Stock changed while placing the order for variant ${item.variant}. Please try again.`
+          `Stock changed while placing the order for variant ${item.variant}. Please try again.`,
         );
       }
     }
@@ -822,46 +731,40 @@ exports.createOrder = async (req, res) => {
     // ======================================================
 
     if (coupon) {
-      const couponUpdate =
-        await Coupon.findOneAndUpdate(
-          {
-            _id: coupon._id,
+      const couponUpdate = await Coupon.findOneAndUpdate(
+        {
+          _id: coupon._id,
 
-            // Prevent usage exceeding the limit
-            $or: [
-              {
-                usageLimit: null,
-              },
-              {
-                usageLimit: {
-                  $exists: false,
-                },
-              },
-              {
-                $expr: {
-                  $lt: [
-                    "$usedCount",
-                    "$usageLimit",
-                  ],
-                },
-              },
-            ],
-          },
-          {
-            $inc: {
-              usedCount: 1,
+          // Prevent usage exceeding the limit
+          $or: [
+            {
+              usageLimit: null,
             },
+            {
+              usageLimit: {
+                $exists: false,
+              },
+            },
+            {
+              $expr: {
+                $lt: ["$usedCount", "$usageLimit"],
+              },
+            },
+          ],
+        },
+        {
+          $inc: {
+            usedCount: 1,
           },
-          {
-            new: true,
-            session,
-          }
-        );
+        },
+        {
+          new: true,
+          session,
+        },
+      );
 
       if (!couponUpdate) {
-        throw new Error(
-          "Coupon usage limit was reached. Please try again."
-        );
+        throw new Error("Coupon usage limit was reached. Please try again.");
       }
     }
 
@@ -881,8 +784,7 @@ exports.createOrder = async (req, res) => {
 
         title: "Order placed",
 
-        message:
-          `Your order ${order.orderNumber} has been placed successfully.`,
+        message: `Your order ${order.orderNumber} has been placed successfully.`,
 
         type: "ORDER",
 
@@ -895,31 +797,19 @@ exports.createOrder = async (req, res) => {
     } catch (notificationError) {
       // Notification failure should NOT make
       // an already-created order fail.
-      console.error(
-        "Order notification error:",
-        notificationError
-      );
+      console.error("Order notification error:", notificationError);
     }
 
     // ======================================================
     // POPULATE ORDER
     // ======================================================
 
-    const populatedOrder =
-      await Order.findById(
-        order._id
-      )
-        .populate({
-          path: "items",
-        })
-        .populate(
-          "coupon",
-          "code discountType discountValue"
-        )
-        .populate(
-          "user",
-          "name email mobileNumber"
-        );
+    const populatedOrder = await Order.findById(order._id)
+      .populate({
+        path: "items",
+      })
+      .populate("coupon", "code discountType discountValue")
+      .populate("user", "name email mobileNumber");
 
     // ======================================================
     // SUCCESS RESPONSE
@@ -928,8 +818,7 @@ exports.createOrder = async (req, res) => {
     return res.status(201).json({
       success: true,
 
-      message:
-        "Order created successfully",
+      message: "Order created successfully",
 
       data: populatedOrder,
     });
@@ -939,26 +828,18 @@ exports.createOrder = async (req, res) => {
     // ======================================================
 
     try {
-      if (
-        session.inTransaction()
-      ) {
+      if (session.inTransaction()) {
         await session.abortTransaction();
       }
     } catch (abortError) {
-      console.error(
-        "Transaction abort error:",
-        abortError
-      );
+      console.error("Transaction abort error:", abortError);
     }
 
     // ======================================================
     // ERROR LOG
     // ======================================================
 
-    console.error(
-      "createOrder:",
-      error
-    );
+    console.error("createOrder:", error);
 
     // ======================================================
     // RESPONSE
@@ -967,11 +848,9 @@ exports.createOrder = async (req, res) => {
     return res.status(500).json({
       success: false,
 
-      message:
-        "Failed to create order",
+      message: "Failed to create order",
 
-      error:
-        error.message,
+      error: error.message,
     });
   } finally {
     // ======================================================
@@ -1065,13 +944,7 @@ exports.getOrderById = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
   try {
-    const {
-      status,
-      paymentStatus,
-      search,
-      page = 1,
-      limit = 20,
-    } = req.query;
+    const { status, paymentStatus, search, page = 1, limit = 20 } = req.query;
 
     const query = {
       isDeleted: false,
@@ -1158,17 +1031,13 @@ exports.updateOrderStatus = async (req, res) => {
       req.params.id,
       {
         orderStatus,
-        ...(orderStatus === "DELIVERED"
-          ? { deliveredAt: new Date() }
-          : {}),
-        ...(orderStatus === "CANCELLED"
-          ? { cancelledAt: new Date() }
-          : {}),
+        ...(orderStatus === "DELIVERED" ? { deliveredAt: new Date() } : {}),
+        ...(orderStatus === "CANCELLED" ? { cancelledAt: new Date() } : {}),
       },
       {
         new: true,
         runValidators: true,
-      }
+      },
     );
 
     if (!order) {
@@ -1183,7 +1052,7 @@ exports.updateOrderStatus = async (req, res) => {
       { order: order._id },
       {
         itemStatus: orderStatus,
-      }
+      },
     );
 
     await Notification.create({
@@ -1267,13 +1136,16 @@ exports.cancelOrder = async (req, res) => {
     });
 
     for (const item of items) {
-      await ProductVariant.findByIdAndUpdate(
-        item.variant,
+      await Product.findOneAndUpdate(
+        {
+          _id: item.product,
+          "variants._id": item.variant,
+        },
         {
           $inc: {
-            stock: item.quantity,
+            "variants.$.stock": item.quantity,
           },
-        }
+        },
       );
 
       item.itemStatus = "CANCELLED";
@@ -1303,12 +1175,8 @@ exports.cancelOrder = async (req, res) => {
 
 exports.updateTracking = async (req, res) => {
   try {
-    const {
-      courierName,
-      trackingNumber,
-      trackingUrl,
-      expectedDeliveryDate,
-    } = req.body;
+    const { courierName, trackingNumber, trackingUrl, expectedDeliveryDate } =
+      req.body;
 
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -1321,7 +1189,7 @@ exports.updateTracking = async (req, res) => {
       {
         new: true,
         runValidators: true,
-      }
+      },
     );
 
     if (!order) {
@@ -1363,7 +1231,7 @@ exports.deleteOrder = async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!order) {
@@ -1385,4 +1253,3 @@ exports.deleteOrder = async (req, res) => {
     });
   }
 };
-
