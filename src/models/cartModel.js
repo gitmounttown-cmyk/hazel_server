@@ -16,6 +16,11 @@ const cartItemSchema = new mongoose.Schema(
       required: true,
     },
 
+    variant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductVariant",
+      required: true,
+    },
     // ----------------------------------------------------------
     // Quantity
     // ----------------------------------------------------------
@@ -51,7 +56,7 @@ const cartItemSchema = new mongoose.Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 // ============================================================
@@ -107,24 +112,17 @@ const cartSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "active",
-        "ordered",
-        "abandoned",
-      ],
+      enum: ["active", "ordered", "abandoned"],
       default: "active",
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // ============================================================
 // EXPORT
 // ============================================================
 
-module.exports = mongoose.model(
-  "Cart",
-  cartSchema
-);
+module.exports = mongoose.model("Cart", cartSchema);

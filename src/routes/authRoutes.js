@@ -7,33 +7,25 @@ const {
   verifyOTP,
   resendOTP,
 } = require("../controllers/authController");
+const { uploadProfileImage } = require("../middleware/uploadMiddleware");
 
 // ============================================================
 // SEND OTP
 // ============================================================
 
-router.post(
-  "/send-otp",
-  sendOTP
-);
+router.post("/send-otp", sendOTP);
 
 // ============================================================
 // VERIFY OTP
 // ============================================================
 
-router.post(
-  "/verify-otp",
-  verifyOTP
-);
+router.post("/verify-otp", verifyOTP);
 
 // ============================================================
 // RESEND OTP
 // ============================================================
 
-router.post(
-  "/resend-otp",
-  resendOTP
-);
+router.post("/resend-otp", resendOTP);
 
 // ============================================================
 // EXPORT
