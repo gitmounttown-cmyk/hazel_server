@@ -628,13 +628,14 @@ const getAllNewArrivals =
   async (req, res) => {
     try {
       const newArrivals =
-        await NewArrival.find()
-          .populate(
-            "featuredProduct"
-          )
-          .populate(
-            "products.product"
-          )
+        await NewArrival.find().select("_id title subtitle description products")
+          // .populate(
+          //   "featuredProduct"
+          // )
+          .populate({
+            path: "products.product",
+            select: "_id brandId  categoryId rating reviewCount sleeveStyle subCategoryId variants description name price image",
+          })
           .sort({
             createdAt: -1,
           });
