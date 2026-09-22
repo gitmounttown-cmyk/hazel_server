@@ -864,3 +864,74 @@ SyntaxError: Unexpected token '<<'
 [2026-09-22T05:23:22.378Z] INFO: MongoDB Connected Successfully!!
 [2026-09-22T05:23:22.954Z] ERROR: (node:16972) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T05:58:30.969Z] INFO: ==========================================
+[2026-09-22T05:58:30.976Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:58:30.981Z] INFO: Field name : image
+[2026-09-22T05:58:30.983Z] INFO: File name  : 1A.png
+[2026-09-22T05:58:30.984Z] INFO: Extension  : .png
+[2026-09-22T05:58:30.986Z] INFO: MIME type  : image/png
+[2026-09-22T05:58:30.996Z] INFO: ==========================================
+[2026-09-22T05:59:21.383Z] INFO: ==========================================
+[2026-09-22T05:59:21.386Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:59:21.388Z] INFO: Field name : image
+[2026-09-22T05:59:21.389Z] INFO: File name  : 4A.png
+[2026-09-22T05:59:21.390Z] INFO: Extension  : .png
+[2026-09-22T05:59:21.390Z] INFO: MIME type  : image/png
+[2026-09-22T05:59:21.391Z] INFO: ==========================================
+[2026-09-22T06:00:39.760Z] INFO: ==========================================
+[2026-09-22T06:00:39.761Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:00:39.762Z] INFO: Field name : image
+[2026-09-22T06:00:39.763Z] INFO: File name  : 4A.png
+[2026-09-22T06:00:39.763Z] INFO: Extension  : .png
+[2026-09-22T06:00:39.764Z] INFO: MIME type  : image/png
+[2026-09-22T06:00:39.764Z] INFO: ==========================================
+[2026-09-22T06:01:25.479Z] INFO: ==========================================
+[2026-09-22T06:01:25.480Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:01:25.480Z] INFO: Field name : image
+[2026-09-22T06:01:25.481Z] INFO: File name  : 5A.png
+[2026-09-22T06:01:25.482Z] INFO: Extension  : .png
+[2026-09-22T06:01:25.494Z] INFO: MIME type  : image/png
+[2026-09-22T06:01:25.496Z] INFO: ==========================================
+[2026-09-22T06:16:21.520Z] INFO: ==========================================
+[2026-09-22T06:16:21.521Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:16:21.522Z] INFO: Field name : image
+[2026-09-22T06:16:21.530Z] INFO: File name  : 6A.png
+[2026-09-22T06:16:21.534Z] INFO: Extension  : .png
+[2026-09-22T06:16:21.536Z] INFO: MIME type  : image/png
+[2026-09-22T06:16:21.538Z] INFO: ==========================================
+[2026-09-22T06:20:07.796Z] INFO: ==========================================
+[2026-09-22T06:20:07.797Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:20:07.797Z] INFO: Field name : image
+[2026-09-22T06:20:07.798Z] INFO: File name  : 2A.png
+[2026-09-22T06:20:07.798Z] INFO: Extension  : .png
+[2026-09-22T06:20:07.799Z] INFO: MIME type  : image/png
+[2026-09-22T06:20:07.802Z] INFO: ==========================================
+[2026-09-22T06:21:00.863Z] INFO: ==========================================
+[2026-09-22T06:21:00.863Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:21:00.864Z] INFO: Field name : image
+[2026-09-22T06:21:00.865Z] INFO: File name  : 3A.png
+[2026-09-22T06:21:00.865Z] INFO: Extension  : .png
+[2026-09-22T06:21:00.865Z] INFO: MIME type  : image/png
+[2026-09-22T06:21:00.866Z] INFO: ==========================================
+[2026-09-22T06:21:28.827Z] INFO: ==========================================
+[2026-09-22T06:21:28.828Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:21:28.828Z] INFO: Field name : image
+[2026-09-22T06:21:28.829Z] INFO: File name  : 6A.png
+[2026-09-22T06:21:28.829Z] INFO: Extension  : .png
+[2026-09-22T06:21:28.830Z] INFO: MIME type  : image/png
+[2026-09-22T06:21:28.830Z] INFO: ==========================================
+[2026-09-22T06:22:25.269Z] INFO: ==========================================
+[2026-09-22T06:22:25.271Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:22:25.272Z] INFO: Field name : image
+[2026-09-22T06:22:25.273Z] INFO: File name  : 3A.png
+[2026-09-22T06:22:25.273Z] INFO: Extension  : .png
+[2026-09-22T06:22:25.273Z] INFO: MIME type  : image/png
+[2026-09-22T06:22:25.274Z] INFO: ==========================================
+[2026-09-22T06:22:25.395Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\subcategories\1790058145274-696455411.png
+[2026-09-22T06:23:00.953Z] INFO: ==========================================
+[2026-09-22T06:23:00.965Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:23:00.968Z] INFO: Field name : image
+[2026-09-22T06:23:00.979Z] INFO: File name  : 3A.png
+[2026-09-22T06:23:00.985Z] INFO: Extension  : .png
+[2026-09-22T06:23:00.986Z] INFO: MIME type  : image/png
+[2026-09-22T06:23:00.987Z] INFO: ==========================================
