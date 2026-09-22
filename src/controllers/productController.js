@@ -2,25 +2,11 @@ const Product = require("../models/productModel");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
+const XLSX = require("xlsx");
 
-// *============================================================*
-// *ENUM OPTIONS*
-// *============================================================*
-
-const FEATURE_OPTIONS = [
-  "Side Pocket",
-  "Cotton Lining",
-  "Feeding Friendly",
-  "Invisible Zipper",
-  "Adjustable Rope",
-  "Breathable",
-];
-
-const SLEEVE_STYLE_OPTIONS = [
-  "Puff Sleeves",
-  "Ruched Sleeves",
-];
+// ============================================================
+// CONSTANTS
+// ============================================================
 
 const AVAILABILITY_OPTIONS = [
   "In Stock",
@@ -29,13 +15,207 @@ const AVAILABILITY_OPTIONS = [
 
 const RATING_OPTIONS = [0, 1, 2, 3, 4, 5];
 
-// *============================================================*
-// *DELETE UPLOADED FILE*
-// *============================================================*
+const SIZE_MAP = {
+  XXL: "XXL",
+  "2XL": "2XL",
+  XXXL: "3XL",
+  "3XL": "3XL",
+};
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
+// ============================================================
+// PARSE JSON
+// ============================================================
+
+const parseJSON = (value, defaultValue = null) => {
+  if (
+    value === undefined ||
+    value === null ||
+    value === ""
+  ) {
+    return defaultValue;
+  }
+
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    return defaultValue;
+  }
+};
+
+// ============================================================
+// NORMALIZE ARRAY
+// ============================================================
+
+const normalizeArray = (value) => {
+  if (value === undefined || value === null) {
+    return [];
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const parsed = parseJSON(value, null);
+
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+// ============================================================
+// RANDOM NUMBER
+// ============================================================
+
+const generateRandomNumber = (length = 6) => {
+  const min = Math.pow(10, length - 1);
+  const max = Math.pow(10, length) - 1;
+
+  return Math.floor(
+    Math.random() * (max - min + 1) + min
+  );
+};
+
+// ============================================================
+// COLOR CODE
+// ============================================================
+
+const createColorCode = (color) => {
+  return String(color || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .substring(0, 4);
+};
+
+// ============================================================
+// PRODUCT CODE
+// ============================================================
+
+const createProductCode = () => {
+  return `HZP-${generateRandomNumber(6)}`;
+};
+
+// ============================================================
+// SKU
+// ============================================================
+
+const generateSKU = (
+  productName,
+  color,
+  size
+) => {
+  const productCode = String(productName || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .substring(0, 5);
+
+  const colorCode = createColorCode(color);
+
+  return `HZ-${productCode}-${colorCode}-${size}`;
+};
+
+// ============================================================
+// BARCODE
+// ============================================================
+
+const generateBarcode = () => {
+  return `890${Date.now()}${generateRandomNumber(4)}`;
+};
+
+// ============================================================
+// QUANTITY
+// ============================================================
+
+const calculateVariantQuantity = (sizes = []) => {
+  return sizes.reduce(
+    (total, size) =>
+      total + (Number(size.stockQuantity) || 0),
+    0
+  );
+};
+
+// ============================================================
+// NORMALIZE SIZE
+// ============================================================
+
+const normalizeSize = (value) => {
+  const size = String(value || "")
+    .trim()
+    .toUpperCase();
+
+  return SIZE_MAP[size] || size;
+};
+
+// ============================================================
+// PREPARE UPLOADED MEDIA
+// ============================================================
+
+const prepareUploadedMedia = (files = []) => {
+  return files.map((file) => {
+    const isVideo =
+      file.mimetype &&
+      file.mimetype.startsWith("video/");
+
+    return {
+      type: isVideo ? "video" : "image",
+      imageURL: `/uploads/products/${file.filename}`,
+      thumbnail: null,
+    };
+  });
+};
+
+// ============================================================
+// NORMALIZE MEDIA
+// ============================================================
+
+const normalizeMedia = (media = []) => {
+  if (!Array.isArray(media)) {
+    return [];
+  }
+
+  return media.map((item) => ({
+    type: item.type || "image",
+    imageURL:
+      item.imageURL ||
+      item.url ||
+      null,
+    thumbnail:
+      item.thumbnail || null,
+  }));
+};
+
+// ============================================================
+// DELETE UPLOADED FILE
+// ============================================================
 
 const deleteUploadedFile = (file) => {
   try {
-    if (file?.path && fs.existsSync(file.path)) {
+    if (
+      file?.path &&
+      fs.existsSync(file.path)
+    ) {
       fs.unlinkSync(file.path);
     }
   } catch (error) {
@@ -46,9 +226,9 @@ const deleteUploadedFile = (file) => {
   }
 };
 
-// *============================================================*
-// *DELETE MEDIA FILE*
-// *============================================================*
+// ============================================================
+// DELETE MEDIA FILE
+// ============================================================
 
 const deleteMediaFile = (imageURL) => {
   try {
@@ -91,9 +271,9 @@ const deleteMediaFile = (imageURL) => {
   }
 };
 
-// *============================================================*
-// *DELETE MEDIA ARRAY*
-// *============================================================*
+// ============================================================
+// DELETE MEDIA ARRAY
+// ============================================================
 
 const deleteMediaArray = (mediaArray = []) => {
   mediaArray.forEach((media) => {
@@ -107,323 +287,13 @@ const deleteMediaArray = (mediaArray = []) => {
   });
 };
 
-// *============================================================*
-// *GENERATE RANDOM NUMBER*
-// *============================================================*
-
-const generateRandomNumber = (length = 6) => {
-  const min = Math.pow(10, length - 1);
-  const max = Math.pow(10, length) - 1;
-
-  return Math.floor(
-    Math.random() * (max - min + 1) + min
-  );
-};
-
-// *============================================================*
-// *CREATE COLOR CODE*
-// *============================================================*
-
-const createColorCode = (color) => {
-  return String(color || "")
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .substring(0, 4);
-};
-
-// *============================================================*
-// *CREATE PRODUCT CODE*
-// *============================================================*
-
-const createProductCode = () => {
-  return `HZP-${generateRandomNumber(6)}`;
-};
-
-// *============================================================*
-// *GENERATE SKU*
-// *============================================================*
-
-const generateSKU = (
-  productName,
-  color,
-  size
-) => {
-  const productCode = String(productName || "")
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .substring(0, 5);
-
-  const colorCode = createColorCode(color);
-
-  return `HZ-${productCode}-${colorCode}-${size}`;
-};
-
-// *============================================================*
-// *GENERATE BARCODE*
-// *============================================================*
-
-const generateBarcode = () => {
-  return `890${Date.now()}${generateRandomNumber(4)}`;
-};
-
-// *============================================================*
-// *CALCULATE VARIANT QUANTITY*
-// *============================================================*
-
-const calculateVariantQuantity = (sizes = []) => {
-  return sizes.reduce(
-    (total, size) =>
-      total + (Number(size.stockQuantity) || 0),
-    0
-  );
-};
-
-// *============================================================*
-// *PARSE JSON*
-// *============================================================*
-
-const parseJSON = (value, defaultValue = null) => {
-  if (
-    value === undefined ||
-    value === null ||
-    value === ""
-  ) {
-    return defaultValue;
-  }
-
-  if (typeof value !== "string") {
-    return value;
-  }
-
-  try {
-    return JSON.parse(value);
-  } catch (error) {
-    return defaultValue;
-  }
-};
-
-// *============================================================*
-// *NORMALIZE ARRAY*
-// *============================================================*
-
-const normalizeArray = (value) => {
-  if (value === undefined || value === null) {
-    return [];
-  }
-
-  if (Array.isArray(value)) {
-    return value;
-  }
-
-  if (typeof value === "string") {
-    const parsed = parseJSON(value, null);
-
-    if (Array.isArray(parsed)) {
-      return parsed;
-    }
-
-    return value
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-  }
-
-  return [];
-};
-
-// *============================================================*
-// *VALIDATE FEATURES*
-// *============================================================*
-
-const normalizeFeatures = (value) => {
-  const features = normalizeArray(value);
-
-  const uniqueFeatures = [
-    ...new Set(
-      features.map((feature) =>
-        String(feature).trim()
-      )
-    ),
-  ];
-
-  const invalidFeatures = uniqueFeatures.filter(
-    (feature) =>
-      !FEATURE_OPTIONS.includes(feature)
-  );
-
-  if (invalidFeatures.length > 0) {
-    throw new Error(
-      `Invalid features: ${invalidFeatures.join(", ")}`
-    );
-  }
-
-  return uniqueFeatures;
-};
-
-// *============================================================*
-// *VALIDATE SLEEVE STYLE*
-// *============================================================*
-
-const normalizeSleeveStyle = (value) => {
-  if (
-    value === undefined ||
-    value === null ||
-    value === ""
-  ) {
-    return null;
-  }
-
-  const sleeveStyle = String(value).trim();
-
-  if (
-    !SLEEVE_STYLE_OPTIONS.includes(
-      sleeveStyle
-    )
-  ) {
-    throw new Error(
-      `Invalid sleeveStyle. Allowed values: ${SLEEVE_STYLE_OPTIONS.join(
-        ", "
-      )}`
-    );
-  }
-
-  return sleeveStyle;
-};
-
-// *============================================================*
-// *VALIDATE OBJECT ID*
-// *============================================================*
-
-const isValidObjectId = (id) => {
-  return mongoose.Types.ObjectId.isValid(id);
-};
-
-// *============================================================*
-// *PREPARE UPLOADED MEDIA*
-// *============================================================*
-
-const prepareUploadedMedia = (files = []) => {
-  return files.map((file) => {
-    const isVideo =
-      file.mimetype &&
-      file.mimetype.startsWith("video/");
-
-    return {
-      type: isVideo ? "video" : "image",
-
-      imageURL: `/uploads/products/${file.filename}`,
-
-      thumbnail: null,
-    };
-  });
-};
-
-// *============================================================*
-// *NORMALIZE MEDIA*
-// *============================================================*
-
-const normalizeMedia = (media = []) => {
-  if (!Array.isArray(media)) {
-    return [];
-  }
-
-  return media.map((item) => ({
-    type: item.type || "image",
-
-    imageURL:
-      item.imageURL ||
-      item.url ||
-      null,
-
-    thumbnail:
-      item.thumbnail || null,
-  }));
-};
-
-// *============================================================*
-// *PARSE MEDIA COLORS*
-// *============================================================*
-
-const parseMediaColors = (
-  value,
-  fileCount
-) => {
-  if (!value) {
-    return [];
-  }
-
-  const colors = normalizeArray(value);
-
-  if (colors.length !== fileCount) {
-    throw new Error(
-      "mediaColors count must match uploaded media count"
-    );
-  }
-
-  return colors.map((color) =>
-    String(color)
-      .trim()
-      .toUpperCase()
-  );
-};
-
-// *============================================================*
-// *ATTACH UPLOADED MEDIA BY COLOR*
-// *============================================================*
-
-const attachUploadedMediaByColor = ({
-  variants,
-  files = [],
-  mediaColors = [],
-}) => {
-  if (!files.length) {
-    return variants;
-  }
-
-  const uploadedMedia =
-    prepareUploadedMedia(files);
-
-  uploadedMedia.forEach((media, index) => {
-    const color = mediaColors[index];
-
-    if (!color) {
-      return;
-    }
-
-    const variant = variants.find(
-      (item) =>
-        String(item.color).toUpperCase() ===
-        String(color).toUpperCase()
-    );
-
-    if (variant) {
-      if (!Array.isArray(variant.media)) {
-        variant.media = [];
-      }
-
-      if (variant.media.length >= 10) {
-        throw new Error(
-          `Maximum 10 media files are allowed for color ${color}`
-        );
-      }
-
-      variant.media.push(media);
-    }
-  });
-
-  return variants;
-};
-
-// *============================================================*
-// *PREPARE VARIANTS*
-// *============================================================*
+// ============================================================
+// PREPARE VARIANTS
+// ============================================================
 
 const prepareVariants = (
   variants = [],
-  productName,
-  existingVariants = []
+  productName
 ) => {
   if (!Array.isArray(variants)) {
     throw new Error(
@@ -433,16 +303,11 @@ const prepareVariants = (
 
   return variants.map(
     (variant, variantIndex) => {
-      const existingVariant =
-        existingVariants.find(
-          (item) =>
-            String(item._id) ===
-            String(variant._id)
-        );
-
       if (!variant.color) {
         throw new Error(
-          `Color is required for variant ${variantIndex + 1}`
+          `Color is required for variant ${
+            variantIndex + 1
+          }`
         );
       }
 
@@ -452,14 +317,13 @@ const prepareVariants = (
         .trim()
         .toUpperCase();
 
-      // *======================================================*
-      // *SIZES*
-      // *======================================================*
-
       let sizes = variant.sizes;
 
       if (typeof sizes === "string") {
-        sizes = parseJSON(sizes, []);
+        sizes = parseJSON(
+          sizes,
+          []
+        );
       }
 
       if (!Array.isArray(sizes)) {
@@ -467,11 +331,8 @@ const prepareVariants = (
       }
 
       sizes = sizes.map((size) => {
-        const sizeValue = String(
-          size.size || ""
-        )
-          .trim()
-          .toUpperCase();
+        const sizeValue =
+          normalizeSize(size.size);
 
         if (!sizeValue) {
           throw new Error(
@@ -506,40 +367,36 @@ const prepareVariants = (
         };
       });
 
-      // *======================================================*
-      // *MEDIA*
-      // *======================================================*
-
       let media = variant.media;
 
       if (typeof media === "string") {
-        media = parseJSON(media, []);
-      }
-
-      if (!Array.isArray(media)) {
-        media = [];
+        media = parseJSON(
+          media,
+          []
+        );
       }
 
       media = normalizeMedia(media);
 
-      // *======================================================*
-      // *QUANTITY*
-      // *======================================================*
+      if (media.length > 10) {
+        throw new Error(
+          `Maximum 10 media files are allowed for color ${color}`
+        );
+      }
 
       const quantity =
         calculateVariantQuantity(
           sizes
         );
 
-      // *======================================================*
-      // *PRICE*
-      // *======================================================*
-
       const price = Number(
         variant.price
       );
 
-      if (Number.isNaN(price) || price < 0) {
+      if (
+        Number.isNaN(price) ||
+        price < 0
+      ) {
         throw new Error(
           `Invalid price for color ${color}`
         );
@@ -557,7 +414,9 @@ const prepareVariants = (
           Number(discountPrice);
 
         if (
-          Number.isNaN(discountPrice) ||
+          Number.isNaN(
+            discountPrice
+          ) ||
           discountPrice < 0
         ) {
           throw new Error(
@@ -565,7 +424,9 @@ const prepareVariants = (
           );
         }
 
-        if (discountPrice > price) {
+        if (
+          discountPrice > price
+        ) {
           throw new Error(
             `discountPrice cannot be greater than price for color ${color}`
           );
@@ -573,10 +434,6 @@ const prepareVariants = (
       } else {
         discountPrice = null;
       }
-
-      // *======================================================*
-      // *OFFER*
-      // *======================================================*
 
       let offer = variant.offer;
 
@@ -596,18 +453,6 @@ const prepareVariants = (
         };
       }
 
-      // *======================================================*
-      // *SLEEVE STYLE*
-      // *======================================================*
-
-      const sleeveStyle =
-        variant.sleeveStyle !==
-        undefined
-          ? normalizeSleeveStyle(
-              variant.sleeveStyle
-            )
-          : null;
-
       return {
         _id: variant._id,
 
@@ -624,8 +469,8 @@ const prepareVariants = (
         lining:
           variant.lining || "",
 
-        sleeves:
-          variant.sleeves || "",
+        sleeveStyle:
+          variant.sleeveStyle || "",
 
         finishing:
           variant.finishing || "",
@@ -645,17 +490,75 @@ const prepareVariants = (
 
         isActive:
           variant.isActive !== undefined
-            ? Boolean(variant.isActive)
+            ? Boolean(
+                variant.isActive
+              )
             : true,
       };
     }
   );
 };
 
-// *============================================================*
-// *CREATE PRODUCT*
-// *POST /api/products/create
-// *============================================================*
+// ============================================================
+// ATTACH UPLOADED MEDIA BY COLOR
+// ============================================================
+
+const attachUploadedMediaByColor = ({
+  variants,
+  files = [],
+  mediaColors = [],
+}) => {
+  if (!files.length) {
+    return variants;
+  }
+
+  const uploadedMedia =
+    prepareUploadedMedia(files);
+
+  uploadedMedia.forEach(
+    (media, index) => {
+      const color =
+        mediaColors[index];
+
+      if (!color) {
+        return;
+      }
+
+      const variant =
+        variants.find(
+          (item) =>
+            String(
+              item.color
+            ).toUpperCase() ===
+            String(color).toUpperCase()
+        );
+
+      if (!variant) {
+        return;
+      }
+
+      if (!Array.isArray(variant.media)) {
+        variant.media = [];
+      }
+
+      if (
+        variant.media.length >= 10
+      ) {
+        throw new Error(
+          `Maximum 10 media files are allowed for color ${color}`
+        );
+      }
+
+      variant.media.push(media);
+    }
+  );
+
+  return variants;
+};
+
+// ============================================================
+// CREATE PRODUCT
+// ============================================================
 
 const createProduct = async (
   req,
@@ -667,42 +570,36 @@ const createProduct = async (
       subCategoryId,
       brandId,
       name,
+      productType,
+      fit,
+      length,
       description,
       features,
-      sleeveStyle,
+      comboOffer,
+      bannerType,
       rating,
       reviewCount,
+      variants: bodyVariants,
     } = req.body;
 
-    // *========================================================*
-    // *VALIDATE NAME*
-    // *========================================================*
-
-    if (!name || !String(name).trim()) {
-      return res.status(400).json({
-        success: false,
-        message: "Product name is required",
-      });
-    }
-
-    // *========================================================*
-    // *VALIDATE SUB CATEGORY*
-    // *========================================================*
+    // --------------------------------------------------------
+    // NAME
+    // --------------------------------------------------------
 
     if (
-      !subCategoryId ||
-      !isValidObjectId(subCategoryId)
+      !name ||
+      !String(name).trim()
     ) {
       return res.status(400).json({
         success: false,
         message:
-          "Valid subCategoryId is required",
+          "Product name is required",
       });
     }
 
-    // *========================================================*
-    // *VALIDATE CATEGORY*
-    // *========================================================*
+    // --------------------------------------------------------
+    // OBJECT IDS
+    // --------------------------------------------------------
 
     if (
       categoryId &&
@@ -715,9 +612,18 @@ const createProduct = async (
       });
     }
 
-    // *========================================================*
-    // *VALIDATE BRAND*
-    // *========================================================*
+    if (
+      subCategoryId &&
+      !isValidObjectId(
+        subCategoryId
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid subCategoryId",
+      });
+    }
 
     if (
       brandId &&
@@ -730,9 +636,9 @@ const createProduct = async (
       });
     }
 
-    // *========================================================*
-    // *DESCRIPTION*
-    // *========================================================*
+    // --------------------------------------------------------
+    // DESCRIPTION
+    // --------------------------------------------------------
 
     const parsedDescription =
       parseJSON(
@@ -740,27 +646,18 @@ const createProduct = async (
         description || {}
       );
 
-    // *========================================================*
-    // *FEATURES*
-    // *========================================================*
+    // --------------------------------------------------------
+    // FEATURES
+    // --------------------------------------------------------
 
     const normalizedFeatures =
-      normalizeFeatures(
+      normalizeArray(
         features
       );
 
-    // *========================================================*
-    // *SLEEVE STYLE*
-    // *========================================================*
-
-    const normalizedSleeveStyle =
-      normalizeSleeveStyle(
-        sleeveStyle
-      );
-
-    // *========================================================*
-    // *RATING*
-    // *========================================================*
+    // --------------------------------------------------------
+    // RATING
+    // --------------------------------------------------------
 
     let productRating = 0;
 
@@ -768,9 +665,8 @@ const createProduct = async (
       rating !== undefined &&
       rating !== ""
     ) {
-      productRating = Number(
-        rating
-      );
+      productRating =
+        Number(rating);
 
       if (
         !RATING_OPTIONS.includes(
@@ -780,14 +676,14 @@ const createProduct = async (
         return res.status(400).json({
           success: false,
           message:
-            "Rating must be one of 0, 1, 2, 3, 4 or 5",
+            "Rating must be between 0 and 5",
         });
       }
     }
 
-    // *========================================================*
-    // *REVIEW COUNT*
-    // *========================================================*
+    // --------------------------------------------------------
+    // REVIEW COUNT
+    // --------------------------------------------------------
 
     let productReviewCount = 0;
 
@@ -795,9 +691,8 @@ const createProduct = async (
       reviewCount !== undefined &&
       reviewCount !== ""
     ) {
-      productReviewCount = Number(
-        reviewCount
-      );
+      productReviewCount =
+        Number(reviewCount);
 
       if (
         Number.isNaN(
@@ -813,20 +708,28 @@ const createProduct = async (
       }
     }
 
-    // *========================================================*
-    // *VARIANTS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // VARIANTS
+    // --------------------------------------------------------
 
-    let variants = req.body.variants;
+    let variants = bodyVariants;
 
-    if (typeof variants === "string") {
-      variants = parseJSON(
-        variants,
-        []
-      );
+    if (
+      typeof variants ===
+      "string"
+    ) {
+      variants =
+        parseJSON(
+          variants,
+          []
+        );
     }
 
-    if (!Array.isArray(variants)) {
+    if (
+      !Array.isArray(
+        variants
+      )
+    ) {
       return res.status(400).json({
         success: false,
         message:
@@ -834,28 +737,33 @@ const createProduct = async (
       });
     }
 
-    variants = prepareVariants(
-      variants,
-      name
-    );
+    variants =
+      prepareVariants(
+        variants,
+        name
+      );
 
-    // *========================================================*
-    // *CHECK DUPLICATE COLORS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // DUPLICATE COLORS
+    // --------------------------------------------------------
 
-    const colors = variants.map(
-      (variant) =>
-        variant.color.toUpperCase()
-    );
+    const colors =
+      variants.map(
+        (variant) =>
+          variant.color
+      );
 
     const duplicateColors =
       colors.filter(
         (color, index) =>
-          colors.indexOf(color) !==
-          index
+          colors.indexOf(
+            color
+          ) !== index
       );
 
-    if (duplicateColors.length > 0) {
+    if (
+      duplicateColors.length
+    ) {
       return res.status(400).json({
         success: false,
         message:
@@ -868,27 +776,32 @@ const createProduct = async (
       });
     }
 
-    // *========================================================*
-    // *MEDIA COLORS*
-    // *========================================================*
-
-    let mediaColors = [];
+    // --------------------------------------------------------
+    // MEDIA
+    // --------------------------------------------------------
 
     if (req.files?.length) {
-      try {
-        mediaColors =
-          parseMediaColors(
-            req.body.mediaColors,
-            req.files.length
-          );
-      } catch (error) {
+      const mediaColors =
+        normalizeArray(
+          req.body.mediaColors
+        ).map((color) =>
+          String(color)
+            .trim()
+            .toUpperCase()
+        );
+
+      if (
+        mediaColors.length !==
+        req.files.length
+      ) {
         req.files.forEach(
           deleteUploadedFile
         );
 
         return res.status(400).json({
           success: false,
-          message: error.message,
+          message:
+            "mediaColors count must match uploaded media count",
         });
       }
 
@@ -900,52 +813,64 @@ const createProduct = async (
         });
     }
 
-    // *========================================================*
-    // *CREATE PRODUCT*
-    // *========================================================*
+    // --------------------------------------------------------
+    // CREATE
+    // --------------------------------------------------------
 
-    const product = new Product({
-      categoryId:
-        categoryId || null,
+    const product =
+      new Product({
+        categoryId:
+          categoryId || null,
 
-      subCategoryId,
+        subCategoryId:
+          subCategoryId || null,
 
-      brandId:
-        brandId || null,
+        brandId:
+          brandId || null,
 
-      name: String(name).trim(),
+        name:
+          String(name).trim(),
 
-      description:
-        parsedDescription,
+        productType:
+          productType || "",
 
-      features:
-        normalizedFeatures,
+        fit:
+          fit || "",
 
-      sleeveStyle:
-        normalizedSleeveStyle,
+        length:
+          length || "",
 
-      rating:
-        productRating,
+        description:
+          parsedDescription,
 
-      reviewCount:
-        productReviewCount,
+        features:
+          normalizedFeatures,
 
-      variants,
+        comboOffer:
+          comboOffer || "",
 
-      isActive: true,
+        bannerType:
+          bannerType || "",
 
-      isDeleted: false,
-    });
+        rating:
+          productRating,
 
-    // *pre-save calculates availability*
+        reviewCount:
+          productReviewCount,
+
+        variants,
+
+        isActive: true,
+
+        isDeleted: false,
+      });
+
     await product.save();
 
     return res.status(201).json({
       success: true,
-
       message:
         "Product created successfully",
-
       data: product,
     });
   } catch (error) {
@@ -962,7 +887,6 @@ const createProduct = async (
 
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to create product",
@@ -970,10 +894,9 @@ const createProduct = async (
   }
 };
 
-// *============================================================*
-// *GET ALL PRODUCTS*
-// *GET /api/products/all
-// *============================================================*
+// ============================================================
+// GET ALL PRODUCTS
+// ============================================================
 
 const getAllProducts = async (
   req,
@@ -984,59 +907,45 @@ const getAllProducts = async (
       page = 1,
       limit = 20,
       search,
-
       categoryId,
       subCategoryId,
       brandId,
-
       isActive,
-
       size,
       fabric,
       color,
-      pocket,
-
-      features,
       sleeveStyle,
-      sleeve,
-
+      pocket,
       availability,
-
       rating,
       minRating,
-
       price,
-      maxPrice,
-
       minPrice,
-      max_price_range,
+      maxPrice,
     } = req.query;
-
-    // *========================================================*
-    // *BASE FILTER*
-    // *========================================================*
 
     const filter = {
       isDeleted: false,
     };
 
-    // *========================================================*
-    // *SEARCH*
-    // *========================================================*
+    // --------------------------------------------------------
+    // SEARCH
+    // --------------------------------------------------------
 
     if (
       search &&
       String(search).trim()
     ) {
       filter.name = {
-        $regex: String(search).trim(),
+        $regex:
+          String(search).trim(),
         $options: "i",
       };
     }
 
-    // *========================================================*
-    // *CATEGORY*
-    // *========================================================*
+    // --------------------------------------------------------
+    // IDS
+    // --------------------------------------------------------
 
     if (categoryId) {
       if (
@@ -1055,10 +964,6 @@ const getAllProducts = async (
         categoryId;
     }
 
-    // *========================================================*
-    // *SUB CATEGORY*
-    // *========================================================*
-
     if (subCategoryId) {
       if (
         !isValidObjectId(
@@ -1075,10 +980,6 @@ const getAllProducts = async (
       filter.subCategoryId =
         subCategoryId;
     }
-
-    // *========================================================*
-    // *BRAND*
-    // *========================================================*
 
     if (brandId) {
       if (
@@ -1097,9 +998,9 @@ const getAllProducts = async (
         brandId;
     }
 
-    // *========================================================*
-    // *ACTIVE*
-    // *========================================================*
+    // --------------------------------------------------------
+    // ACTIVE
+    // --------------------------------------------------------
 
     if (
       isActive !== undefined
@@ -1109,123 +1010,42 @@ const getAllProducts = async (
         "true";
     }
 
-    // *========================================================*
-    // *PRODUCT FEATURES*
-    // *========================================================*
-
-    if (features) {
-      const requestedFeatures =
-        normalizeArray(
-          features
-        );
-
-      const invalidFeatures =
-        requestedFeatures.filter(
-          (feature) =>
-            !FEATURE_OPTIONS.includes(
-              feature
-            )
-        );
-
-      if (
-        invalidFeatures.length
-      ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Invalid feature filter",
-          allowedFeatures:
-            FEATURE_OPTIONS,
-          invalidFeatures,
-        });
-      }
-
-      if (
-        requestedFeatures.length
-      ) {
-        filter.features = {
-          $in: requestedFeatures,
-        };
-      }
-    }
-
-    // *========================================================*
-    // *SLEEVE STYLE*
-    // *========================================================*
-
-    const requestedSleeveStyle =
-      sleeveStyle || sleeve;
-
-    if (requestedSleeveStyle) {
-      const sleeveStyles =
-        normalizeArray(
-          requestedSleeveStyle
-        );
-
-      const invalidSleeves =
-        sleeveStyles.filter(
-          (value) =>
-            !SLEEVE_STYLE_OPTIONS.includes(
-              value
-            )
-        );
-
-      if (invalidSleeves.length) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Invalid sleeveStyle filter",
-          allowedSleeveStyles:
-            SLEEVE_STYLE_OPTIONS,
-          invalidSleeves,
-        });
-      }
-
-      // *Your schema stores sleeveStyle
-      // *at product level.
-      filter.sleeveStyle = {
-        $in: sleeveStyles,
-      };
-    }
-
-    // *========================================================*
-    // *AVAILABILITY*
-    // *========================================================*
+    // --------------------------------------------------------
+    // AVAILABILITY
+    // --------------------------------------------------------
 
     if (availability) {
-      const availabilityValues =
+      const values =
         normalizeArray(
           availability
         );
 
-      const invalidAvailability =
-        availabilityValues.filter(
+      const invalid =
+        values.filter(
           (value) =>
             !AVAILABILITY_OPTIONS.includes(
               value
             )
         );
 
-      if (
-        invalidAvailability.length
-      ) {
+      if (invalid.length) {
         return res.status(400).json({
           success: false,
           message:
-            "Invalid availability filter",
-          allowedAvailability:
+            "Invalid availability",
+          allowed:
             AVAILABILITY_OPTIONS,
         });
       }
 
       filter.availability = {
-        $in: availabilityValues,
+        $in: values,
       };
     }
 
-    // *========================================================*
-    // *RATING*
-    // *========================================================*
+    // --------------------------------------------------------
+    // RATING
+    // --------------------------------------------------------
 
     const ratingValue =
       rating !== undefined
@@ -1240,14 +1060,16 @@ const getAllProducts = async (
         Number(ratingValue);
 
       if (
-        !RATING_OPTIONS.includes(
+        Number.isNaN(
           minimumRating
-        )
+        ) ||
+        minimumRating < 0 ||
+        minimumRating > 5
       ) {
         return res.status(400).json({
           success: false,
           message:
-            "Rating filter must be 0, 1, 2, 3, 4 or 5",
+            "Rating must be between 0 and 5",
         });
       }
 
@@ -1256,24 +1078,16 @@ const getAllProducts = async (
       };
     }
 
-    // *========================================================*
-    // *VARIANT FILTERS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // VARIANT FILTERS
+    // --------------------------------------------------------
 
     const variantMatch = {};
 
-    // *========================================================*
-    // *SIZE*
-    // *========================================================*
-
     if (size) {
       const sizes =
-        normalizeArray(size).map(
-          (value) =>
-            String(value)
-              .trim()
-              .toUpperCase()
-        );
+        normalizeArray(size)
+          .map(normalizeSize);
 
       variantMatch.sizes = {
         $elemMatch: {
@@ -1284,63 +1098,58 @@ const getAllProducts = async (
       };
     }
 
-    // *========================================================*
-    // *FABRIC*
-    // *========================================================*
-
     if (fabric) {
       variantMatch.fabric = {
-        $regex: String(fabric),
+        $regex:
+          String(fabric),
         $options: "i",
       };
     }
 
-    // *========================================================*
-    // *COLOR*
-    // *========================================================*
-
     if (color) {
       const colors =
-        normalizeArray(color).map(
-          (value) =>
+        normalizeArray(color)
+          .map((value) =>
             String(value)
               .trim()
               .toUpperCase()
-        );
+          );
 
       variantMatch.color = {
         $in: colors,
       };
     }
 
-    // *========================================================*
-    // *POCKET*
-    // *========================================================*
-
-    if (pocket) {
-      variantMatch.pocket = {
-        $regex: String(pocket),
+    if (sleeveStyle) {
+      variantMatch.sleeveStyle = {
+        $regex:
+          String(sleeveStyle),
         $options: "i",
       };
     }
 
-    // *========================================================*
-    // *APPLY VARIANT FILTER*
-    // *========================================================*
+    if (pocket) {
+      variantMatch.pocket = {
+        $regex:
+          String(pocket),
+        $options: "i",
+      };
+    }
 
     if (
       Object.keys(
         variantMatch
-      ).length > 0
+      ).length
     ) {
       filter.variants = {
-        $elemMatch: variantMatch,
+        $elemMatch:
+          variantMatch,
       };
     }
 
-    // *========================================================*
-    // *PRICE FILTER*
-    // *========================================================*
+    // --------------------------------------------------------
+    // PRICE
+    // --------------------------------------------------------
 
     if (price) {
       switch (price) {
@@ -1369,20 +1178,12 @@ const getAllProducts = async (
             $gt: 2000,
           };
           break;
-
-        default:
-          break;
       }
     }
 
-    // *========================================================*
-    // *MIN / MAX PRICE*
-    // *========================================================*
-
     if (
       minPrice !== undefined ||
-      maxPrice !== undefined ||
-      max_price_range !== undefined
+      maxPrice !== undefined
     ) {
       const priceFilter = {};
 
@@ -1394,17 +1195,12 @@ const getAllProducts = async (
           Number(minPrice);
       }
 
-      const maximumPrice =
-        maxPrice !== undefined
-          ? maxPrice
-          : max_price_range;
-
       if (
-        maximumPrice !== undefined &&
-        maximumPrice !== ""
+        maxPrice !== undefined &&
+        maxPrice !== ""
       ) {
         priceFilter.$lte =
-          Number(maximumPrice);
+          Number(maxPrice);
       }
 
       if (
@@ -1417,9 +1213,9 @@ const getAllProducts = async (
       }
     }
 
-    // *========================================================*
-    // *PAGINATION*
-    // *========================================================*
+    // --------------------------------------------------------
+    // PAGINATION
+    // --------------------------------------------------------
 
     const pageNumber =
       Math.max(
@@ -1440,65 +1236,56 @@ const getAllProducts = async (
       (pageNumber - 1) *
       limitNumber;
 
-    // *========================================================*
-    // *QUERY*
-    // *========================================================*
+    // --------------------------------------------------------
+    // QUERY
+    // --------------------------------------------------------
 
-    const [products, total] =
-      await Promise.all([
-        Product.find(filter)
-          .populate(
-            "categoryId"
-          )
-          .populate(
-            "subCategoryId"
-          )
-          .populate(
-            "brandId"
-          )
-          .sort({
-            createdAt: -1,
-          })
-          .skip(skip)
-          .limit(limitNumber),
-
-        Product.countDocuments(
-          filter
+    const [
+      products,
+      total,
+    ] = await Promise.all([
+      Product.find(filter)
+        .populate("categoryId")
+        .populate("subCategoryId")
+        .populate("brandId")
+        .sort({
+          createdAt: -1,
+        })
+        .skip(skip)
+        .limit(
+          limitNumber
         ),
-      ]);
 
-    // *========================================================*
-    // *RESPONSE*
-    // *========================================================*
+      Product.countDocuments(
+        filter
+      ),
+    ]);
 
     return res.status(200).json({
       success: true,
-
       message:
         "Products fetched successfully",
 
       data: products,
 
       pagination: {
-        currentPage: pageNumber,
+        currentPage:
+          pageNumber,
 
         totalPages:
           Math.ceil(
-            total / limitNumber
+            total /
+              limitNumber
           ),
 
-        totalProducts: total,
+        totalProducts:
+          total,
 
-        limit: limitNumber,
+        limit:
+          limitNumber,
       },
 
       filters: {
-        features:
-          FEATURE_OPTIONS,
-
-        sleeveStyles:
-          SLEEVE_STYLE_OPTIONS,
-
         availability:
           AVAILABILITY_OPTIONS,
 
@@ -1514,7 +1301,6 @@ const getAllProducts = async (
 
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to fetch products",
@@ -1522,10 +1308,9 @@ const getAllProducts = async (
   }
 };
 
-// *============================================================*
-// *GET PRODUCT BY ID*
-// *GET /api/products/:productId
-// *============================================================*
+// ============================================================
+// GET PRODUCT BY ID
+// ============================================================
 
 const getProductById = async (
   req,
@@ -1537,7 +1322,9 @@ const getProductById = async (
     } = req.params;
 
     if (
-      !isValidObjectId(productId)
+      !isValidObjectId(
+        productId
+      )
     ) {
       return res.status(400).json({
         success: false,
@@ -1551,15 +1338,9 @@ const getProductById = async (
         _id: productId,
         isDeleted: false,
       })
-        .populate(
-          "categoryId"
-        )
-        .populate(
-          "subCategoryId"
-        )
-        .populate(
-          "brandId"
-        );
+        .populate("categoryId")
+        .populate("subCategoryId")
+        .populate("brandId");
 
     if (!product) {
       return res.status(404).json({
@@ -1571,10 +1352,8 @@ const getProductById = async (
 
     return res.status(200).json({
       success: true,
-
       message:
         "Product fetched successfully",
-
       data: product,
     });
   } catch (error) {
@@ -1585,7 +1364,6 @@ const getProductById = async (
 
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to fetch product",
@@ -1593,10 +1371,9 @@ const getProductById = async (
   }
 };
 
-// *============================================================*
-// *UPDATE PRODUCT*
-// *PUT /api/products/:productId
-// *============================================================*
+// ============================================================
+// UPDATE PRODUCT
+// ============================================================
 
 const updateProduct = async (
   req,
@@ -1608,7 +1385,9 @@ const updateProduct = async (
     } = req.params;
 
     if (
-      !isValidObjectId(productId)
+      !isValidObjectId(
+        productId
+      )
     ) {
       return res.status(400).json({
         success: false,
@@ -1631,12 +1410,13 @@ const updateProduct = async (
       });
     }
 
-    // *========================================================*
-    // *BASIC FIELDS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // BASIC FIELDS
+    // --------------------------------------------------------
 
     if (
-      req.body.name !== undefined
+      req.body.name !==
+      undefined
     ) {
       if (
         !String(
@@ -1683,6 +1463,7 @@ const updateProduct = async (
       undefined
     ) {
       if (
+        req.body.subCategoryId &&
         !isValidObjectId(
           req.body.subCategoryId
         )
@@ -1695,7 +1476,8 @@ const updateProduct = async (
       }
 
       product.subCategoryId =
-        req.body.subCategoryId;
+        req.body.subCategoryId ||
+        null;
     }
 
     if (
@@ -1720,9 +1502,37 @@ const updateProduct = async (
         null;
     }
 
-    // *========================================================*
-    // *DESCRIPTION*
-    // *========================================================*
+    // --------------------------------------------------------
+    // PRODUCT INFORMATION
+    // --------------------------------------------------------
+
+    if (
+      req.body.productType !==
+      undefined
+    ) {
+      product.productType =
+        req.body.productType;
+    }
+
+    if (
+      req.body.fit !==
+      undefined
+    ) {
+      product.fit =
+        req.body.fit;
+    }
+
+    if (
+      req.body.length !==
+      undefined
+    ) {
+      product.length =
+        req.body.length;
+    }
+
+    // --------------------------------------------------------
+    // DESCRIPTION
+    // --------------------------------------------------------
 
     if (
       req.body.description !==
@@ -1735,37 +1545,43 @@ const updateProduct = async (
         );
     }
 
-    // *========================================================*
-    // *FEATURES*
-    // *========================================================*
+    // --------------------------------------------------------
+    // FEATURES
+    // --------------------------------------------------------
 
     if (
       req.body.features !==
       undefined
     ) {
       product.features =
-        normalizeFeatures(
+        normalizeArray(
           req.body.features
         );
     }
 
-    // *========================================================*
-    // *SLEEVE STYLE*
-    // *========================================================*
+    // --------------------------------------------------------
+    // COMBO / BANNER
+    // --------------------------------------------------------
 
     if (
-      req.body.sleeveStyle !==
+      req.body.comboOffer !==
       undefined
     ) {
-      product.sleeveStyle =
-        normalizeSleeveStyle(
-          req.body.sleeveStyle
-        );
+      product.comboOffer =
+        req.body.comboOffer;
     }
 
-    // *========================================================*
-    // *RATING*
-    // *========================================================*
+    if (
+      req.body.bannerType !==
+      undefined
+    ) {
+      product.bannerType =
+        req.body.bannerType;
+    }
+
+    // --------------------------------------------------------
+    // RATING
+    // --------------------------------------------------------
 
     if (
       req.body.rating !==
@@ -1778,14 +1594,14 @@ const updateProduct = async (
         );
 
       if (
-        !RATING_OPTIONS.includes(
-          rating
-        )
+        Number.isNaN(rating) ||
+        rating < 0 ||
+        rating > 5
       ) {
         return res.status(400).json({
           success: false,
           message:
-            "Rating must be 0, 1, 2, 3, 4 or 5",
+            "Rating must be between 0 and 5",
         });
       }
 
@@ -1793,9 +1609,9 @@ const updateProduct = async (
         rating;
     }
 
-    // *========================================================*
-    // *REVIEW COUNT*
-    // *========================================================*
+    // --------------------------------------------------------
+    // REVIEW COUNT
+    // --------------------------------------------------------
 
     if (
       req.body.reviewCount !==
@@ -1824,9 +1640,9 @@ const updateProduct = async (
         reviewCount;
     }
 
-    // *========================================================*
-    // *ACTIVE STATUS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // ACTIVE
+    // --------------------------------------------------------
 
     if (
       req.body.isActive !==
@@ -1838,9 +1654,9 @@ const updateProduct = async (
         ) === "true";
     }
 
-    // *========================================================*
-    // *UPDATE VARIANTS*
-    // *========================================================*
+    // --------------------------------------------------------
+    // VARIANTS
+    // --------------------------------------------------------
 
     if (
       req.body.variants !==
@@ -1860,7 +1676,11 @@ const updateProduct = async (
           );
       }
 
-      if (!Array.isArray(variants)) {
+      if (
+        !Array.isArray(
+          variants
+        )
+      ) {
         return res.status(400).json({
           success: false,
           message:
@@ -1868,12 +1688,9 @@ const updateProduct = async (
         });
       }
 
-      const oldVariants =
-        product.variants;
-
       const oldMedia = [];
 
-      oldVariants.forEach(
+      product.variants.forEach(
         (variant) => {
           if (
             Array.isArray(
@@ -1890,13 +1707,12 @@ const updateProduct = async (
       const preparedVariants =
         prepareVariants(
           variants,
-          product.name,
-          oldVariants
+          product.name
         );
 
-      // *======================================================*
-      // *CHECK DUPLICATE COLORS*
-      // *======================================================*
+      // ------------------------------------------------------
+      // DUPLICATE COLORS
+      // ------------------------------------------------------
 
       const colors =
         preparedVariants.map(
@@ -1927,30 +1743,45 @@ const updateProduct = async (
         });
       }
 
-      // *======================================================*
-      // *ATTACH NEW MEDIA*
-      // *======================================================*
+      // ------------------------------------------------------
+      // NEW MEDIA
+      // ------------------------------------------------------
 
       if (req.files?.length) {
         const mediaColors =
-          parseMediaColors(
-            req.body.mediaColors,
-            req.files.length
+          normalizeArray(
+            req.body.mediaColors
           );
+
+        if (
+          mediaColors.length !==
+          req.files.length
+        ) {
+          req.files.forEach(
+            deleteUploadedFile
+          );
+
+          return res.status(400).json({
+            success: false,
+            message:
+              "mediaColors count must match uploaded media count",
+          });
+        }
 
         attachUploadedMediaByColor(
           {
             variants:
               preparedVariants,
-            files: req.files,
+            files:
+              req.files,
             mediaColors,
           }
         );
       }
 
-      // *======================================================*
-      // *DELETE REMOVED MEDIA*
-      // *======================================================*
+      // ------------------------------------------------------
+      // DELETE REMOVED MEDIA
+      // ------------------------------------------------------
 
       const newMediaURLs =
         new Set();
@@ -1981,31 +1812,25 @@ const updateProduct = async (
 
       oldMedia.forEach(
         (oldMediaItem) => {
-          const imageURL =
-            oldMediaItem.imageURL;
-
-          const thumbnail =
-            oldMediaItem.thumbnail;
-
           if (
-            imageURL &&
+            oldMediaItem.imageURL &&
             !newMediaURLs.has(
-              imageURL
+              oldMediaItem.imageURL
             )
           ) {
             deleteMediaFile(
-              imageURL
+              oldMediaItem.imageURL
             );
           }
 
           if (
-            thumbnail &&
+            oldMediaItem.thumbnail &&
             !newMediaURLs.has(
-              thumbnail
+              oldMediaItem.thumbnail
             )
           ) {
             deleteMediaFile(
-              thumbnail
+              oldMediaItem.thumbnail
             );
           }
         }
@@ -2013,41 +1838,52 @@ const updateProduct = async (
 
       product.variants =
         preparedVariants;
-    } else if (
-      req.files?.length
-    ) {
-      // *======================================================*
-      // *MEDIA-ONLY UPDATE*
-      // *======================================================*
-
-      const mediaColors =
-        parseMediaColors(
-          req.body.mediaColors,
-          req.files.length
-        );
-
-      attachUploadedMediaByColor({
-        variants:
-          product.variants,
-        files: req.files,
-        mediaColors,
-      });
     }
 
-    // *========================================================*
-    // *SAVE*
-    // *========================================================*
+    // --------------------------------------------------------
+    // MEDIA ONLY
+    // --------------------------------------------------------
 
-    // *pre-save recalculates quantity
-    // *and availability.
+    else if (
+      req.files?.length
+    ) {
+      const mediaColors =
+        normalizeArray(
+          req.body.mediaColors
+        );
+
+      if (
+        mediaColors.length !==
+        req.files.length
+      ) {
+        req.files.forEach(
+          deleteUploadedFile
+        );
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "mediaColors count must match uploaded media count",
+        });
+      }
+
+      attachUploadedMediaByColor(
+        {
+          variants:
+            product.variants,
+          files:
+            req.files,
+          mediaColors,
+        }
+      );
+    }
+
     await product.save();
 
     return res.status(200).json({
       success: true,
-
       message:
         "Product updated successfully",
-
       data: product,
     });
   } catch (error) {
@@ -2056,9 +1892,14 @@ const updateProduct = async (
       error
     );
 
+    if (req.files?.length) {
+      req.files.forEach(
+        deleteUploadedFile
+      );
+    }
+
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to update product",
@@ -2066,10 +1907,9 @@ const updateProduct = async (
   }
 };
 
-// *============================================================*
-// *DELETE PRODUCT*
-// *DELETE /api/products/:productId
-// *============================================================*
+// ============================================================
+// DELETE PRODUCT
+// ============================================================
 
 const deleteProduct = async (
   req,
@@ -2081,7 +1921,9 @@ const deleteProduct = async (
     } = req.params;
 
     if (
-      !isValidObjectId(productId)
+      !isValidObjectId(
+        productId
+      )
     ) {
       return res.status(400).json({
         success: false,
@@ -2104,10 +1946,6 @@ const deleteProduct = async (
       });
     }
 
-    // *========================================================*
-    // *DELETE MEDIA FILES*
-    // *========================================================*
-
     product.variants.forEach(
       (variant) => {
         deleteMediaArray(
@@ -2115,10 +1953,6 @@ const deleteProduct = async (
         );
       }
     );
-
-    // *========================================================*
-    // *SOFT DELETE*
-    // *========================================================*
 
     product.isDeleted =
       true;
@@ -2130,7 +1964,6 @@ const deleteProduct = async (
 
     return res.status(200).json({
       success: true,
-
       message:
         "Product deleted successfully",
     });
@@ -2142,7 +1975,6 @@ const deleteProduct = async (
 
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to delete product",
@@ -2150,10 +1982,9 @@ const deleteProduct = async (
   }
 };
 
-// *============================================================*
-// *ADD VARIANT MEDIA*
-// *POST /api/products/:productId/variants/:variantId/media
-// *============================================================*
+// ============================================================
+// ADD VARIANT MEDIA
+// ============================================================
 
 const addVariantMedia = async (
   req,
@@ -2255,10 +2086,8 @@ const addVariantMedia = async (
 
     return res.status(200).json({
       success: true,
-
       message:
         "Variant media added successfully",
-
       data: product,
     });
   } catch (error) {
@@ -2275,7 +2104,6 @@ const addVariantMedia = async (
 
     return res.status(500).json({
       success: false,
-
       message:
         error.message ||
         "Failed to add variant media",
@@ -2283,13 +2111,15 @@ const addVariantMedia = async (
   }
 };
 
-// *============================================================*
-// *DELETE VARIANT MEDIA*
-// *DELETE /api/products/:productId/variants/:variantId/media/:mediaId
-// *============================================================*
+// ============================================================
+// DELETE VARIANT MEDIA
+// ============================================================
 
 const deleteVariantMedia =
-  async (req, res) => {
+  async (
+    req,
+    res
+  ) => {
     try {
       const {
         productId,
@@ -2373,25 +2203,21 @@ const deleteVariantMedia =
         });
       }
 
-      // *======================================================*
-      // *DELETE PHYSICAL FILE*
-      // *======================================================*
-
-      if (media.imageURL) {
+      if (
+        media.imageURL
+      ) {
         deleteMediaFile(
           media.imageURL
         );
       }
 
-      if (media.thumbnail) {
+      if (
+        media.thumbnail
+      ) {
         deleteMediaFile(
           media.thumbnail
         );
       }
-
-      // *======================================================*
-      // *REMOVE MEDIA*
-      // *======================================================*
 
       media.deleteOne();
 
@@ -2399,10 +2225,8 @@ const deleteVariantMedia =
 
       return res.status(200).json({
         success: true,
-
         message:
           "Variant media deleted successfully",
-
         data: product,
       });
     } catch (error) {
@@ -2413,7 +2237,6 @@ const deleteVariantMedia =
 
       return res.status(500).json({
         success: false,
-
         message:
           error.message ||
           "Failed to delete variant media",
@@ -2421,9 +2244,502 @@ const deleteVariantMedia =
     }
   };
 
-// *============================================================*
-// *EXPORT CONTROLLERS*
-// *============================================================*
+// ============================================================
+// BULK EXCEL UPLOAD
+// ============================================================
+
+const bulkUploadProducts = async (
+  req,
+  res
+) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Excel file is required",
+      });
+    }
+
+    const workbook =
+      XLSX.readFile(
+        req.file.path
+      );
+
+    const sheetName =
+      workbook.SheetNames[0];
+
+    const worksheet =
+      workbook.Sheets[
+        sheetName
+      ];
+
+    const rows =
+      XLSX.utils.sheet_to_json(
+        worksheet,
+        {
+          defval: "",
+        }
+      );
+
+    if (!rows.length) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Excel file is empty",
+      });
+    }
+
+    // --------------------------------------------------------
+    // GROUP BY PRODUCT NAME
+    // --------------------------------------------------------
+
+    const groupedProducts =
+      {};
+
+    rows.forEach((row) => {
+      const productName =
+        String(
+          row["Product Name"] ||
+            ""
+        ).trim();
+
+      if (!productName) {
+        return;
+      }
+
+      if (
+        !groupedProducts[
+          productName
+        ]
+      ) {
+        groupedProducts[
+          productName
+        ] = [];
+      }
+
+      groupedProducts[
+        productName
+      ].push(row);
+    });
+
+    const createdProducts =
+      [];
+
+    const errors = [];
+
+    // --------------------------------------------------------
+    // PROCESS EACH PRODUCT
+    // --------------------------------------------------------
+
+    for (
+      const productName of
+      Object.keys(
+        groupedProducts
+      )
+    ) {
+      try {
+        const productRows =
+          groupedProducts[
+            productName
+          ];
+
+        const firstRow =
+          productRows[0];
+
+        // ----------------------------------------------------
+        // BUILD VARIANTS
+        // ----------------------------------------------------
+
+        const variants = [];
+
+        productRows.forEach(
+          (row) => {
+            const color =
+              String(
+                row["Color"] ||
+                  "DEFAULT"
+              )
+                .trim()
+                .toUpperCase();
+
+            let variant =
+              variants.find(
+                (item) =>
+                  item.color ===
+                  color
+              );
+
+            if (!variant) {
+              variant = {
+                color,
+
+                media: [],
+
+                fabric:
+                  row[
+                    "Fabric"
+                  ] || "",
+
+                feel: "",
+
+                lining:
+                  row[
+                    "Lining"
+                  ] || "",
+
+                sleeveStyle:
+                  row[
+                    "Sleeve Type"
+                  ] || "",
+
+                finishing: "",
+
+                pocket:
+                  row[
+                    "Pocket"
+                  ] || "",
+
+                quantity: 0,
+
+                price:
+                  Number(
+                    row[
+                      "MRP"
+                    ]
+                  ) || 0,
+
+                discountPrice:
+                  Number(
+                    row[
+                      "Selling Price"
+                    ]
+                  ) || 0,
+
+                offer: {
+                  type:
+                    row[
+                      "Offer Type"
+                    ] || "none",
+
+                  value:
+                    Number(
+                      row[
+                        "Offer Value"
+                      ]
+                    ) || 0,
+
+                  startDate:
+                    row[
+                      "Offer Start Date"
+                    ] || null,
+
+                  endDate:
+                    row[
+                      "Offer End Date"
+                    ] || null,
+                },
+
+                sizes: [],
+
+                isActive: true,
+              };
+
+              // ------------------------------------------------
+              // IMAGE URLS
+              // ------------------------------------------------
+
+              const imageColumns = [
+                "Image URL 1",
+                "Image URL 2",
+                "Image URL 3",
+              ];
+
+              imageColumns.forEach(
+                (column) => {
+                  const imageURL =
+                    String(
+                      row[
+                        column
+                      ] || ""
+                    ).trim();
+
+                  if (imageURL) {
+                    variant.media.push(
+                      {
+                        type:
+                          "image",
+
+                        imageURL,
+
+                        thumbnail:
+                          null,
+                      }
+                    );
+                  }
+                }
+              );
+
+              variants.push(
+                variant
+              );
+            }
+
+            // ------------------------------------------------
+            // SIZE
+            // ------------------------------------------------
+
+            const size =
+              normalizeSize(
+                row["Size"]
+              );
+
+            if (size) {
+              const existingSize =
+                variant.sizes.find(
+                  (item) =>
+                    item.size ===
+                    size
+                );
+
+              const stockQuantity =
+                Number(
+                  row[
+                    "Stock Qty"
+                  ]
+                ) || 0;
+
+              if (
+                existingSize
+              ) {
+                existingSize.stockQuantity +=
+                  stockQuantity;
+              } else {
+                variant.sizes.push(
+                  {
+                    size,
+
+                    stockQuantity,
+
+                    sku:
+                      String(
+                        row[
+                          "SKU"
+                        ] || ""
+                      ).trim() ||
+                      generateSKU(
+                        productName,
+                        color,
+                        size
+                      ),
+
+                    barcode:
+                      generateBarcode(),
+
+                    isActive:
+                      true,
+                  }
+                );
+              }
+            }
+          }
+        );
+
+        // ------------------------------------------------------
+        // CALCULATE QUANTITY
+        // ------------------------------------------------------
+
+        variants.forEach(
+          (variant) => {
+            variant.quantity =
+              calculateVariantQuantity(
+                variant.sizes
+              );
+
+            // If Selling Price is same as MRP,
+            // discountPrice should be null.
+            if (
+              variant.discountPrice ===
+              variant.price
+            ) {
+              variant.discountPrice =
+                null;
+            }
+          }
+        );
+
+        // ------------------------------------------------------
+        // DESCRIPTION
+        // ------------------------------------------------------
+
+        const description = {
+          about:
+            firstRow[
+              "About / Description"
+            ] || "",
+
+          itemDetails:
+            firstRow[
+              "About / Description"
+            ] || "",
+        };
+
+        // ------------------------------------------------------
+        // CREATE PRODUCT
+        // ------------------------------------------------------
+
+        const product =
+          new Product({
+            name:
+              productName,
+
+            categoryId:
+              null,
+
+            subCategoryId:
+              null,
+
+            brandId:
+              null,
+
+            productType:
+              firstRow[
+                "Product Type"
+              ] || "",
+
+            fit:
+              firstRow[
+                "Fit"
+              ] || "",
+
+            length:
+              firstRow[
+                "Length"
+              ] || "",
+
+            description,
+
+            features: [],
+
+            comboOffer:
+              firstRow[
+                "Combo Offer"
+              ] || "",
+
+            bannerType:
+              firstRow[
+                "Banner Type"
+              ] || "",
+
+            rating: 0,
+
+            reviewCount: 0,
+
+            variants,
+
+            isActive: true,
+
+            isDeleted: false,
+          });
+
+        await product.save();
+
+        createdProducts.push({
+          productId:
+            product._id,
+
+          name:
+            product.name,
+
+          variants:
+            product.variants
+              .length,
+        });
+      } catch (error) {
+        errors.push({
+          productName,
+          message:
+            error.message,
+        });
+      }
+    }
+
+    // --------------------------------------------------------
+    // DELETE EXCEL FILE
+    // --------------------------------------------------------
+
+    try {
+      if (
+        fs.existsSync(
+          req.file.path
+        )
+      ) {
+        fs.unlinkSync(
+          req.file.path
+        );
+      }
+    } catch (error) {
+      console.error(
+        "EXCEL DELETE ERROR:",
+        error.message
+      );
+    }
+
+    return res.status(201).json({
+      success: true,
+
+      message:
+        "Bulk product upload completed",
+
+      summary: {
+        totalRows:
+          rows.length,
+
+        totalProducts:
+          Object.keys(
+            groupedProducts
+          ).length,
+
+        createdProducts:
+          createdProducts.length,
+
+        failedProducts:
+          errors.length,
+      },
+
+      createdProducts,
+
+      errors,
+    });
+  } catch (error) {
+    console.error(
+      "BULK UPLOAD ERROR:",
+      error
+    );
+
+    if (
+      req.file?.path &&
+      fs.existsSync(
+        req.file.path
+      )
+    ) {
+      fs.unlinkSync(
+        req.file.path
+      );
+    }
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to upload products",
+    });
+  }
+};
+
+// ============================================================
+// EXPORT
+// ============================================================
 
 module.exports = {
   createProduct,
@@ -2433,4 +2749,5 @@ module.exports = {
   deleteProduct,
   addVariantMedia,
   deleteVariantMedia,
+  bulkUploadProducts,
 };

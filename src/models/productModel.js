@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+
+// ============================================================
+// SIZE SCHEMA
+// ============================================================
+
 const SizeSchema = new mongoose.Schema(
   {
     size: {
@@ -6,7 +11,7 @@ const SizeSchema = new mongoose.Schema(
       required: true,
       trim: true,
       uppercase: true,
-      enum: ["S", "M", "L", "XL", "2XL", "3XL"],
+      enum: ["XS", "S", "M", "L", "XL", "2XL", "XXL", "3XL"],
     },
 
     stockQuantity: {
@@ -36,12 +41,17 @@ const SizeSchema = new mongoose.Schema(
     _id: true,
   }
 );
+
+// ============================================================
+// MEDIA SCHEMA
+// ============================================================
+
 const MediaSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      required: true,
       enum: ["image", "video"],
+      default: "image",
     },
 
     imageURL: {
@@ -60,6 +70,11 @@ const MediaSchema = new mongoose.Schema(
     _id: true,
   }
 );
+
+// ============================================================
+// OFFER SCHEMA
+// ============================================================
+
 const OfferSchema = new mongoose.Schema(
   {
     type: {
@@ -88,6 +103,11 @@ const OfferSchema = new mongoose.Schema(
     _id: false,
   }
 );
+
+// ============================================================
+// VARIANT SCHEMA
+// ============================================================
+
 const VariantSchema = new mongoose.Schema(
   {
     color: {
@@ -96,19 +116,18 @@ const VariantSchema = new mongoose.Schema(
       trim: true,
       uppercase: true,
     },
+
     media: {
       type: [MediaSchema],
       default: [],
-
       validate: {
         validator: function (media) {
           return media.length <= 10;
         },
-
-        message:
-          "Maximum 10 media files are allowed for each color",
+        message: "Maximum 10 media files are allowed for each color",
       },
     },
+
     fabric: {
       type: String,
       trim: true,
@@ -126,7 +145,8 @@ const VariantSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
-    sleeves: {
+
+    sleeveStyle: {
       type: String,
       trim: true,
       default: "",
@@ -143,11 +163,13 @@ const VariantSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+
     quantity: {
       type: Number,
       default: 0,
       min: 0,
     },
+
     price: {
       type: Number,
       required: true,
@@ -159,9 +181,9 @@ const VariantSchema = new mongoose.Schema(
       default: null,
       min: 0,
     },
+
     offer: {
       type: OfferSchema,
-
       default: () => ({
         type: "none",
         value: 0,
@@ -169,10 +191,12 @@ const VariantSchema = new mongoose.Schema(
         endDate: null,
       }),
     },
+
     sizes: {
       type: [SizeSchema],
       default: [],
     },
+
     isActive: {
       type: Boolean,
       default: true,
@@ -182,28 +206,67 @@ const VariantSchema = new mongoose.Schema(
     _id: true,
   }
 );
+
+// ============================================================
+// PRODUCT SCHEMA
+// ============================================================
+
 const ProductSchema = new mongoose.Schema(
   {
+    // ----------------------------------------------------------
+    // CATEGORY
+    // ----------------------------------------------------------
+
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       default: null,
     },
+
     subCategoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",
-      required: true,
+      default: null,
     },
+
     brandId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Brand",
       default: null,
     },
+
+    // ----------------------------------------------------------
+    // BASIC PRODUCT INFORMATION
+    // ----------------------------------------------------------
+
     name: {
       type: String,
       required: true,
       trim: true,
     },
+
+    productType: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    fit: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    length: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    // ----------------------------------------------------------
+    // DESCRIPTION
+    // ----------------------------------------------------------
+
     description: {
       about: {
         type: String,
@@ -217,62 +280,87 @@ const ProductSchema = new mongoose.Schema(
         default: "",
       },
     },
+
+    // ----------------------------------------------------------
+    // FEATURES
+    // ----------------------------------------------------------
+
     features: {
       type: [
         {
           type: String,
           trim: true,
-          enum: [
-           "Side Pocket",
-           "Cotton Lining",
-           "Feeding Friendly",
-           "Invisible Zipper",
-           "Adjustable Rope",
-           "Breathable"
-          ],
         },
       ],
       default: [],
     },
-    sleeveStyle: {
+
+    // ----------------------------------------------------------
+    // COMBO / BANNER
+    // ----------------------------------------------------------
+
+    comboOffer: {
       type: String,
-      enum: [
-        "Puff Sleeves",
-        "Ruched Sleeves",
-      ],
-      default: null,
+      trim: true,
+      default: "",
     },
-    availability: {
+
+    bannerType: {
       type: String,
-      enum: [
-        "In Stock",
-        "New Arrivals",
-      ],
+      trim: true,
+      default: "",
     },
+
+    // ----------------------------------------------------------
+    // PRODUCT RATING
+    // ----------------------------------------------------------
+
     rating: {
       type: Number,
-      enum: [0, 1, 2, 3, 4, 5],
+      min: 0,
+      max: 5,
       default: 0,
     },
+
     reviewCount: {
       type: Number,
       default: 0,
       min: 0,
     },
+
+    // ----------------------------------------------------------
+    // AUTOMATIC AVAILABILITY
+    // ----------------------------------------------------------
+
+    availability: {
+      type: String,
+      enum: ["In Stock", "Out of Stock"],
+      default: "Out of Stock",
+    },
+
+    // ----------------------------------------------------------
+    // VARIANTS
+    // ----------------------------------------------------------
+
     variants: {
       type: [VariantSchema],
       default: [],
     },
+
+    // ----------------------------------------------------------
+    // STATUS
+    // ----------------------------------------------------------
+
     isActive: {
       type: Boolean,
       default: true,
     },
+
     isDeleted: {
       type: Boolean,
       default: false,
     },
   },
-
   {
     timestamps: true,
   }
@@ -281,23 +369,16 @@ const ProductSchema = new mongoose.Schema(
 // ============================================================
 // PRE SAVE
 // ============================================================
-// Calculate variant quantity
-// Calculate product availability automatically
-// ============================================================
 
-ProductSchema.pre("save", function () {
+ProductSchema.pre("save", function (next) {
   let totalQuantity = 0;
 
   if (Array.isArray(this.variants)) {
     this.variants.forEach((variant) => {
       if (Array.isArray(variant.sizes)) {
         variant.quantity = variant.sizes.reduce(
-          (total, size) => {
-            return (
-              total +
-              (Number(size.stockQuantity) || 0)
-            );
-          },
+          (total, size) =>
+            total + (Number(size.stockQuantity) || 0),
           0
         );
       } else {
@@ -308,22 +389,12 @@ ProductSchema.pre("save", function () {
     });
   }
 
-  // ==========================================================
-  // AUTOMATIC AVAILABILITY
-  // ==========================================================
+  this.availability =
+    totalQuantity > 0 ? "In Stock" : "Out of Stock";
 
-  if (totalQuantity > 0) {
-    this.availability = "In Stock";
-  } else {
-    this.availability = "Out of Stock";
-  }
+  next();
 });
 
-// ============================================================
-// EXPORT
-// ============================================================
 
-module.exports = mongoose.model(
-  "Product",
-  ProductSchema
-);
+
+module.exports = mongoose.model("Product", ProductSchema);
