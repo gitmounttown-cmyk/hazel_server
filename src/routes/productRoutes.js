@@ -1,96 +1,63 @@
 const express = require("express");
 
-const router = express.Router();
-
 const {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
-  addVariantMedia,
-  deleteVariantMedia,
 } = require("../controllers/productController");
 
 const {
   uploadProductMedia,
+  handleUploadError,
 } = require("../middleware/uploadMiddleware");
 
-// *============================================================*
-// *CREATE PRODUCT*
-// *POST /api/products/create
-// *============================================================*
+const router = express.Router();
+
+// ============================================================
+// CREATE PRODUCT
+// POST /api/products/create
+// ============================================================
 
 router.post(
   "/create",
   uploadProductMedia.array("media", 10),
+  handleUploadError,
   createProduct
 );
 
-// *============================================================*
-// *GET ALL PRODUCTS / FILTER PRODUCTS*
-// *GET /api/products/all
-// *============================================================*
+// ============================================================
+// GET ALL PRODUCTS
+// GET /api/products/all
+// ============================================================
 
-router.get(
-  "/all",
-  getAllProducts
-);
+router.get("/all", getAllProducts);
 
-// *============================================================*
-// *GET PRODUCT BY ID*
-// *GET /api/products/:productId
-// *============================================================*
+// ============================================================
+// GET PRODUCT BY ID
+// GET /api/products/:productId
+// ============================================================
 
-router.get(
-  "/:productId",
-  getProductById
-);
+router.get("/:productId", getProductById);
 
-// *============================================================*
-// *UPDATE PRODUCT*
-// *PUT /api/products/:productId
-// *============================================================*
+// ============================================================
+// UPDATE PRODUCT
+// PUT /api/products/update/:productId
+// ============================================================
 
 router.put(
-  "/:productId",
+  "/update/:productId",
   uploadProductMedia.array("media", 10),
+  handleUploadError,
   updateProduct
 );
 
-// *============================================================*
-// *DELETE PRODUCT*
-// *DELETE /api/products/:productId
-// *============================================================*
+// ============================================================
+// DELETE PRODUCT
+// DELETE /api/products/delete/:productId
+// ============================================================
 
-router.delete(
-  "/:productId",
-  deleteProduct
-);
-
-// *============================================================*
-// *ADD VARIANT MEDIA*
-// *POST /api/products/:productId/variants/:variantId/media
-// *============================================================*
-
-router.post(
-  "/:productId/variants/:variantId/media",
-  uploadProductMedia.array("media", 10),
-  addVariantMedia
-);
-
-// *============================================================*
-// *DELETE VARIANT MEDIA*
-// *DELETE /api/products/:productId/variants/:variantId/media/:mediaId
-// *============================================================*
-
-router.delete(
-  "/:productId/variants/:variantId/media/:mediaId",
-  deleteVariantMedia
-);
-
-// *============================================================*
-// *EXPORT ROUTER*
-// *============================================================*
+router.delete("/delete/:productId", deleteProduct);
 
 module.exports = router;
