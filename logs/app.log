@@ -1,0 +1,117 @@
+[2026-09-16T06:20:22.236Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-16T06:20:22.261Z] INFO: ========================================
+[2026-09-16T06:20:22.264Z] INFO: Hazel application starting
+[2026-09-16T06:20:22.267Z] INFO: Node version: v20.20.2
+[2026-09-16T06:20:22.271Z] INFO: Environment: production
+[2026-09-16T06:20:22.275Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:20:22.276Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:20:22.280Z] INFO: PORT: 5004
+[2026-09-16T06:20:22.283Z] INFO: ========================================
+[2026-09-16T06:20:35.230Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-16T06:20:35.231Z] ERROR: C:\Users\User05\Documents\newgit\hazel_server\src\services\OTPService.js:112
+<<<<<<< HEAD
+^^
+
+SyntaxError: Unexpected token '<<'
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\controllers\authController.js:5:20)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-09-16T06:21:59.154Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-16T06:21:59.165Z] INFO: ========================================
+[2026-09-16T06:21:59.165Z] INFO: Hazel application starting
+[2026-09-16T06:21:59.166Z] INFO: Node version: v20.20.2
+[2026-09-16T06:21:59.172Z] INFO: Environment: production
+[2026-09-16T06:21:59.173Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:21:59.175Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-16T06:21:59.175Z] INFO: PORT: 5004
+[2026-09-16T06:21:59.176Z] INFO: ========================================
+[2026-09-16T06:22:04.480Z] INFO: App loaded successfully
+[2026-09-16T06:22:04.481Z] INFO: Connecting to MongoDB...
+[2026-09-16T06:22:04.482Z] INFO: Environment: production
+[2026-09-16T06:22:04.482Z] INFO: MongoDB URI exists: true
+[2026-09-16T06:22:04.508Z] INFO: Server running on port 5004
+[2026-09-16T06:22:04.509Z] INFO: Hazel backend started successfully
+[2026-09-16T06:22:05.120Z] INFO: MongoDB Connected Successfully!!
+[2026-09-16T06:22:05.533Z] ERROR: (node:10632) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-21T12:55:21.452Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-21T12:55:22.467Z] INFO: ========================================
+[2026-09-21T12:55:22.468Z] INFO: Hazel application starting
+[2026-09-21T12:55:22.469Z] INFO: Node version: v20.20.2
+[2026-09-21T12:55:22.469Z] INFO: Environment: production
+[2026-09-21T12:55:22.472Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-21T12:55:22.474Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-21T12:55:22.476Z] INFO: PORT: 5004
+[2026-09-21T12:55:22.477Z] INFO: ========================================
+[2026-09-22T04:59:09.429Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-22T04:59:09.445Z] INFO: ========================================
+[2026-09-22T04:59:09.446Z] INFO: Hazel application starting
+[2026-09-22T04:59:09.447Z] INFO: Node version: v20.20.2
+[2026-09-22T04:59:09.447Z] INFO: Environment: production
+[2026-09-22T04:59:09.448Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T04:59:09.448Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T04:59:09.449Z] INFO: PORT: 5004
+[2026-09-22T04:59:09.450Z] INFO: ========================================
+[2026-09-22T04:59:42.065Z] INFO: App loaded successfully
+[2026-09-22T04:59:42.080Z] INFO: Connecting to MongoDB...
+[2026-09-22T04:59:42.097Z] INFO: Environment: production
+[2026-09-22T04:59:42.128Z] INFO: MongoDB URI exists: true
+[2026-09-22T04:59:42.383Z] INFO: Server running on port 5004
+[2026-09-22T04:59:42.393Z] INFO: Hazel backend started successfully
+[2026-09-22T04:59:43.049Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T04:59:43.490Z] ERROR: (node:11444) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T05:02:08.290Z] INFO: 
+[2026-09-22T05:02:08.291Z] INFO: ====================================
+[2026-09-22T05:02:08.292Z] INFO:         VERIFY OTP DEBUG
+[2026-09-22T05:02:08.292Z] INFO: ====================================
+[2026-09-22T05:02:08.293Z] INFO: Mobile Number : 9626597049
+[2026-09-22T05:02:08.293Z] INFO: Entered OTP   : 544371
+[2026-09-22T05:02:08.295Z] INFO: OTP ID        : "6ab20b9a99ce45fc9fbf7f83"
+[2026-09-22T05:02:08.296Z] INFO: Stored OTP    : 544371
+[2026-09-22T05:02:08.297Z] INFO: Purpose       : LOGIN
+[2026-09-22T05:02:08.298Z] INFO: Expires At    : "2026-09-22T05:06:14.425Z"
+[2026-09-22T05:02:08.304Z] INFO: Attempts      : 0
+[2026-09-22T05:02:08.307Z] INFO: Max Attempts  : 5
+[2026-09-22T05:02:08.309Z] INFO: Is Verified   : false
+[2026-09-22T05:02:08.310Z] INFO: ====================================
+[2026-09-22T05:02:08.311Z] INFO: 
+[2026-09-22T05:03:16.433Z] ERROR: Global Error: MulterError: Unexpected field
+    at wrappedFileFilter (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\index.js:41:19)
+    at Multipart.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\lib\make-middleware.js:193:7)
+    at Multipart.emit (node:events:524:28)
+    at HeaderParser.cb (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+[2026-09-22T05:04:51.695Z] INFO: ==========================================
+[2026-09-22T05:04:51.697Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:04:51.698Z] INFO: Field name : image
+[2026-09-22T05:04:51.701Z] INFO: File name  : 1A.png
+[2026-09-22T05:04:51.702Z] INFO: Extension  : .png
+[2026-09-22T05:04:51.708Z] INFO: MIME type  : image/png
+[2026-09-22T05:04:51.717Z] INFO: ==========================================
+[2026-09-22T05:05:46.203Z] INFO: ==========================================
+[2026-09-22T05:05:46.207Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:05:46.209Z] INFO: Field name : image
+[2026-09-22T05:05:46.210Z] INFO: File name  : 4A.png
+[2026-09-22T05:05:46.217Z] INFO: Extension  : .png
+[2026-09-22T05:05:46.219Z] INFO: MIME type  : image/png
+[2026-09-22T05:05:46.221Z] INFO: ==========================================
+[2026-09-22T05:06:18.808Z] INFO: ==========================================
+[2026-09-22T05:06:18.808Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:06:18.813Z] INFO: Field name : image
+[2026-09-22T05:06:18.816Z] INFO: File name  : 1A.png
+[2026-09-22T05:06:18.817Z] INFO: Extension  : .png
+[2026-09-22T05:06:18.822Z] INFO: MIME type  : image/png
+[2026-09-22T05:06:18.824Z] INFO: ==========================================

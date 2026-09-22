@@ -4,26 +4,27 @@ const connectDB = async () => {
   try {
     let mongoURI;
 
-    // Select database based on environment
     if (process.env.NODE_ENV === "production") {
       mongoURI = process.env.MONGODB_ATLAS;
     } else {
       mongoURI = process.env.MONGODB_ATLAS;
     }
 
-    // Check MongoDB URI
     if (!mongoURI) {
       throw new Error("MongoDB connection string is missing");
     }
 
-    // Connect MongoDB
+    console.log("Environment:", process.env.NODE_ENV);
+    console.log("MongoDB URI exists:", !!mongoURI);
+
     const conn = await mongoose.connect(mongoURI);
 
     console.log("MongoDB Connected Successfully!!");
-    
   } catch (error) {
     console.error("MongoDB Connection Failed");
-    console.error(error.message);
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Full error:", error);
 
     process.exit(1);
   }

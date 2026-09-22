@@ -99,12 +99,15 @@ exports.sendOTP = async (req, res) => {
         "OTP generated successfully.",
 
       // Only development
-      ...(process.env.NODE_ENV !==
-        "production" && {
-        otp: otpResult.otp,
-        expiresAt:
-          otpResult.expiresAt,
-      }),
+      // ...(process.env.NODE_ENV !==
+      //   "production" && {
+      //   otp: otpResult.otp,
+      //   expiresAt:
+      //     otpResult.expiresAt,
+      // }),
+      otp: otpResult.otp,
+      expiresAt:
+        otpResult.expiresAt,
     });
   } catch (error) {
     console.error(

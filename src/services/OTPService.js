@@ -1,4 +1,5 @@
 const OTP = require("../models/OTPModel");
+
 const generateOTP = require("../utils/generateOTP");
 
 // ============================================================
@@ -56,37 +57,56 @@ exports.sendOTP = async ({
     });
 
     // ----------------------------------------------------------
-    // 5. Development Terminal
+    // 5. DEVELOPMENT ONLY
     // ----------------------------------------------------------
 
-    console.log("");
-    console.log("====================================");
-    console.log("        HAZEL DEVELOPMENT OTP");
-    console.log("====================================");
-    console.log(
-      "Mobile Number :",
-      mobileNumber
-    );
-    console.log(
-      "Purpose       :",
-      purpose
-    );
-    console.log(
-      "OTP           :",
-      otp
-    );
-    console.log(
-      "Expires At    :",
-      expiresAt
-    );
-    console.log("====================================");
-    console.log("");
+    if (process.env.NODE_ENV !== "production") {
+      console.log("");
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "        HAZEL DEVELOPMENT OTP"
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "Mobile Number :",
+        mobileNumber
+      );
+
+      console.log(
+        "Purpose       :",
+        purpose
+      );
+
+      console.log(
+        "OTP           :",
+        otp
+      );
+
+      console.log(
+        "Expires At    :",
+        expiresAt
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      console.log("");
+    }
 
     // ----------------------------------------------------------
     // 6. RETURN DATA
     // ----------------------------------------------------------
 
-    return {
+    const response = {
       success: true,
       message: "OTP generated successfully.",
 
@@ -101,6 +121,16 @@ exports.sendOTP = async ({
 
       expiresAt,
     };
+
+    // ----------------------------------------------------------
+    // 7. RETURN OTP ONLY IN DEVELOPMENT
+    // ----------------------------------------------------------
+
+    if (process.env.NODE_ENV !== "production") {
+      response.otp = otp;
+    }
+
+    return response;
   } catch (error) {
     console.error(
       "SEND OTP SERVICE ERROR:",
