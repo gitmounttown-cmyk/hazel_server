@@ -370,7 +370,7 @@ const ProductSchema = new mongoose.Schema(
 // PRE SAVE
 // ============================================================
 
-ProductSchema.pre("save", function (next) {
+ProductSchema.pre("save", function () {
   let totalQuantity = 0;
 
   if (Array.isArray(this.variants)) {
@@ -392,7 +392,7 @@ ProductSchema.pre("save", function (next) {
   this.availability =
     totalQuantity > 0 ? "In Stock" : "Out of Stock";
 
-  next();
+ 
 });
 
 
