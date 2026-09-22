@@ -193,8 +193,9 @@ const createSubCategory = async (req, res) => {
 
 const getSubCategories = async (req, res) => {
   try {
-    const subCategories = await SubCategory.find()
-      .populate("categoryId", "name imageURL");
+    const subCategories = await SubCategory.find().select("_id name imageURL").sort({ createdAt: -1 });
+      // const subCategories = await SubCategory.find().select("_id name imageURL categoryId").sort({ createdAt: -1 })
+      // .populate("categoryId", "name imageURL");
 
     return res.status(200).json({
       success: true,

@@ -53,7 +53,7 @@ exports.createVideo = async (req, res) => {
 // =====================================================
 exports.getVideos = async (req, res) => {
   try {
-    const videos = await Video.find().sort({ createdAt: -1 });
+    const videos = await Video.find().select("_id title price videoUrl").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

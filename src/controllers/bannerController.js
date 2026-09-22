@@ -78,7 +78,7 @@ const createBanner = async (req, res) => {
 // ==========================================================
 const getAllBanners = async (req, res) => {
   try {
-    const banners = await Banner.find();
+    const banners = await Banner.find().select("_id bannerType imageURL isActive").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
