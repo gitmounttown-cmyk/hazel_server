@@ -923,6 +923,25 @@ SyntaxError: Unexpected token '<<'
 [2026-09-22T05:06:18.817Z] INFO: Extension  : .png
 [2026-09-22T05:06:18.822Z] INFO: MIME type  : image/png
 [2026-09-22T05:06:18.824Z] INFO: ==========================================
+<<<<<<< HEAD
+[2026-09-22T05:22:30.387Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-22T05:22:30.392Z] INFO: ========================================
+[2026-09-22T05:22:30.393Z] INFO: Hazel application starting
+[2026-09-22T05:22:30.394Z] INFO: Node version: v20.20.2
+[2026-09-22T05:22:30.395Z] INFO: Environment: production
+[2026-09-22T05:22:30.395Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T05:22:30.396Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T05:22:30.397Z] INFO: PORT: 5004
+[2026-09-22T05:22:30.398Z] INFO: ========================================
+[2026-09-22T05:22:31.392Z] INFO: App loaded successfully
+[2026-09-22T05:22:31.393Z] INFO: Connecting to MongoDB...
+[2026-09-22T05:22:31.394Z] INFO: Environment: production
+[2026-09-22T05:22:31.395Z] INFO: MongoDB URI exists: true
+[2026-09-22T05:22:31.413Z] INFO: Server running on port 5004
+[2026-09-22T05:22:31.414Z] INFO: Hazel backend started successfully
+[2026-09-22T05:22:32.050Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T05:22:32.482Z] ERROR: (node:4976) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+=======
 >>>>>>> filter_product_12_09_26
 [2026-09-22T05:20:44.045Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
 [2026-09-22T05:20:44.049Z] INFO: ========================================
@@ -942,6 +961,7 @@ SyntaxError: Unexpected token '<<'
 [2026-09-22T05:20:45.423Z] INFO: MongoDB Connected Successfully!!
 [2026-09-22T05:20:45.843Z] ERROR: (node:13472) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 >>>>>>> ad9b66e0c1aafa598037fa9f635df27b5cc3886e
+<<<<<<< HEAD
 (Use `node --trace-warnings ...` to show where the warning was created)
 [2026-09-22T05:38:06.951Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
 [2026-09-22T05:38:06.953Z] INFO: ========================================
@@ -987,4 +1007,95 @@ SyntaxError: Unexpected token '<<'
 [2026-09-22T06:22:18.891Z] INFO: Hazel backend started successfully
 [2026-09-22T06:22:19.517Z] INFO: MongoDB Connected Successfully!!
 [2026-09-22T06:22:19.989Z] ERROR: (node:19440) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+=======
+>>>>>>> b2c9362302bd189a45c9d284d19d61f4374c42af
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T05:23:19.698Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-22T05:23:19.813Z] INFO: ========================================
+[2026-09-22T05:23:19.836Z] INFO: Hazel application starting
+[2026-09-22T05:23:19.893Z] INFO: Node version: v20.20.2
+[2026-09-22T05:23:19.901Z] INFO: Environment: production
+[2026-09-22T05:23:19.925Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T05:23:19.947Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T05:23:19.952Z] INFO: PORT: 5004
+[2026-09-22T05:23:19.961Z] INFO: ========================================
+[2026-09-22T05:23:21.348Z] INFO: App loaded successfully
+[2026-09-22T05:23:21.352Z] INFO: Connecting to MongoDB...
+[2026-09-22T05:23:21.356Z] INFO: Environment: production
+[2026-09-22T05:23:21.437Z] INFO: MongoDB URI exists: true
+[2026-09-22T05:23:21.699Z] INFO: Server running on port 5004
+[2026-09-22T05:23:21.715Z] INFO: Hazel backend started successfully
+[2026-09-22T05:23:22.378Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T05:23:22.954Z] ERROR: (node:16972) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T05:58:30.969Z] INFO: ==========================================
+[2026-09-22T05:58:30.976Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:58:30.981Z] INFO: Field name : image
+[2026-09-22T05:58:30.983Z] INFO: File name  : 1A.png
+[2026-09-22T05:58:30.984Z] INFO: Extension  : .png
+[2026-09-22T05:58:30.986Z] INFO: MIME type  : image/png
+[2026-09-22T05:58:30.996Z] INFO: ==========================================
+[2026-09-22T05:59:21.383Z] INFO: ==========================================
+[2026-09-22T05:59:21.386Z] INFO: IMAGE UPLOAD
+[2026-09-22T05:59:21.388Z] INFO: Field name : image
+[2026-09-22T05:59:21.389Z] INFO: File name  : 4A.png
+[2026-09-22T05:59:21.390Z] INFO: Extension  : .png
+[2026-09-22T05:59:21.390Z] INFO: MIME type  : image/png
+[2026-09-22T05:59:21.391Z] INFO: ==========================================
+[2026-09-22T06:00:39.760Z] INFO: ==========================================
+[2026-09-22T06:00:39.761Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:00:39.762Z] INFO: Field name : image
+[2026-09-22T06:00:39.763Z] INFO: File name  : 4A.png
+[2026-09-22T06:00:39.763Z] INFO: Extension  : .png
+[2026-09-22T06:00:39.764Z] INFO: MIME type  : image/png
+[2026-09-22T06:00:39.764Z] INFO: ==========================================
+[2026-09-22T06:01:25.479Z] INFO: ==========================================
+[2026-09-22T06:01:25.480Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:01:25.480Z] INFO: Field name : image
+[2026-09-22T06:01:25.481Z] INFO: File name  : 5A.png
+[2026-09-22T06:01:25.482Z] INFO: Extension  : .png
+[2026-09-22T06:01:25.494Z] INFO: MIME type  : image/png
+[2026-09-22T06:01:25.496Z] INFO: ==========================================
+[2026-09-22T06:16:21.520Z] INFO: ==========================================
+[2026-09-22T06:16:21.521Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:16:21.522Z] INFO: Field name : image
+[2026-09-22T06:16:21.530Z] INFO: File name  : 6A.png
+[2026-09-22T06:16:21.534Z] INFO: Extension  : .png
+[2026-09-22T06:16:21.536Z] INFO: MIME type  : image/png
+[2026-09-22T06:16:21.538Z] INFO: ==========================================
+[2026-09-22T06:20:07.796Z] INFO: ==========================================
+[2026-09-22T06:20:07.797Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:20:07.797Z] INFO: Field name : image
+[2026-09-22T06:20:07.798Z] INFO: File name  : 2A.png
+[2026-09-22T06:20:07.798Z] INFO: Extension  : .png
+[2026-09-22T06:20:07.799Z] INFO: MIME type  : image/png
+[2026-09-22T06:20:07.802Z] INFO: ==========================================
+[2026-09-22T06:21:00.863Z] INFO: ==========================================
+[2026-09-22T06:21:00.863Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:21:00.864Z] INFO: Field name : image
+[2026-09-22T06:21:00.865Z] INFO: File name  : 3A.png
+[2026-09-22T06:21:00.865Z] INFO: Extension  : .png
+[2026-09-22T06:21:00.865Z] INFO: MIME type  : image/png
+[2026-09-22T06:21:00.866Z] INFO: ==========================================
+[2026-09-22T06:21:28.827Z] INFO: ==========================================
+[2026-09-22T06:21:28.828Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:21:28.828Z] INFO: Field name : image
+[2026-09-22T06:21:28.829Z] INFO: File name  : 6A.png
+[2026-09-22T06:21:28.829Z] INFO: Extension  : .png
+[2026-09-22T06:21:28.830Z] INFO: MIME type  : image/png
+[2026-09-22T06:21:28.830Z] INFO: ==========================================
+[2026-09-22T06:22:25.269Z] INFO: ==========================================
+[2026-09-22T06:22:25.271Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:22:25.272Z] INFO: Field name : image
+[2026-09-22T06:22:25.273Z] INFO: File name  : 3A.png
+[2026-09-22T06:22:25.273Z] INFO: Extension  : .png
+[2026-09-22T06:22:25.273Z] INFO: MIME type  : image/png
+[2026-09-22T06:22:25.274Z] INFO: ==========================================
+[2026-09-22T06:22:25.395Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\subcategories\1790058145274-696455411.png
+[2026-09-22T06:23:00.953Z] INFO: ==========================================
+[2026-09-22T06:23:00.965Z] INFO: IMAGE UPLOAD
+[2026-09-22T06:23:00.968Z] INFO: Field name : image
+[2026-09-22T06:23:00.979Z] INFO: File name  : 3A.png
+[2026-09-22T06:23:00.985Z] INFO: Extension  : .png
+[2026-09-22T06:23:00.986Z] INFO: MIME type  : image/png
+[2026-09-22T06:23:00.987Z] INFO: ==========================================
