@@ -519,10 +519,15 @@ const getAllTrendingProducts =
   async (req, res) => {
     try {
       const trendingProducts =
-        await TrendingProduct.find()
-          .populate(
-            "products.product"
-          )
+        await TrendingProduct.find().select("_id title isActive products")
+        //get specifc details from product
+          .populate({
+            path: "products.product",
+            select: "_id name price image",
+          })
+          .sort({
+            createdAt: -1,
+          }).select("_id name price image")
           .sort({
             createdAt: -1,
           });
