@@ -1099,3 +1099,198 @@ SyntaxError: Unexpected token '<<'
 [2026-09-22T06:23:00.985Z] INFO: Extension  : .png
 [2026-09-22T06:23:00.986Z] INFO: MIME type  : image/png
 [2026-09-22T06:23:00.987Z] INFO: ==========================================
+<<<<<<< HEAD
+[2026-09-22T07:21:31.412Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-22T07:21:31.498Z] INFO: ========================================
+[2026-09-22T07:21:31.504Z] INFO: Hazel application starting
+[2026-09-22T07:21:31.515Z] INFO: Node version: v20.20.2
+[2026-09-22T07:21:31.519Z] INFO: Environment: production
+[2026-09-22T07:21:31.530Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:21:31.550Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:21:31.564Z] INFO: PORT: 5004
+[2026-09-22T07:21:31.575Z] INFO: ========================================
+[2026-09-22T07:21:33.043Z] INFO: App loaded successfully
+[2026-09-22T07:21:33.058Z] INFO: Connecting to MongoDB...
+[2026-09-22T07:21:33.063Z] INFO: Environment: production
+[2026-09-22T07:21:33.077Z] INFO: MongoDB URI exists: true
+[2026-09-22T07:21:33.113Z] INFO: Server running on port 5004
+[2026-09-22T07:21:33.118Z] INFO: Hazel backend started successfully
+[2026-09-22T07:21:33.927Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T07:21:34.360Z] ERROR: (node:18768) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+=======
+[2026-09-22T06:47:33.616Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-22T06:47:33.626Z] INFO: ========================================
+[2026-09-22T06:47:33.627Z] INFO: Hazel application starting
+[2026-09-22T06:47:33.628Z] INFO: Node version: v20.20.2
+[2026-09-22T06:47:33.629Z] INFO: Environment: production
+[2026-09-22T06:47:33.630Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:47:33.631Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:47:33.633Z] INFO: PORT: 5004
+[2026-09-22T06:47:33.634Z] INFO: ========================================
+[2026-09-22T06:47:35.605Z] INFO: App loaded successfully
+[2026-09-22T06:47:35.607Z] INFO: Connecting to MongoDB...
+[2026-09-22T06:47:35.608Z] INFO: Environment: production
+[2026-09-22T06:47:35.610Z] INFO: MongoDB URI exists: true
+[2026-09-22T06:47:35.654Z] INFO: Server running on port 5004
+[2026-09-22T06:47:35.657Z] INFO: Hazel backend started successfully
+[2026-09-22T06:47:36.401Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T06:47:36.844Z] ERROR: (node:11876) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T06:48:12.776Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-22T06:48:12.780Z] INFO: ========================================
+[2026-09-22T06:48:12.781Z] INFO: Hazel application starting
+[2026-09-22T06:48:12.781Z] INFO: Node version: v20.20.2
+[2026-09-22T06:48:12.782Z] INFO: Environment: production
+[2026-09-22T06:48:12.783Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:48:12.783Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:48:12.784Z] INFO: PORT: 5004
+[2026-09-22T06:48:12.784Z] INFO: ========================================
+[2026-09-22T06:48:13.675Z] INFO: App loaded successfully
+[2026-09-22T06:48:13.677Z] INFO: Connecting to MongoDB...
+[2026-09-22T06:48:13.678Z] INFO: Environment: production
+[2026-09-22T06:48:13.679Z] INFO: MongoDB URI exists: true
+[2026-09-22T06:48:13.699Z] INFO: Server running on port 5004
+[2026-09-22T06:48:13.700Z] INFO: Hazel backend started successfully
+[2026-09-22T06:48:14.271Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T06:48:14.693Z] ERROR: (node:13804) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T06:52:54.225Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-22T06:52:54.268Z] INFO: ========================================
+[2026-09-22T06:52:54.271Z] INFO: Hazel application starting
+[2026-09-22T06:52:54.277Z] INFO: Node version: v20.20.2
+[2026-09-22T06:52:54.289Z] INFO: Environment: production
+[2026-09-22T06:52:54.295Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:52:54.301Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T06:52:54.303Z] INFO: PORT: 5004
+[2026-09-22T06:52:54.306Z] INFO: ========================================
+[2026-09-22T06:52:55.300Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-22T06:52:55.302Z] ERROR: Error: Cannot find module 'xlsx'
+Require stack:
+- C:\Users\User05\Documents\newgit\hazel_server\src\controllers\productController.js
+- C:\Users\User05\Documents\newgit\hazel_server\src\routes\productRoutes.js
+- C:\Users\User05\Documents\newgit\hazel_server\app.js
+- C:\Users\User05\Documents\newgit\hazel_server\server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\controllers\productController.js:5:14)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+[2026-09-22T07:12:44.199Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-22T07:12:44.206Z] INFO: ========================================
+[2026-09-22T07:12:44.207Z] INFO: Hazel application starting
+[2026-09-22T07:12:44.207Z] INFO: Node version: v20.20.2
+[2026-09-22T07:12:44.208Z] INFO: Environment: production
+[2026-09-22T07:12:44.209Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:12:44.209Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:12:44.210Z] INFO: PORT: 5004
+[2026-09-22T07:12:44.211Z] INFO: ========================================
+[2026-09-22T07:12:45.270Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-22T07:12:45.273Z] ERROR: Error: Cannot find module 'xlsx'
+Require stack:
+- C:\Users\User05\Documents\newgit\hazel_server\src\controllers\productController.js
+- C:\Users\User05\Documents\newgit\hazel_server\src\routes\productRoutes.js
+- C:\Users\User05\Documents\newgit\hazel_server\app.js
+- C:\Users\User05\Documents\newgit\hazel_server\server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\controllers\productController.js:5:14)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+[2026-09-22T07:15:45.920Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-22T07:15:45.940Z] INFO: ========================================
+[2026-09-22T07:15:45.957Z] INFO: Hazel application starting
+[2026-09-22T07:15:45.974Z] INFO: Node version: v20.20.2
+[2026-09-22T07:15:45.988Z] INFO: Environment: production
+[2026-09-22T07:15:45.995Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:46.004Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:46.012Z] INFO: PORT: 5004
+[2026-09-22T07:15:46.030Z] INFO: ========================================
+[2026-09-22T07:15:46.575Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-22T07:15:46.580Z] INFO: ========================================
+[2026-09-22T07:15:46.581Z] INFO: Hazel application starting
+[2026-09-22T07:15:46.582Z] INFO: Node version: v20.20.2
+[2026-09-22T07:15:46.584Z] INFO: Environment: production
+[2026-09-22T07:15:46.587Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:46.589Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:46.590Z] INFO: PORT: 5004
+[2026-09-22T07:15:46.591Z] INFO: ========================================
+[2026-09-22T07:15:47.579Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-22T07:15:47.580Z] ERROR: TypeError: Cannot read properties of undefined (reading 'single')
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\routes\productRoutes.js:42:15)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\app.js:74:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-09-22T07:15:56.248Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-22T07:15:56.254Z] INFO: ========================================
+[2026-09-22T07:15:56.255Z] INFO: Hazel application starting
+[2026-09-22T07:15:56.256Z] INFO: Node version: v20.20.2
+[2026-09-22T07:15:56.257Z] INFO: Environment: production
+[2026-09-22T07:15:56.257Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:56.258Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:15:56.260Z] INFO: PORT: 5004
+[2026-09-22T07:15:56.260Z] INFO: ========================================
+[2026-09-22T07:15:57.126Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-22T07:15:57.127Z] ERROR: TypeError: Cannot read properties of undefined (reading 'single')
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\src\routes\productRoutes.js:42:15)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\app.js:74:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-09-22T07:19:32.818Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-22T07:19:32.823Z] INFO: ========================================
+[2026-09-22T07:19:32.824Z] INFO: Hazel application starting
+[2026-09-22T07:19:32.825Z] INFO: Node version: v20.20.2
+[2026-09-22T07:19:32.826Z] INFO: Environment: production
+[2026-09-22T07:19:32.826Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:19:32.827Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:19:32.831Z] INFO: PORT: 5004
+[2026-09-22T07:19:32.833Z] INFO: ========================================
+[2026-09-22T07:19:34.123Z] INFO: App loaded successfully
+[2026-09-22T07:19:34.124Z] INFO: Connecting to MongoDB...
+[2026-09-22T07:19:34.125Z] INFO: Environment: production
+[2026-09-22T07:19:34.126Z] INFO: MongoDB URI exists: true
+[2026-09-22T07:19:34.148Z] INFO: Server running on port 5004
+[2026-09-22T07:19:34.154Z] INFO: Hazel backend started successfully
+[2026-09-22T07:19:34.813Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T07:19:35.233Z] ERROR: (node:8912) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+>>>>>>> filter_product_12_09_26
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T07:22:35.547Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-22T07:22:35.561Z] INFO: ========================================
+[2026-09-22T07:22:35.563Z] INFO: Hazel application starting
+[2026-09-22T07:22:35.565Z] INFO: Node version: v20.20.2
+[2026-09-22T07:22:35.570Z] INFO: Environment: production
+[2026-09-22T07:22:35.573Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:22:35.574Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T07:22:35.576Z] INFO: PORT: 5004
+[2026-09-22T07:22:35.578Z] INFO: ========================================
+[2026-09-22T07:22:37.098Z] INFO: App loaded successfully
+[2026-09-22T07:22:37.101Z] INFO: Connecting to MongoDB...
+[2026-09-22T07:22:37.107Z] INFO: Environment: production
+[2026-09-22T07:22:37.110Z] INFO: MongoDB URI exists: true
+[2026-09-22T07:22:37.134Z] INFO: Server running on port 5004
+[2026-09-22T07:22:37.135Z] INFO: Hazel backend started successfully
+[2026-09-22T07:22:37.807Z] INFO: MongoDB Connected Successfully!!
+[2026-09-22T07:22:38.229Z] ERROR: (node:18088) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
