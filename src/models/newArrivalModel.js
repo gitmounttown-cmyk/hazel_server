@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 
-// ==========================================================
-// NEW ARRIVAL PRODUCT SCHEMA
-// ==========================================================
-
 const NewArrivalProductSchema = new mongoose.Schema(
   {
     product: {
@@ -33,11 +29,6 @@ const NewArrivalProductSchema = new mongoose.Schema(
     _id: true,
   }
 );
-
-// ==========================================================
-// NEW ARRIVAL SCHEMA
-// ==========================================================
-
 const NewArrivalSchema = new mongoose.Schema(
   {
     title: {
@@ -63,23 +54,17 @@ const NewArrivalSchema = new mongoose.Schema(
       ref: "Product",
       default: null,
     },
-
-    // Maximum 4 products
     products: {
       type: [NewArrivalProductSchema],
-
       validate: {
         validator: function (value) {
           return value.length <= 4;
         },
-
         message: "Maximum 4 products are allowed",
       },
-
       default: [],
     },
   },
-
   {
     timestamps: true,
   }
