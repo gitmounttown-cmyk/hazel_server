@@ -1469,3 +1469,199 @@ Require stack:
 [2026-09-22T12:04:12.718Z] INFO: MongoDB Connected Successfully!!
 [2026-09-22T12:04:13.149Z] ERROR: (node:18572) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-22T12:59:26.545Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-09-22T12:59:27.566Z] INFO: ========================================
+[2026-09-22T12:59:27.567Z] INFO: Hazel application starting
+[2026-09-22T12:59:27.568Z] INFO: Node version: v20.20.2
+[2026-09-22T12:59:27.568Z] INFO: Environment: production
+[2026-09-22T12:59:27.569Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T12:59:27.570Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-22T12:59:27.570Z] INFO: PORT: 5004
+[2026-09-22T12:59:27.571Z] INFO: ========================================
+[2026-09-23T04:38:07.899Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-23T04:38:07.915Z] INFO: ========================================
+[2026-09-23T04:38:07.916Z] INFO: Hazel application starting
+[2026-09-23T04:38:07.917Z] INFO: Node version: v20.20.2
+[2026-09-23T04:38:07.918Z] INFO: Environment: production
+[2026-09-23T04:38:07.920Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T04:38:07.921Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T04:38:07.925Z] INFO: PORT: 5004
+[2026-09-23T04:38:07.926Z] INFO: ========================================
+[2026-09-23T04:38:34.446Z] INFO: App loaded successfully
+[2026-09-23T04:38:34.453Z] INFO: Connecting to MongoDB...
+[2026-09-23T04:38:34.457Z] INFO: Environment: production
+[2026-09-23T04:38:34.459Z] INFO: MongoDB URI exists: true
+[2026-09-23T04:38:34.526Z] INFO: Server running on port 5004
+[2026-09-23T04:38:34.528Z] INFO: Hazel backend started successfully
+[2026-09-23T04:38:35.213Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T04:38:35.620Z] ERROR: (node:12716) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T10:22:59.909Z] INFO: ==========================================
+[2026-09-23T10:22:59.920Z] INFO: IMAGE UPLOAD
+[2026-09-23T10:22:59.921Z] INFO: Field name : productImages
+[2026-09-23T10:22:59.923Z] INFO: File name  : 1B.png
+[2026-09-23T10:22:59.924Z] INFO: Extension  : .png
+[2026-09-23T10:22:59.925Z] INFO: MIME type  : image/png
+[2026-09-23T10:22:59.926Z] INFO: ==========================================
+[2026-09-23T10:22:59.959Z] INFO: ==========================================
+[2026-09-23T10:22:59.960Z] INFO: IMAGE UPLOAD
+[2026-09-23T10:22:59.962Z] INFO: Field name : productImages
+[2026-09-23T10:22:59.962Z] INFO: File name  : 1A.png
+[2026-09-23T10:22:59.963Z] INFO: Extension  : .png
+[2026-09-23T10:22:59.964Z] INFO: MIME type  : image/png
+[2026-09-23T10:22:59.964Z] INFO: ==========================================
+[2026-09-23T10:23:00.090Z] INFO: ==========================================
+[2026-09-23T10:23:00.092Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T10:23:00.093Z] INFO: ==========================================
+[2026-09-23T10:23:00.095Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"\"products\": [{\"product\":\"6ab269547b8ed0dab704bffc\",\"image\":\"/uploads/products/1790077268777-152783524.png\",\"displayOrder\": 1,\"isFeatured\": true}],"}
+[2026-09-23T10:23:00.107Z] INFO: Uploaded Files: 2
+[2026-09-23T10:23:00.115Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\trending-products\1790158979927-688677645.png
+[2026-09-23T10:23:00.116Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\trending-products\1790158979965-888147206.png
+[2026-09-23T10:51:56.663Z] INFO: ==========================================
+[2026-09-23T10:51:56.666Z] INFO: IMAGE UPLOAD
+[2026-09-23T10:51:56.668Z] INFO: Field name : productImages
+[2026-09-23T10:51:56.679Z] INFO: File name  : 1B.png
+[2026-09-23T10:51:56.747Z] INFO: Extension  : .png
+[2026-09-23T10:51:56.753Z] INFO: MIME type  : image/png
+[2026-09-23T10:51:56.761Z] INFO: ==========================================
+[2026-09-23T10:51:56.827Z] INFO: ==========================================
+[2026-09-23T10:51:56.831Z] INFO: IMAGE UPLOAD
+[2026-09-23T10:51:56.832Z] INFO: Field name : productImages
+[2026-09-23T10:51:56.833Z] INFO: File name  : 1A.png
+[2026-09-23T10:51:56.834Z] INFO: Extension  : .png
+[2026-09-23T10:51:56.834Z] INFO: MIME type  : image/png
+[2026-09-23T10:51:56.835Z] INFO: ==========================================
+[2026-09-23T10:51:56.879Z] INFO: ==========================================
+[2026-09-23T10:51:56.880Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T10:51:56.881Z] INFO: ==========================================
+[2026-09-23T10:51:56.882Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab269547b8ed0dab704bffc\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T10:51:56.883Z] INFO: Uploaded Files: 2
+[2026-09-23T10:51:57.035Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\trending-products\1790160716762-709624398.png
+[2026-09-23T10:51:57.045Z] INFO: Deleted image: C:\Users\User05\Documents\newgit\hazel_server\uploads\trending-products\1790160716836-740350118.png
+[2026-09-23T10:53:19.148Z] INFO: ==========================================
+[2026-09-23T10:53:19.151Z] INFO: IMAGE UPLOAD
+[2026-09-23T10:53:19.152Z] INFO: Field name : productImages
+[2026-09-23T10:53:19.152Z] INFO: File name  : 1A.png
+[2026-09-23T10:53:19.153Z] INFO: Extension  : .png
+[2026-09-23T10:53:19.153Z] INFO: MIME type  : image/png
+[2026-09-23T10:53:19.154Z] INFO: ==========================================
+[2026-09-23T10:53:19.192Z] INFO: ==========================================
+[2026-09-23T10:53:19.192Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T10:53:19.197Z] INFO: ==========================================
+[2026-09-23T10:53:19.201Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab269547b8ed0dab704bffc\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T10:53:19.203Z] INFO: Uploaded Files: 1
+[2026-09-23T11:18:09.286Z] INFO: 
+[2026-09-23T11:18:09.288Z] INFO: ====================================
+[2026-09-23T11:18:09.289Z] INFO:         VERIFY OTP DEBUG
+[2026-09-23T11:18:09.290Z] INFO: ====================================
+[2026-09-23T11:18:09.291Z] INFO: Mobile Number : 9626597049
+[2026-09-23T11:18:09.292Z] INFO: Entered OTP   : 757069
+[2026-09-23T11:18:09.293Z] INFO: OTP ID        : "6ab3b0b3a640eb93bf9400d5"
+[2026-09-23T11:18:09.296Z] INFO: Stored OTP    : 757069
+[2026-09-23T11:18:09.297Z] INFO: Purpose       : LOGIN
+[2026-09-23T11:18:09.304Z] INFO: Expires At    : "2026-09-23T11:02:55.928Z"
+[2026-09-23T11:18:09.310Z] INFO: Attempts      : 0
+[2026-09-23T11:18:09.311Z] INFO: Max Attempts  : 5
+[2026-09-23T11:18:09.312Z] INFO: Is Verified   : false
+[2026-09-23T11:18:09.313Z] INFO: ====================================
+[2026-09-23T11:18:09.313Z] INFO: 
+[2026-09-23T11:18:12.523Z] INFO: 
+[2026-09-23T11:18:12.531Z] INFO: ====================================
+[2026-09-23T11:18:12.532Z] INFO:         VERIFY OTP DEBUG
+[2026-09-23T11:18:12.536Z] INFO: ====================================
+[2026-09-23T11:18:12.539Z] INFO: Mobile Number : 9626597049
+[2026-09-23T11:18:12.542Z] INFO: Entered OTP   : 757069
+[2026-09-23T11:18:12.551Z] INFO: OTP Record    : NOT FOUND
+[2026-09-23T11:18:12.552Z] INFO: ====================================
+[2026-09-23T11:18:12.553Z] INFO: 
+[2026-09-23T11:18:39.467Z] INFO: 
+[2026-09-23T11:18:39.470Z] INFO: ====================================
+[2026-09-23T11:18:39.475Z] INFO:         VERIFY OTP DEBUG
+[2026-09-23T11:18:39.476Z] INFO: ====================================
+[2026-09-23T11:18:39.479Z] INFO: Mobile Number : 9626597049
+[2026-09-23T11:18:39.481Z] INFO: Entered OTP   : 533026
+[2026-09-23T11:18:39.483Z] INFO: OTP ID        : "6ab3b578a640eb93bf9400d6"
+[2026-09-23T11:18:39.494Z] INFO: Stored OTP    : 533026
+[2026-09-23T11:18:39.501Z] INFO: Purpose       : LOGIN
+[2026-09-23T11:18:39.508Z] INFO: Expires At    : "2026-09-23T11:23:16.784Z"
+[2026-09-23T11:18:39.514Z] INFO: Attempts      : 0
+[2026-09-23T11:18:39.516Z] INFO: Max Attempts  : 5
+[2026-09-23T11:18:39.517Z] INFO: Is Verified   : false
+[2026-09-23T11:18:39.518Z] INFO: ====================================
+[2026-09-23T11:18:39.524Z] INFO: 
+[2026-09-23T11:34:08.569Z] INFO: ==========================================
+[2026-09-23T11:34:08.572Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T11:34:08.575Z] INFO: Field name : media
+[2026-09-23T11:34:08.580Z] INFO: File name  : 2A.png
+[2026-09-23T11:34:08.584Z] INFO: Extension  : .png
+[2026-09-23T11:34:08.587Z] INFO: MIME type  : image/png
+[2026-09-23T11:34:08.592Z] INFO: ==========================================
+[2026-09-23T11:34:08.689Z] INFO: ==========================================
+[2026-09-23T11:34:08.693Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T11:34:08.699Z] INFO: Field name : media
+[2026-09-23T11:34:08.702Z] INFO: File name  : 2B.png
+[2026-09-23T11:34:08.705Z] INFO: Extension  : .png
+[2026-09-23T11:34:08.706Z] INFO: MIME type  : image/png
+[2026-09-23T11:34:08.706Z] INFO: ==========================================
+[2026-09-23T11:42:50.762Z] INFO: ==========================================
+[2026-09-23T11:42:50.818Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T11:42:50.904Z] INFO: Field name : media
+[2026-09-23T11:42:50.917Z] INFO: File name  : 4A.png
+[2026-09-23T11:42:50.936Z] INFO: Extension  : .png
+[2026-09-23T11:42:50.943Z] INFO: MIME type  : image/png
+[2026-09-23T11:42:50.954Z] INFO: ==========================================
+[2026-09-23T11:42:51.051Z] INFO: ==========================================
+[2026-09-23T11:42:51.052Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T11:42:51.053Z] INFO: Field name : media
+[2026-09-23T11:42:51.054Z] INFO: File name  : 4B.png
+[2026-09-23T11:42:51.055Z] INFO: Extension  : .png
+[2026-09-23T11:42:51.055Z] INFO: MIME type  : image/png
+[2026-09-23T11:42:51.056Z] INFO: ==========================================
+[2026-09-23T11:43:17.814Z] INFO: ==========================================
+[2026-09-23T11:43:17.816Z] INFO: IMAGE UPLOAD
+[2026-09-23T11:43:17.818Z] INFO: Field name : productImages
+[2026-09-23T11:43:17.831Z] INFO: File name  : 1A.png
+[2026-09-23T11:43:17.848Z] INFO: Extension  : .png
+[2026-09-23T11:43:17.850Z] INFO: MIME type  : image/png
+[2026-09-23T11:43:17.850Z] INFO: ==========================================
+[2026-09-23T11:43:17.894Z] INFO: ==========================================
+[2026-09-23T11:43:17.895Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T11:43:17.897Z] INFO: ==========================================
+[2026-09-23T11:43:17.897Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3b930a640eb93bf9400d7\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T11:43:17.899Z] INFO: Uploaded Files: 1
+[2026-09-23T11:44:42.616Z] INFO: ==========================================
+[2026-09-23T11:44:42.627Z] INFO: IMAGE UPLOAD
+[2026-09-23T11:44:42.627Z] INFO: Field name : productImages
+[2026-09-23T11:44:42.630Z] INFO: File name  : 2A.png
+[2026-09-23T11:44:42.640Z] INFO: Extension  : .png
+[2026-09-23T11:44:42.640Z] INFO: MIME type  : image/png
+[2026-09-23T11:44:42.645Z] INFO: ==========================================
+[2026-09-23T11:44:42.673Z] INFO: ==========================================
+[2026-09-23T11:44:42.675Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T11:44:42.676Z] INFO: ==========================================
+[2026-09-23T11:44:42.677Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab269547b8ed0dab704bffc\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T11:44:42.678Z] INFO: Uploaded Files: 1
+[2026-09-23T11:45:24.324Z] INFO: ==========================================
+[2026-09-23T11:45:24.325Z] INFO: IMAGE UPLOAD
+[2026-09-23T11:45:24.326Z] INFO: Field name : productImages
+[2026-09-23T11:45:24.327Z] INFO: File name  : 2A.png
+[2026-09-23T11:45:24.327Z] INFO: Extension  : .png
+[2026-09-23T11:45:24.327Z] INFO: MIME type  : image/png
+[2026-09-23T11:45:24.338Z] INFO: ==========================================
+[2026-09-23T11:45:24.390Z] INFO: ==========================================
+[2026-09-23T11:45:24.391Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T11:45:24.391Z] INFO: ==========================================
+[2026-09-23T11:45:24.391Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3b930a640eb93bf9400d7\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T11:45:24.392Z] INFO: Uploaded Files: 1
+[2026-09-23T11:45:50.428Z] INFO: ==========================================
+[2026-09-23T11:45:50.435Z] INFO: IMAGE UPLOAD
+[2026-09-23T11:45:50.442Z] INFO: Field name : productImages
+[2026-09-23T11:45:50.445Z] INFO: File name  : 4A.png
+[2026-09-23T11:45:50.451Z] INFO: Extension  : .png
+[2026-09-23T11:45:50.460Z] INFO: MIME type  : image/png
+[2026-09-23T11:45:50.465Z] INFO: ==========================================
+[2026-09-23T11:45:50.485Z] INFO: ==========================================
+[2026-09-23T11:45:50.495Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T11:45:50.497Z] INFO: ==========================================
+[2026-09-23T11:45:50.497Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3bb3ba640eb93bf9400de\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T11:45:50.498Z] INFO: Uploaded Files: 1
