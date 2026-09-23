@@ -1626,3 +1626,12 @@ Require stack:
 [2026-09-23T11:28:11.898Z] INFO: MongoDB Connected Successfully!!
 [2026-09-23T11:28:12.332Z] ERROR: (node:37300) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T11:49:17.368Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-23T11:49:17.379Z] INFO: ========================================
+[2026-09-23T11:49:17.380Z] INFO: Hazel application starting
+[2026-09-23T11:49:17.381Z] INFO: Node version: v20.20.2
+[2026-09-23T11:49:17.381Z] INFO: Environment: production
+[2026-09-23T11:49:17.383Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T11:49:17.384Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T11:49:17.385Z] INFO: PORT: 5004
+[2026-09-23T11:49:17.386Z] INFO: ========================================
