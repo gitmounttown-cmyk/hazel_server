@@ -1635,3 +1635,12 @@ Require stack:
 [2026-09-23T11:49:17.384Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
 [2026-09-23T11:49:17.385Z] INFO: PORT: 5004
 [2026-09-23T11:49:17.386Z] INFO: ========================================
+[2026-09-23T11:49:38.675Z] INFO: App loaded successfully
+[2026-09-23T11:49:38.676Z] INFO: Connecting to MongoDB...
+[2026-09-23T11:49:38.678Z] INFO: Environment: production
+[2026-09-23T11:49:38.679Z] INFO: MongoDB URI exists: true
+[2026-09-23T11:49:38.706Z] INFO: Server running on port 5004
+[2026-09-23T11:49:38.707Z] INFO: Hazel backend started successfully
+[2026-09-23T11:49:39.380Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T11:49:39.813Z] ERROR: (node:11788) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
