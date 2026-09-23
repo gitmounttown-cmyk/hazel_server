@@ -1527,3 +1527,30 @@ Require stack:
 [2026-09-23T04:28:42.865Z] INFO: MongoDB Connected Successfully!!
 [2026-09-23T04:28:43.451Z] ERROR: (node:32804) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T09:51:40.976Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-23T09:51:40.982Z] INFO: ========================================
+[2026-09-23T09:51:40.984Z] INFO: Hazel application starting
+[2026-09-23T09:51:40.989Z] INFO: Node version: v24.16.0
+[2026-09-23T09:51:40.995Z] INFO: Environment: development
+[2026-09-23T09:51:41.032Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-23T09:51:41.048Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-23T09:51:41.059Z] INFO: PORT: 5004
+[2026-09-23T09:51:41.068Z] INFO: ========================================
+[2026-09-23T09:52:55.816Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-23T09:52:55.819Z] INFO: ========================================
+[2026-09-23T09:52:55.820Z] INFO: Hazel application starting
+[2026-09-23T09:52:55.821Z] INFO: Node version: v24.16.0
+[2026-09-23T09:52:55.822Z] INFO: Environment: development
+[2026-09-23T09:52:55.822Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-23T09:52:55.823Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-23T09:52:55.824Z] INFO: PORT: 5004
+[2026-09-23T09:52:55.825Z] INFO: ========================================
+[2026-09-23T09:53:05.419Z] INFO: App loaded successfully
+[2026-09-23T09:53:05.421Z] INFO: Connecting to MongoDB...
+[2026-09-23T09:53:05.424Z] INFO: Environment: development
+[2026-09-23T09:53:05.425Z] INFO: MongoDB URI exists: true
+[2026-09-23T09:53:05.463Z] INFO: Server running on port 5004
+[2026-09-23T09:53:05.468Z] INFO: Hazel backend started successfully
+[2026-09-23T09:53:06.170Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T09:53:06.609Z] ERROR: (node:27848) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
