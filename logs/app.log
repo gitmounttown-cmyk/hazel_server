@@ -1970,3 +1970,130 @@ Require stack:
 [2026-09-23T12:16:03.370Z] INFO: MongoDB Connected Successfully!!
 [2026-09-23T12:16:03.789Z] ERROR: (node:8020) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T12:30:34.092Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-23T12:30:34.096Z] INFO: ========================================
+[2026-09-23T12:30:34.097Z] INFO: Hazel application starting
+[2026-09-23T12:30:34.097Z] INFO: Node version: v20.20.2
+[2026-09-23T12:30:34.098Z] INFO: Environment: production
+[2026-09-23T12:30:34.098Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:30:34.099Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:30:34.100Z] INFO: PORT: 5004
+[2026-09-23T12:30:34.100Z] INFO: ========================================
+[2026-09-23T12:30:35.214Z] INFO: App loaded successfully
+[2026-09-23T12:30:35.215Z] INFO: Connecting to MongoDB...
+[2026-09-23T12:30:35.217Z] INFO: Environment: production
+[2026-09-23T12:30:35.220Z] INFO: MongoDB URI exists: true
+[2026-09-23T12:30:35.247Z] INFO: Server running on port 5004
+[2026-09-23T12:30:35.249Z] INFO: Hazel backend started successfully
+[2026-09-23T12:30:35.891Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T12:30:36.338Z] ERROR: (node:10196) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T12:31:26.361Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-23T12:31:26.365Z] INFO: ========================================
+[2026-09-23T12:31:26.367Z] INFO: Hazel application starting
+[2026-09-23T12:31:26.367Z] INFO: Node version: v20.20.2
+[2026-09-23T12:31:26.369Z] INFO: Environment: production
+[2026-09-23T12:31:26.374Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:31:26.375Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:31:26.377Z] INFO: PORT: 5004
+[2026-09-23T12:31:26.378Z] INFO: ========================================
+[2026-09-23T12:31:27.670Z] INFO: App loaded successfully
+[2026-09-23T12:31:27.672Z] INFO: Connecting to MongoDB...
+[2026-09-23T12:31:27.674Z] INFO: Environment: production
+[2026-09-23T12:31:27.679Z] INFO: MongoDB URI exists: true
+[2026-09-23T12:31:27.707Z] INFO: Server running on port 5004
+[2026-09-23T12:31:27.712Z] INFO: Hazel backend started successfully
+[2026-09-23T12:31:28.351Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T12:31:28.760Z] ERROR: (node:16332) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T12:42:42.993Z] INFO: ==========================================
+[2026-09-23T12:42:43.010Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:42:43.012Z] INFO: Field name : productImages
+[2026-09-23T12:42:43.034Z] INFO: File name  : 2A.png
+[2026-09-23T12:42:43.045Z] INFO: Extension  : .png
+[2026-09-23T12:42:43.054Z] INFO: MIME type  : image/png
+[2026-09-23T12:42:43.079Z] INFO: ==========================================
+[2026-09-23T12:42:43.137Z] INFO: ==========================================
+[2026-09-23T12:42:43.138Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:42:43.138Z] INFO: Field name : productImages
+[2026-09-23T12:42:43.139Z] INFO: File name  : 3A.png
+[2026-09-23T12:42:43.140Z] INFO: Extension  : .png
+[2026-09-23T12:42:43.140Z] INFO: MIME type  : image/png
+[2026-09-23T12:42:43.140Z] INFO: ==========================================
+[2026-09-23T12:42:43.164Z] INFO: ==========================================
+[2026-09-23T12:42:43.172Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:42:43.174Z] INFO: Field name : productImages
+[2026-09-23T12:42:43.175Z] INFO: File name  : 4A.png
+[2026-09-23T12:42:43.176Z] INFO: Extension  : .png
+[2026-09-23T12:42:43.177Z] INFO: MIME type  : image/png
+[2026-09-23T12:42:43.178Z] INFO: ==========================================
+[2026-09-23T12:42:43.196Z] INFO: ==========================================
+[2026-09-23T12:42:43.197Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:42:43.198Z] INFO: Field name : productImages
+[2026-09-23T12:42:43.204Z] INFO: File name  : 6A.png
+[2026-09-23T12:42:43.206Z] INFO: Extension  : .png
+[2026-09-23T12:42:43.208Z] INFO: MIME type  : image/png
+[2026-09-23T12:42:43.210Z] INFO: ==========================================
+[2026-09-23T12:42:43.239Z] INFO: CREATE NEW ARRIVAL
+[2026-09-23T12:42:43.240Z] INFO: Body: {"title":"Our New Arrivals","subtitle":"Latest Collection","description":"Discover our latest collection","featuredProduct":"6ab269547b8ed0dab704bffc","products":"[{\"product\":\"6ab269547b8ed0dab704bffc\",\"displayOrder\":1},{\"product\":\"6ab3b930a640eb93bf9400d7\",\"displayOrder\":2},{\"product\":\"6ab3bb3ba640eb93bf9400de\",\"displayOrder\":3},{\"product\":\"6ab3c0c34545dfe3bfab9d0c\",\"displayOrder\":4}]"}
+[2026-09-23T12:42:43.244Z] INFO: Files: [{"fieldname":"productImages","originalname":"2A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167363091-985429345.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167363091-985429345.png","size":2228005},{"fieldname":"productImages","originalname":"3A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167363141-251204761.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167363141-251204761.png","size":2230114},{"fieldname":"productImages","originalname":"4A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167363178-223109069.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167363178-223109069.png","size":2051378},{"fieldname":"productImages","originalname":"6A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167363211-780160516.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167363211-780160516.png","size":2491107}]
+[2026-09-23T12:43:58.373Z] ERROR: UPLOAD ERROR: MulterError: Unexpected field
+    at wrappedFileFilter (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\index.js:41:19)
+    at Multipart.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\lib\make-middleware.js:193:7)
+    at Multipart.emit (node:events:524:28)
+    at HeaderParser.cb (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+[2026-09-23T12:44:06.952Z] INFO: ==========================================
+[2026-09-23T12:44:06.956Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:44:06.962Z] INFO: Field name : productImages
+[2026-09-23T12:44:06.966Z] INFO: File name  : 1A.png
+[2026-09-23T12:44:06.981Z] INFO: Extension  : .png
+[2026-09-23T12:44:06.987Z] INFO: MIME type  : image/png
+[2026-09-23T12:44:07.004Z] INFO: ==========================================
+[2026-09-23T12:44:07.040Z] INFO: ==========================================
+[2026-09-23T12:44:07.048Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:44:07.052Z] INFO: Field name : productImages
+[2026-09-23T12:44:07.054Z] INFO: File name  : 2A.png
+[2026-09-23T12:44:07.055Z] INFO: Extension  : .png
+[2026-09-23T12:44:07.055Z] INFO: MIME type  : image/png
+[2026-09-23T12:44:07.056Z] INFO: ==========================================
+[2026-09-23T12:44:07.093Z] INFO: ==========================================
+[2026-09-23T12:44:07.099Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:44:07.100Z] INFO: Field name : productImages
+[2026-09-23T12:44:07.101Z] INFO: File name  : 4A.png
+[2026-09-23T12:44:07.102Z] INFO: Extension  : .png
+[2026-09-23T12:44:07.104Z] INFO: MIME type  : image/png
+[2026-09-23T12:44:07.139Z] INFO: ==========================================
+[2026-09-23T12:44:07.287Z] INFO: ==========================================
+[2026-09-23T12:44:07.309Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:44:07.339Z] INFO: Field name : productImages
+[2026-09-23T12:44:07.357Z] INFO: File name  : 5A.png
+[2026-09-23T12:44:07.359Z] INFO: Extension  : .png
+[2026-09-23T12:44:07.367Z] INFO: MIME type  : image/png
+[2026-09-23T12:44:07.371Z] INFO: ==========================================
+[2026-09-23T12:44:07.453Z] INFO: CREATE NEW ARRIVAL
+[2026-09-23T12:44:07.455Z] INFO: Body: {"title":"Our New Arrivals","subtitle":"Latest Collection","description":"Discover our latest collection","featuredProduct":"6ab269547b8ed0dab704bffc","products":"[{\"product\":\"6ab269547b8ed0dab704bffc\",\"displayOrder\":1},{\"product\":\"6ab3b930a640eb93bf9400d7\",\"displayOrder\":2},{\"product\":\"6ab3bb3ba640eb93bf9400de\",\"displayOrder\":3},{\"product\":\"6ab3c0c34545dfe3bfab9d0c\",\"displayOrder\":4}]"}
+[2026-09-23T12:44:07.457Z] INFO: Files: [{"fieldname":"productImages","originalname":"1A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167447007-936042674.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167447007-936042674.png","size":2256101},{"fieldname":"productImages","originalname":"2A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167447056-751376141.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167447056-751376141.png","size":2647679},{"fieldname":"productImages","originalname":"4A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167447166-989717820.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167447166-989717820.png","size":2533983},{"fieldname":"productImages","originalname":"5A.png","encoding":"7bit","mimetype":"image/png","path":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals\\1790167447389-500352709.png","destination":"C:\\Users\\User05\\Documents\\newgit\\hazel_server\\uploads\\new-arrivals","filename":"1790167447389-500352709.png","size":1878539}]
+[2026-09-23T12:44:27.052Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-23T12:44:27.056Z] INFO: ========================================
+[2026-09-23T12:44:27.057Z] INFO: Hazel application starting
+[2026-09-23T12:44:27.057Z] INFO: Node version: v20.20.2
+[2026-09-23T12:44:27.058Z] INFO: Environment: production
+[2026-09-23T12:44:27.059Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:44:27.059Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T12:44:27.061Z] INFO: PORT: 5004
+[2026-09-23T12:44:27.064Z] INFO: ========================================
+[2026-09-23T12:44:35.202Z] INFO: App loaded successfully
+[2026-09-23T12:44:35.203Z] INFO: Connecting to MongoDB...
+[2026-09-23T12:44:35.204Z] INFO: Environment: production
+[2026-09-23T12:44:35.205Z] INFO: MongoDB URI exists: true
+[2026-09-23T12:44:35.227Z] INFO: Server running on port 5004
+[2026-09-23T12:44:35.228Z] INFO: Hazel backend started successfully
+[2026-09-23T12:44:35.828Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T12:44:36.204Z] ERROR: (node:16300) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
