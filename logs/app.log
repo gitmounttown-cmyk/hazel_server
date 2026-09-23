@@ -1840,6 +1840,7 @@ Require stack:
 [2026-09-23T11:45:50.497Z] INFO: ==========================================
 [2026-09-23T11:45:50.497Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3bb3ba640eb93bf9400de\",\"displayOrder\":1,\"isFeatured\":true}]"}
 [2026-09-23T11:45:50.498Z] INFO: Uploaded Files: 1
+<<<<<<< HEAD
 [2026-09-23T12:12:20.511Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
 [2026-09-23T12:12:20.525Z] INFO: ========================================
 [2026-09-23T12:12:20.529Z] INFO: Hazel application starting
@@ -1858,3 +1859,75 @@ Require stack:
 [2026-09-23T12:12:22.873Z] INFO: MongoDB Connected Successfully!!
 [2026-09-23T12:12:23.299Z] ERROR: (node:12028) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+=======
+[2026-09-23T11:54:20.176Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-23T11:54:20.180Z] INFO: ========================================
+[2026-09-23T11:54:20.181Z] INFO: Hazel application starting
+[2026-09-23T11:54:20.181Z] INFO: Node version: v20.20.2
+[2026-09-23T11:54:20.182Z] INFO: Environment: production
+[2026-09-23T11:54:20.182Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T11:54:20.183Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-23T11:54:20.183Z] INFO: PORT: 5004
+[2026-09-23T11:54:20.184Z] INFO: ========================================
+[2026-09-23T11:54:21.785Z] INFO: App loaded successfully
+[2026-09-23T11:54:21.786Z] INFO: Connecting to MongoDB...
+[2026-09-23T11:54:21.788Z] INFO: Environment: production
+[2026-09-23T11:54:21.790Z] INFO: MongoDB URI exists: true
+[2026-09-23T11:54:21.813Z] INFO: Server running on port 5004
+[2026-09-23T11:54:21.815Z] INFO: Hazel backend started successfully
+[2026-09-23T11:54:22.475Z] INFO: MongoDB Connected Successfully!!
+[2026-09-23T11:54:22.907Z] ERROR: (node:8312) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T12:06:27.150Z] INFO: ==========================================
+[2026-09-23T12:06:27.151Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:06:27.153Z] INFO: Field name : media
+[2026-09-23T12:06:27.159Z] INFO: File name  : 5A.png
+[2026-09-23T12:06:27.162Z] INFO: Extension  : .png
+[2026-09-23T12:06:27.163Z] INFO: MIME type  : image/png
+[2026-09-23T12:06:27.163Z] INFO: ==========================================
+[2026-09-23T12:06:27.226Z] INFO: ==========================================
+[2026-09-23T12:06:27.227Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:06:27.228Z] INFO: Field name : media
+[2026-09-23T12:06:27.229Z] INFO: File name  : 5B.png
+[2026-09-23T12:06:27.230Z] INFO: Extension  : .png
+[2026-09-23T12:06:27.232Z] INFO: MIME type  : image/png
+[2026-09-23T12:06:27.232Z] INFO: ==========================================
+[2026-09-23T12:07:09.381Z] INFO: ==========================================
+[2026-09-23T12:07:09.382Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:07:09.382Z] INFO: Field name : productImages
+[2026-09-23T12:07:09.383Z] INFO: File name  : 5A.png
+[2026-09-23T12:07:09.384Z] INFO: Extension  : .png
+[2026-09-23T12:07:09.384Z] INFO: MIME type  : image/png
+[2026-09-23T12:07:09.389Z] INFO: ==========================================
+[2026-09-23T12:07:09.424Z] INFO: ==========================================
+[2026-09-23T12:07:09.426Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T12:07:09.427Z] INFO: ==========================================
+[2026-09-23T12:07:09.428Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3c0c34545dfe3bfab9d0c\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T12:07:09.431Z] INFO: Uploaded Files: 1
+[2026-09-23T12:10:46.051Z] INFO: ==========================================
+[2026-09-23T12:10:46.056Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:10:46.057Z] INFO: Field name : media
+[2026-09-23T12:10:46.058Z] INFO: File name  : 3A.png
+[2026-09-23T12:10:46.062Z] INFO: Extension  : .png
+[2026-09-23T12:10:46.064Z] INFO: MIME type  : image/png
+[2026-09-23T12:10:46.068Z] INFO: ==========================================
+[2026-09-23T12:10:46.139Z] INFO: ==========================================
+[2026-09-23T12:10:46.145Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:10:46.147Z] INFO: Field name : media
+[2026-09-23T12:10:46.154Z] INFO: File name  : 3B.png
+[2026-09-23T12:10:46.155Z] INFO: Extension  : .png
+[2026-09-23T12:10:46.156Z] INFO: MIME type  : image/png
+[2026-09-23T12:10:46.157Z] INFO: ==========================================
+[2026-09-23T12:11:30.535Z] INFO: ==========================================
+[2026-09-23T12:11:30.537Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:11:30.538Z] INFO: Field name : productImages
+[2026-09-23T12:11:30.539Z] INFO: File name  : 3A.png
+[2026-09-23T12:11:30.541Z] INFO: Extension  : .png
+[2026-09-23T12:11:30.543Z] INFO: MIME type  : image/png
+[2026-09-23T12:11:30.546Z] INFO: ==========================================
+[2026-09-23T12:11:30.586Z] INFO: ==========================================
+[2026-09-23T12:11:30.589Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T12:11:30.589Z] INFO: ==========================================
+[2026-09-23T12:11:30.590Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3c1c64545dfe3bfab9d4c\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T12:11:30.591Z] INFO: Uploaded Files: 1
+>>>>>>> filter_product_12_09_26
