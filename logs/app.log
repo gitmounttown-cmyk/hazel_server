@@ -1683,3 +1683,55 @@ Require stack:
 [2026-09-23T11:54:22.475Z] INFO: MongoDB Connected Successfully!!
 [2026-09-23T11:54:22.907Z] ERROR: (node:8312) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-23T12:06:27.150Z] INFO: ==========================================
+[2026-09-23T12:06:27.151Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:06:27.153Z] INFO: Field name : media
+[2026-09-23T12:06:27.159Z] INFO: File name  : 5A.png
+[2026-09-23T12:06:27.162Z] INFO: Extension  : .png
+[2026-09-23T12:06:27.163Z] INFO: MIME type  : image/png
+[2026-09-23T12:06:27.163Z] INFO: ==========================================
+[2026-09-23T12:06:27.226Z] INFO: ==========================================
+[2026-09-23T12:06:27.227Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:06:27.228Z] INFO: Field name : media
+[2026-09-23T12:06:27.229Z] INFO: File name  : 5B.png
+[2026-09-23T12:06:27.230Z] INFO: Extension  : .png
+[2026-09-23T12:06:27.232Z] INFO: MIME type  : image/png
+[2026-09-23T12:06:27.232Z] INFO: ==========================================
+[2026-09-23T12:07:09.381Z] INFO: ==========================================
+[2026-09-23T12:07:09.382Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:07:09.382Z] INFO: Field name : productImages
+[2026-09-23T12:07:09.383Z] INFO: File name  : 5A.png
+[2026-09-23T12:07:09.384Z] INFO: Extension  : .png
+[2026-09-23T12:07:09.384Z] INFO: MIME type  : image/png
+[2026-09-23T12:07:09.389Z] INFO: ==========================================
+[2026-09-23T12:07:09.424Z] INFO: ==========================================
+[2026-09-23T12:07:09.426Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T12:07:09.427Z] INFO: ==========================================
+[2026-09-23T12:07:09.428Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3c0c34545dfe3bfab9d0c\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T12:07:09.431Z] INFO: Uploaded Files: 1
+[2026-09-23T12:10:46.051Z] INFO: ==========================================
+[2026-09-23T12:10:46.056Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:10:46.057Z] INFO: Field name : media
+[2026-09-23T12:10:46.058Z] INFO: File name  : 3A.png
+[2026-09-23T12:10:46.062Z] INFO: Extension  : .png
+[2026-09-23T12:10:46.064Z] INFO: MIME type  : image/png
+[2026-09-23T12:10:46.068Z] INFO: ==========================================
+[2026-09-23T12:10:46.139Z] INFO: ==========================================
+[2026-09-23T12:10:46.145Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-23T12:10:46.147Z] INFO: Field name : media
+[2026-09-23T12:10:46.154Z] INFO: File name  : 3B.png
+[2026-09-23T12:10:46.155Z] INFO: Extension  : .png
+[2026-09-23T12:10:46.156Z] INFO: MIME type  : image/png
+[2026-09-23T12:10:46.157Z] INFO: ==========================================
+[2026-09-23T12:11:30.535Z] INFO: ==========================================
+[2026-09-23T12:11:30.537Z] INFO: IMAGE UPLOAD
+[2026-09-23T12:11:30.538Z] INFO: Field name : productImages
+[2026-09-23T12:11:30.539Z] INFO: File name  : 3A.png
+[2026-09-23T12:11:30.541Z] INFO: Extension  : .png
+[2026-09-23T12:11:30.543Z] INFO: MIME type  : image/png
+[2026-09-23T12:11:30.546Z] INFO: ==========================================
+[2026-09-23T12:11:30.586Z] INFO: ==========================================
+[2026-09-23T12:11:30.589Z] INFO: CREATE TRENDING PRODUCT
+[2026-09-23T12:11:30.589Z] INFO: ==========================================
+[2026-09-23T12:11:30.590Z] INFO: Request Body: {"title":"Trending Products","subtitle":"Our Most Loved Styles","isActive":"true","products":"[{\"product\":\"6ab3c1c64545dfe3bfab9d4c\",\"displayOrder\":1,\"isFeatured\":true}]"}
+[2026-09-23T12:11:30.591Z] INFO: Uploaded Files: 1
