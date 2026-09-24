@@ -2388,3 +2388,21 @@ Require stack:
 [2026-09-24T12:46:16.990Z] INFO: Extension  : .png
 [2026-09-24T12:46:16.991Z] INFO: MIME type  : image/png
 [2026-09-24T12:46:16.991Z] INFO: ==========================================
+[2026-09-24T12:48:22.675Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-24T12:48:22.680Z] INFO: ========================================
+[2026-09-24T12:48:22.681Z] INFO: Hazel application starting
+[2026-09-24T12:48:22.683Z] INFO: Node version: v20.20.2
+[2026-09-24T12:48:22.684Z] INFO: Environment: production
+[2026-09-24T12:48:22.687Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:22.692Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:22.695Z] INFO: PORT: 5004
+[2026-09-24T12:48:22.697Z] INFO: ========================================
+[2026-09-24T12:48:24.138Z] INFO: App loaded successfully
+[2026-09-24T12:48:24.140Z] INFO: Connecting to MongoDB...
+[2026-09-24T12:48:24.143Z] INFO: Environment: production
+[2026-09-24T12:48:24.153Z] INFO: MongoDB URI exists: true
+[2026-09-24T12:48:24.176Z] INFO: Server running on port 5004
+[2026-09-24T12:48:24.178Z] INFO: Hazel backend started successfully
+[2026-09-24T12:48:24.749Z] INFO: MongoDB Connected Successfully!!
+[2026-09-24T12:48:25.145Z] ERROR: (node:18800) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
