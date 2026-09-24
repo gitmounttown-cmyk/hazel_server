@@ -942,10 +942,21 @@ const getProductById = async (req, res) => {
       });
     }
 
+    //get related products based on category and brand
+    const relatedProducts = await Product.find({
+      categoryId: product.categoryId,
+      brandId: product.brandId,
+      _id: { $ne: product._id },
+      isDeleted: false,
+    })
+      .populate("categoryId")
+      .populate("brandId")
+      .limit(5);
+
     return res.status(200).json({
       success: true,
       message: "Product fetched successfully",
-      data: product,
+      data: { ...product.toObject(), relatedProducts }
     });
   } catch (error) {
     console.error("Get Product By ID Error:", error);
