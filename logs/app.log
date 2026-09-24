@@ -2049,6 +2049,7 @@ Require stack:
 [2026-09-24T09:16:31.256Z] INFO: MongoDB Connected Successfully!!
 [2026-09-24T09:16:31.707Z] ERROR: (node:18448) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+<<<<<<< HEAD
 [2026-09-24T09:49:47.245Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
 [2026-09-24T09:49:47.249Z] INFO: ========================================
 [2026-09-24T09:49:47.251Z] INFO: Hazel application starting
@@ -2085,3 +2086,33 @@ Require stack:
 [2026-09-24T12:47:13.850Z] INFO: MongoDB Connected Successfully!!
 [2026-09-24T12:47:14.232Z] ERROR: (node:1168) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+=======
+[2026-09-24T12:43:51.660Z] INFO: ==========================================
+[2026-09-24T12:43:51.671Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:43:51.674Z] INFO: Field name : media
+[2026-09-24T12:43:51.675Z] INFO: File name  : 1A.png
+[2026-09-24T12:43:51.676Z] INFO: Extension  : .png
+[2026-09-24T12:43:51.676Z] INFO: MIME type  : image/png
+[2026-09-24T12:43:51.677Z] INFO: ==========================================
+[2026-09-24T12:43:51.715Z] INFO: ==========================================
+[2026-09-24T12:43:51.716Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:43:51.717Z] INFO: Field name : media
+[2026-09-24T12:43:51.718Z] INFO: File name  : 1B.png
+[2026-09-24T12:43:51.719Z] INFO: Extension  : .png
+[2026-09-24T12:43:51.719Z] INFO: MIME type  : image/png
+[2026-09-24T12:43:51.721Z] INFO: ==========================================
+[2026-09-24T12:46:16.951Z] INFO: ==========================================
+[2026-09-24T12:46:16.953Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:46:16.953Z] INFO: Field name : media
+[2026-09-24T12:46:16.954Z] INFO: File name  : 3A.png
+[2026-09-24T12:46:16.955Z] INFO: Extension  : .png
+[2026-09-24T12:46:16.956Z] INFO: MIME type  : image/png
+[2026-09-24T12:46:16.957Z] INFO: ==========================================
+[2026-09-24T12:46:16.980Z] INFO: ==========================================
+[2026-09-24T12:46:16.986Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:46:16.987Z] INFO: Field name : media
+[2026-09-24T12:46:16.988Z] INFO: File name  : 3B.png
+[2026-09-24T12:46:16.990Z] INFO: Extension  : .png
+[2026-09-24T12:46:16.991Z] INFO: MIME type  : image/png
+[2026-09-24T12:46:16.991Z] INFO: ==========================================
+>>>>>>> filter_product_12_09_26
