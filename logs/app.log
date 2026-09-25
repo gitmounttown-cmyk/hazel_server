@@ -2586,3 +2586,21 @@ SyntaxError: Identifier 'app' has already been declared
 [2026-09-25T09:19:04.992Z] INFO: Extension  : .png
 [2026-09-25T09:19:04.993Z] INFO: MIME type  : image/png
 [2026-09-25T09:19:04.996Z] INFO: ==========================================
+[2026-09-25T09:26:18.812Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-09-25T09:26:18.910Z] INFO: ========================================
+[2026-09-25T09:26:18.924Z] INFO: Hazel application starting
+[2026-09-25T09:26:18.926Z] INFO: Node version: v20.20.2
+[2026-09-25T09:26:18.929Z] INFO: Environment: production
+[2026-09-25T09:26:18.937Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:26:18.939Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:26:18.941Z] INFO: PORT: 5004
+[2026-09-25T09:26:18.943Z] INFO: ========================================
+[2026-09-25T09:26:20.175Z] INFO: App loaded successfully
+[2026-09-25T09:26:20.176Z] INFO: Connecting to MongoDB...
+[2026-09-25T09:26:20.177Z] INFO: Environment: production
+[2026-09-25T09:26:20.178Z] INFO: MongoDB URI exists: true
+[2026-09-25T09:26:20.197Z] INFO: Server running on port 5004
+[2026-09-25T09:26:20.198Z] INFO: Hazel backend started successfully
+[2026-09-25T09:26:20.756Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T09:26:21.167Z] ERROR: (node:17796) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
