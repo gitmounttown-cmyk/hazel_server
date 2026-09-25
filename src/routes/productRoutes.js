@@ -6,6 +6,8 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
+  addVariantMedia,
+  deleteVariantMedia,
 } = require("../controllers/productController");
 
 const {
@@ -35,13 +37,6 @@ router.post(
 router.get("/all", getAllProducts);
 
 // ============================================================
-// GET PRODUCT BY ID
-// GET /api/products/:productId
-// ============================================================
-
-router.get("/:productId", getProductById);
-
-// ============================================================
 // UPDATE PRODUCT
 // PUT /api/products/update/:productId
 // ============================================================
@@ -58,6 +53,72 @@ router.put(
 // DELETE /api/products/delete/:productId
 // ============================================================
 
-router.delete("/delete/:productId", deleteProduct);
+router.delete(
+  "/delete/:productId",
+  deleteProduct
+);
+
+// ============================================================
+// ADD VARIANT MEDIA
+// Express routes mapped to handle both /variant/ and /variants/
+// using :color parameter to match productController.js expectations
+// ============================================================
+
+router.post(
+  "/:productId/variant/:color/media",
+  uploadProductMedia.array("media", 10),
+  handleUploadError,
+  addVariantMedia
+);
+
+router.post(
+  "/:productId/variants/:color/media",
+  uploadProductMedia.array("media", 10),
+  handleUploadError,
+  addVariantMedia
+);
+
+// ============================================================
+// DELETE VARIANT MEDIA
+// ============================================================
+
+router.delete(
+  "/:productId/variant/:color/media/:mediaId",
+  deleteVariantMedia
+);
+
+router.delete(
+  "/:productId/variants/:color/media/:mediaId",
+  deleteVariantMedia
+);
+
+// ============================================================
+// UPDATE PRODUCT - DIRECT URL
+// PUT /api/products/:productId
+// ============================================================
+
+router.put(
+  "/:productId",
+  uploadProductMedia.array("media", 10),
+  handleUploadError,
+  updateProduct
+);
+
+// ============================================================
+// DELETE PRODUCT - DIRECT URL
+// DELETE /api/products/:productId
+// ============================================================
+
+router.delete(
+  "/:productId",
+  deleteProduct
+);
+
+// ============================================================
+// GET PRODUCT BY ID
+// GET /api/products/:productId
+// ============================================================
+
+router.get("/:productId", getProductById);
 
 module.exports = router;
