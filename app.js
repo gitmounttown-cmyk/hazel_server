@@ -141,6 +141,7 @@ app.use ('/api/stock-history', require ('./src/routes/stockHistoryRoutes'));
 app.use ('/api/customers', require ('./src/routes/customerRoutes'));
 app.use ('/api/videos', require ('./src/routes/videoRoutes'));
 app.use("/api/reports",require("./src/routes/reportRoutes"));
+app.use("/api/users",require("./src/routes/userRoutes"));
 // ==========================================================
 // 404 HANDLER
 // ==========================================================

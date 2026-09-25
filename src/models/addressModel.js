@@ -1,211 +1,99 @@
 const mongoose = require("mongoose");
 
-// ==========================================================
-// ADDRESS SCHEMA
-// ==========================================================
-
 const addressSchema = new mongoose.Schema(
   {
-    // ======================================================
-    // USER
-    // ======================================================
-
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required:false,
+      required: true,
       index: true,
     },
-
-    // ======================================================
-    // LOCATION REFERENCE
-    // ======================================================
-
-    // location: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Location",
-    //   default: null,
-    // },
-
-    // ======================================================
-    // ADDRESS TYPE
-    // ======================================================
-
     addressType: {
       type: String,
-      enum: [
-        "home",
-        "work",
-        "other",
-      ],
-      default: "home",
+      enum: ["Home", "Work", "Other"],
+      default: "Home",
     },
-
-    // ======================================================
-    // FULL NAME
-    // ======================================================
-
     fullName: {
       type: String,
-      required:false,
+      required: [true, "Full name is required"],
       trim: true,
     },
-
-    // ======================================================
-    // MOBILE NUMBER
-    // ======================================================
-
     mobileNumber: {
       type: String,
-      required:false,
+      required: [true, "Mobile number is required"],
       trim: true,
     },
-
-    // ======================================================
-    // ALTERNATE MOBILE
-    // ======================================================
-
     alternateMobileNumber: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // HOUSE / FLAT
-    // ======================================================
-
     houseNo: {
       type: String,
-      required:false,
+      required: [true, "House / Flat No. is required"],
       trim: true,
     },
-
-    // ======================================================
-    // STREET
-    // ======================================================
-
     street: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // AREA
-    // ======================================================
-
     area: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // LANDMARK
-    // ======================================================
-
     landmark: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // CITY
-    // ======================================================
-
     city: {
       type: String,
-      required:false,
+      required: [true, "City is required"],
       trim: true,
     },
-
-    // ======================================================
-    // DISTRICT
-    // ======================================================
-
     district: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // STATE
-    // ======================================================
-
     state: {
       type: String,
-      required:false,
+      required: [true, "State is required"],
       trim: true,
     },
-
-    // ======================================================
-    // COUNTRY
-    // ======================================================
-
     country: {
       type: String,
       default: "India",
       trim: true,
     },
-
-    // ======================================================
-    // PINCODE
-    // ======================================================
-
     pincode: {
       type: String,
-      required:false,
+      required: [true, "PIN Code is required"],
       trim: true,
     },
-
-    // ======================================================
-    // LATITUDE
-    // ======================================================
-
     latitude: {
       type: Number,
       min: -90,
       max: 90,
       default: null,
     },
-
-    // ======================================================
-    // LONGITUDE
-    // ======================================================
-
     longitude: {
       type: Number,
       min: -180,
       max: 180,
       default: null,
     },
-
-    // ======================================================
-    // GOOGLE PLACE ID
-    // ======================================================
-
     placeId: {
       type: String,
       default: "",
       trim: true,
     },
-
-    // ======================================================
-    // DEFAULT ADDRESS
-    // ======================================================
-
     isDefault: {
       type: Boolean,
       default: false,
     },
-
-    // ======================================================
-    // ACTIVE
-    // ======================================================
-
     isActive: {
       type: Boolean,
       default: true,
@@ -216,20 +104,10 @@ const addressSchema = new mongoose.Schema(
   }
 );
 
-// ==========================================================
-// INDEX
-// ==========================================================
-
 addressSchema.index({
   user: 1,
   isActive: 1,
 });
 
-// ==========================================================
-// EXPORT
-// ==========================================================
-
-module.exports = mongoose.model(
-  "Address",
-  addressSchema
-);
+module.exports =
+  mongoose.models.Address || mongoose.model("Address", addressSchema);

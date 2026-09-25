@@ -1,124 +1,50 @@
 const express = require("express");
+const router = express.Router();
 
+const { verifyToken } = require("../middleware/authMiddleware");
+const { uploadProductMedia } = require("../middleware/uploadMiddleware");
 const {
   createProduct,
+  uploadProductMediaHandler,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
-  addVariantMedia,
-  deleteVariantMedia,
 } = require("../controllers/productController");
 
-const {
-  uploadProductMedia,
-  handleUploadError,
-} = require("../middleware/uploadMiddleware");
+// 1. ALL GET/POST STATIC ROUTES
+router.get("/all", getAllProducts);
 
-const router = express.Router();
-
-// ============================================================
-// CREATE PRODUCT
-// POST /api/products/create
-// ============================================================
+router.post(
+  "/upload-media",
+  verifyToken,
+  uploadProductMedia.array("media", 10),
+  uploadProductMediaHandler
+);
 
 router.post(
   "/create",
+  verifyToken,
   uploadProductMedia.array("media", 10),
-  handleUploadError,
   createProduct
 );
 
-// ============================================================
-// GET ALL PRODUCTS
-// GET /api/products/all
-// ============================================================
-
-router.get("/all", getAllProducts);
-
-// ============================================================
-// UPDATE PRODUCT
-// PUT /api/products/update/:productId
-// ============================================================
-
+// 2. PUT ROUTES (Supports BOTH /update/:productId and /:productId to guarantee no 404s)
 router.put(
-  "/update/:productId",
+  ["/update/:productId", "/:productId"],
+  verifyToken,
   uploadProductMedia.array("media", 10),
-  handleUploadError,
   updateProduct
 );
 
-// ============================================================
-// DELETE PRODUCT
-// DELETE /api/products/delete/:productId
-// ============================================================
-
+// 3. DELETE ROUTES
 router.delete(
-  "/delete/:productId",
+  ["/delete/:productId", "/:productId"],
+  verifyToken,
   deleteProduct
 );
 
-// ============================================================
-// ADD VARIANT MEDIA
-// Express routes mapped to handle both /variant/ and /variants/
-// using :color parameter to match productController.js expectations
-// ============================================================
-
-router.post(
-  "/:productId/variant/:color/media",
-  uploadProductMedia.array("media", 10),
-  handleUploadError,
-  addVariantMedia
-);
-
-router.post(
-  "/:productId/variants/:color/media",
-  uploadProductMedia.array("media", 10),
-  handleUploadError,
-  addVariantMedia
-);
-
-// ============================================================
-// DELETE VARIANT MEDIA
-// ============================================================
-
-router.delete(
-  "/:productId/variant/:color/media/:mediaId",
-  deleteVariantMedia
-);
-
-router.delete(
-  "/:productId/variants/:color/media/:mediaId",
-  deleteVariantMedia
-);
-
-// ============================================================
-// UPDATE PRODUCT - DIRECT URL
-// PUT /api/products/:productId
-// ============================================================
-
-router.put(
-  "/:productId",
-  uploadProductMedia.array("media", 10),
-  handleUploadError,
-  updateProduct
-);
-
-// ============================================================
-// DELETE PRODUCT - DIRECT URL
-// DELETE /api/products/:productId
-// ============================================================
-
-router.delete(
-  "/:productId",
-  deleteProduct
-);
-
-// ============================================================
-// GET PRODUCT BY ID
-// GET /api/products/:productId
-// ============================================================
-
+// 4. GET SINGLE PRODUCT BY ID (Must stay at the bottom)
 router.get("/:productId", getProductById);
 
 module.exports = router;
