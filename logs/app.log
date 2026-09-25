@@ -2115,7 +2115,28 @@ Require stack:
 [2026-09-24T12:46:16.990Z] INFO: Extension  : .png
 [2026-09-24T12:46:16.991Z] INFO: MIME type  : image/png
 [2026-09-24T12:46:16.991Z] INFO: ==========================================
+<<<<<<< HEAD
+[2026-09-24T12:48:22.675Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-24T12:48:22.680Z] INFO: ========================================
+[2026-09-24T12:48:22.681Z] INFO: Hazel application starting
+[2026-09-24T12:48:22.683Z] INFO: Node version: v20.20.2
+[2026-09-24T12:48:22.684Z] INFO: Environment: production
+[2026-09-24T12:48:22.687Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:22.692Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:22.695Z] INFO: PORT: 5004
+[2026-09-24T12:48:22.697Z] INFO: ========================================
+[2026-09-24T12:48:24.138Z] INFO: App loaded successfully
+[2026-09-24T12:48:24.140Z] INFO: Connecting to MongoDB...
+[2026-09-24T12:48:24.143Z] INFO: Environment: production
+[2026-09-24T12:48:24.153Z] INFO: MongoDB URI exists: true
+[2026-09-24T12:48:24.176Z] INFO: Server running on port 5004
+[2026-09-24T12:48:24.178Z] INFO: Hazel backend started successfully
+[2026-09-24T12:48:24.749Z] INFO: MongoDB Connected Successfully!!
+[2026-09-24T12:48:25.145Z] ERROR: (node:18800) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+=======
 >>>>>>> filter_product_12_09_26
+<<<<<<< HEAD
 [2026-09-25T09:25:23.834Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
 [2026-09-25T09:25:23.840Z] INFO: ========================================
 [2026-09-25T09:25:23.842Z] INFO: Hazel application starting
@@ -2133,4 +2154,491 @@ Require stack:
 [2026-09-25T09:25:25.299Z] INFO: Hazel backend started successfully
 [2026-09-25T09:25:25.921Z] INFO: MongoDB Connected Successfully!!
 [2026-09-25T09:25:26.358Z] ERROR: (node:17740) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+=======
+>>>>>>> fdf419571626ea166db6eca46d4b357d6535e10c
+[2026-09-24T12:48:52.738Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-24T12:48:52.742Z] INFO: ========================================
+[2026-09-24T12:48:52.743Z] INFO: Hazel application starting
+[2026-09-24T12:48:52.745Z] INFO: Node version: v20.20.2
+[2026-09-24T12:48:52.746Z] INFO: Environment: production
+[2026-09-24T12:48:52.747Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:52.749Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T12:48:52.750Z] INFO: PORT: 5004
+[2026-09-24T12:48:52.751Z] INFO: ========================================
+[2026-09-24T12:48:53.943Z] INFO: App loaded successfully
+[2026-09-24T12:48:53.945Z] INFO: Connecting to MongoDB...
+[2026-09-24T12:48:53.946Z] INFO: Environment: production
+[2026-09-24T12:48:53.947Z] INFO: MongoDB URI exists: true
+[2026-09-24T12:48:53.969Z] INFO: Server running on port 5004
+[2026-09-24T12:48:53.970Z] INFO: Hazel backend started successfully
+[2026-09-24T12:48:54.441Z] INFO: MongoDB Connected Successfully!!
+[2026-09-24T12:48:54.855Z] ERROR: (node:5516) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-24T12:57:56.640Z] ERROR: UPLOAD ERROR: MulterError: Unexpected field
+    at wrappedFileFilter (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\index.js:41:19)
+    at Multipart.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\node_modules\multer\lib\make-middleware.js:193:7)
+    at Multipart.emit (node:events:524:28)
+    at HeaderParser.cb (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (C:\Users\User05\Documents\newgit\hazel_server\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\User05\Documents\newgit\hazel_server\node_modules\busboy\lib\types\multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+[2026-09-24T12:59:16.335Z] INFO: ==========================================
+[2026-09-24T12:59:16.336Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:59:16.339Z] INFO: Field name : media
+[2026-09-24T12:59:16.340Z] INFO: File name  : 3A.png
+[2026-09-24T12:59:16.342Z] INFO: Extension  : .png
+[2026-09-24T12:59:16.342Z] INFO: MIME type  : image/png
+[2026-09-24T12:59:16.345Z] INFO: ==========================================
+[2026-09-24T12:59:16.386Z] INFO: ==========================================
+[2026-09-24T12:59:16.388Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-24T12:59:16.389Z] INFO: Field name : media
+[2026-09-24T12:59:16.390Z] INFO: File name  : 3B.png
+[2026-09-24T12:59:16.391Z] INFO: Extension  : .png
+[2026-09-24T12:59:16.392Z] INFO: MIME type  : image/png
+[2026-09-24T12:59:16.393Z] INFO: ==========================================
+[2026-09-24T13:03:08.122Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-24T13:03:08.129Z] INFO: ========================================
+[2026-09-24T13:03:08.131Z] INFO: Hazel application starting
+[2026-09-24T13:03:08.133Z] INFO: Node version: v20.20.2
+[2026-09-24T13:03:08.134Z] INFO: Environment: production
+[2026-09-24T13:03:08.135Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T13:03:08.135Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-24T13:03:08.136Z] INFO: PORT: 5004
+[2026-09-24T13:03:08.138Z] INFO: ========================================
+[2026-09-24T13:03:09.363Z] INFO: App loaded successfully
+[2026-09-24T13:03:09.364Z] INFO: Connecting to MongoDB...
+[2026-09-24T13:03:09.364Z] INFO: Environment: production
+[2026-09-24T13:03:09.365Z] INFO: MongoDB URI exists: true
+[2026-09-24T13:03:09.383Z] INFO: Server running on port 5004
+[2026-09-24T13:03:09.383Z] INFO: Hazel backend started successfully
+[2026-09-24T13:03:10.002Z] INFO: MongoDB Connected Successfully!!
+[2026-09-24T13:03:10.409Z] ERROR: (node:12384) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T03:36:17.687Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-25T03:36:17.695Z] INFO: ========================================
+[2026-09-25T03:36:17.696Z] INFO: Hazel application starting
+[2026-09-25T03:36:17.697Z] INFO: Node version: v20.20.2
+[2026-09-25T03:36:17.697Z] INFO: Environment: production
+[2026-09-25T03:36:17.698Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T03:36:17.698Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T03:36:17.699Z] INFO: PORT: 5004
+[2026-09-25T03:36:17.700Z] INFO: ========================================
+[2026-09-25T03:36:51.618Z] INFO: App loaded successfully
+[2026-09-25T03:36:51.633Z] INFO: Connecting to MongoDB...
+[2026-09-25T03:36:51.634Z] INFO: Environment: production
+[2026-09-25T03:36:51.643Z] INFO: MongoDB URI exists: true
+[2026-09-25T03:36:51.725Z] INFO: Server running on port 5004
+[2026-09-25T03:36:51.733Z] INFO: Hazel backend started successfully
+[2026-09-25T03:36:52.485Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T03:36:52.946Z] ERROR: (node:13796) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T05:15:11.463Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-25T05:15:11.469Z] INFO: ========================================
+[2026-09-25T05:15:11.470Z] INFO: Hazel application starting
+[2026-09-25T05:15:11.471Z] INFO: Node version: v20.20.2
+[2026-09-25T05:15:11.473Z] INFO: Environment: production
+[2026-09-25T05:15:11.475Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:15:11.475Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:15:11.477Z] INFO: PORT: 5004
+[2026-09-25T05:15:11.478Z] INFO: ========================================
+[2026-09-25T05:15:31.051Z] INFO: App loaded successfully
+[2026-09-25T05:15:31.052Z] INFO: Connecting to MongoDB...
+[2026-09-25T05:15:31.055Z] INFO: Environment: production
+[2026-09-25T05:15:31.056Z] INFO: MongoDB URI exists: true
+[2026-09-25T05:15:31.085Z] INFO: Server running on port 5004
+[2026-09-25T05:15:31.086Z] INFO: Hazel backend started successfully
+[2026-09-25T05:15:31.872Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T05:15:32.321Z] ERROR: (node:4324) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T05:17:51.245Z] INFO: 
+[2026-09-25T05:17:51.249Z] INFO: ====================================
+[2026-09-25T05:17:51.250Z] INFO:         VERIFY OTP DEBUG
+[2026-09-25T05:17:51.252Z] INFO: ====================================
+[2026-09-25T05:17:51.256Z] INFO: Mobile Number : 9626597049
+[2026-09-25T05:17:51.258Z] INFO: Entered OTP   : 190645
+[2026-09-25T05:17:51.262Z] INFO: OTP ID        : "6ab603c6969dd3316dce261a"
+[2026-09-25T05:17:51.266Z] INFO: Stored OTP    : 190645
+[2026-09-25T05:17:51.272Z] INFO: Purpose       : LOGIN
+[2026-09-25T05:17:51.273Z] INFO: Expires At    : "2026-09-25T05:21:54.480Z"
+[2026-09-25T05:17:51.285Z] INFO: Attempts      : 0
+[2026-09-25T05:17:51.288Z] INFO: Max Attempts  : 5
+[2026-09-25T05:17:51.292Z] INFO: Is Verified   : false
+[2026-09-25T05:17:51.294Z] INFO: ====================================
+[2026-09-25T05:17:51.303Z] INFO: 
+[2026-09-25T05:38:54.294Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-25T05:38:54.318Z] INFO: ========================================
+[2026-09-25T05:38:54.339Z] INFO: Hazel application starting
+[2026-09-25T05:38:54.348Z] INFO: Node version: v20.20.2
+[2026-09-25T05:38:54.355Z] INFO: Environment: production
+[2026-09-25T05:38:54.359Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:38:54.361Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:38:54.369Z] INFO: PORT: 5004
+[2026-09-25T05:38:54.382Z] INFO: ========================================
+[2026-09-25T05:38:56.299Z] INFO: App loaded successfully
+[2026-09-25T05:38:56.301Z] INFO: Connecting to MongoDB...
+[2026-09-25T05:38:56.302Z] INFO: Environment: production
+[2026-09-25T05:38:56.303Z] INFO: MongoDB URI exists: true
+[2026-09-25T05:38:56.335Z] INFO: Server running on port 5004
+[2026-09-25T05:38:56.336Z] INFO: Hazel backend started successfully
+[2026-09-25T05:38:58.068Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T05:38:58.547Z] ERROR: (node:17012) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T05:39:15.285Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-25T05:39:15.291Z] INFO: ========================================
+[2026-09-25T05:39:15.291Z] INFO: Hazel application starting
+[2026-09-25T05:39:15.292Z] INFO: Node version: v20.20.2
+[2026-09-25T05:39:15.293Z] INFO: Environment: production
+[2026-09-25T05:39:15.294Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:39:15.294Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T05:39:15.295Z] INFO: PORT: 5004
+[2026-09-25T05:39:15.305Z] INFO: ========================================
+[2026-09-25T05:39:16.533Z] INFO: App loaded successfully
+[2026-09-25T05:39:16.534Z] INFO: Connecting to MongoDB...
+[2026-09-25T05:39:16.535Z] INFO: Environment: production
+[2026-09-25T05:39:16.537Z] INFO: MongoDB URI exists: true
+[2026-09-25T05:39:16.562Z] INFO: Server running on port 5004
+[2026-09-25T05:39:16.564Z] INFO: Hazel backend started successfully
+[2026-09-25T05:39:17.291Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T05:39:17.713Z] ERROR: (node:5916) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T07:15:34.205Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-25T07:15:34.241Z] INFO: ========================================
+[2026-09-25T07:15:34.248Z] INFO: Hazel application starting
+[2026-09-25T07:15:34.251Z] INFO: Node version: v20.20.2
+[2026-09-25T07:15:34.259Z] INFO: Environment: production
+[2026-09-25T07:15:34.265Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T07:15:34.268Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T07:15:34.274Z] INFO: PORT: 5004
+[2026-09-25T07:15:34.275Z] INFO: ========================================
+[2026-09-25T07:15:57.035Z] INFO: App loaded successfully
+[2026-09-25T07:15:57.048Z] INFO: Connecting to MongoDB...
+[2026-09-25T07:15:57.054Z] INFO: Environment: production
+[2026-09-25T07:15:57.056Z] INFO: MongoDB URI exists: true
+[2026-09-25T07:15:57.167Z] INFO: Server running on port 5004
+[2026-09-25T07:15:57.204Z] INFO: Hazel backend started successfully
+[2026-09-25T07:15:58.160Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T07:15:58.795Z] ERROR: (node:16796) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T07:20:30.677Z] INFO: ==========================================
+[2026-09-25T07:20:30.678Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:20:30.679Z] INFO: Field name : media
+[2026-09-25T07:20:30.680Z] INFO: File name  : 3A.png
+[2026-09-25T07:20:30.680Z] INFO: Extension  : .png
+[2026-09-25T07:20:30.681Z] INFO: MIME type  : image/png
+[2026-09-25T07:20:30.682Z] INFO: ==========================================
+[2026-09-25T07:20:30.729Z] INFO: ==========================================
+[2026-09-25T07:20:30.731Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:20:30.733Z] INFO: Field name : media
+[2026-09-25T07:20:30.734Z] INFO: File name  : 3B.png
+[2026-09-25T07:20:30.737Z] INFO: Extension  : .png
+[2026-09-25T07:20:30.738Z] INFO: MIME type  : image/png
+[2026-09-25T07:20:30.739Z] INFO: ==========================================
+[2026-09-25T07:38:53.720Z] INFO: ==========================================
+[2026-09-25T07:38:53.724Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:38:53.724Z] INFO: Field name : media
+[2026-09-25T07:38:53.725Z] INFO: File name  : 3A.png
+[2026-09-25T07:38:53.727Z] INFO: Extension  : .png
+[2026-09-25T07:38:53.729Z] INFO: MIME type  : image/png
+[2026-09-25T07:38:53.729Z] INFO: ==========================================
+[2026-09-25T07:38:53.777Z] INFO: ==========================================
+[2026-09-25T07:38:53.780Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:38:53.789Z] INFO: Field name : media
+[2026-09-25T07:38:53.791Z] INFO: File name  : 3B.png
+[2026-09-25T07:38:53.793Z] INFO: Extension  : .png
+[2026-09-25T07:38:53.796Z] INFO: MIME type  : image/png
+[2026-09-25T07:38:53.800Z] INFO: ==========================================
+[2026-09-25T07:40:41.249Z] INFO: ==========================================
+[2026-09-25T07:40:41.251Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:40:41.252Z] INFO: Field name : media
+[2026-09-25T07:40:41.253Z] INFO: File name  : 1A.png
+[2026-09-25T07:40:41.254Z] INFO: Extension  : .png
+[2026-09-25T07:40:41.254Z] INFO: MIME type  : image/png
+[2026-09-25T07:40:41.255Z] INFO: ==========================================
+[2026-09-25T07:40:41.291Z] INFO: ==========================================
+[2026-09-25T07:40:41.292Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:40:41.293Z] INFO: Field name : media
+[2026-09-25T07:40:41.295Z] INFO: File name  : 1B.png
+[2026-09-25T07:40:41.296Z] INFO: Extension  : .png
+[2026-09-25T07:40:41.301Z] INFO: MIME type  : image/png
+[2026-09-25T07:40:41.302Z] INFO: ==========================================
+[2026-09-25T07:41:13.759Z] INFO: ==========================================
+[2026-09-25T07:41:13.760Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:41:13.762Z] INFO: Field name : media
+[2026-09-25T07:41:13.763Z] INFO: File name  : 3A.png
+[2026-09-25T07:41:13.763Z] INFO: Extension  : .png
+[2026-09-25T07:41:13.764Z] INFO: MIME type  : image/png
+[2026-09-25T07:41:13.764Z] INFO: ==========================================
+[2026-09-25T07:41:13.803Z] INFO: ==========================================
+[2026-09-25T07:41:13.804Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:41:13.805Z] INFO: Field name : media
+[2026-09-25T07:41:13.806Z] INFO: File name  : 3B.png
+[2026-09-25T07:41:13.807Z] INFO: Extension  : .png
+[2026-09-25T07:41:13.808Z] INFO: MIME type  : image/png
+[2026-09-25T07:41:13.809Z] INFO: ==========================================
+[2026-09-25T07:56:22.232Z] INFO: ==========================================
+[2026-09-25T07:56:22.233Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:56:22.237Z] INFO: Field name : media
+[2026-09-25T07:56:22.238Z] INFO: File name  : 3A.png
+[2026-09-25T07:56:22.242Z] INFO: Extension  : .png
+[2026-09-25T07:56:22.246Z] INFO: MIME type  : image/png
+[2026-09-25T07:56:22.248Z] INFO: ==========================================
+[2026-09-25T07:56:22.309Z] INFO: ==========================================
+[2026-09-25T07:56:22.310Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T07:56:22.310Z] INFO: Field name : media
+[2026-09-25T07:56:22.311Z] INFO: File name  : 3B.png
+[2026-09-25T07:56:22.314Z] INFO: Extension  : .png
+[2026-09-25T07:56:22.315Z] INFO: MIME type  : image/png
+[2026-09-25T07:56:22.316Z] INFO: ==========================================
+[2026-09-25T08:45:38.424Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-25T08:45:38.449Z] INFO: ========================================
+[2026-09-25T08:45:38.451Z] INFO: Hazel application starting
+[2026-09-25T08:45:38.453Z] INFO: Node version: v20.20.2
+[2026-09-25T08:45:38.455Z] INFO: Environment: production
+[2026-09-25T08:45:38.458Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:45:38.459Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:45:38.461Z] INFO: PORT: 5004
+[2026-09-25T08:45:38.468Z] INFO: ========================================
+[2026-09-25T08:45:41.153Z] INFO: App loaded successfully
+[2026-09-25T08:45:41.154Z] INFO: Connecting to MongoDB...
+[2026-09-25T08:45:41.156Z] INFO: Environment: production
+[2026-09-25T08:45:41.157Z] INFO: MongoDB URI exists: true
+[2026-09-25T08:45:41.199Z] INFO: Server running on port 5004
+[2026-09-25T08:45:41.202Z] INFO: Hazel backend started successfully
+[2026-09-25T08:45:41.802Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T08:45:42.199Z] ERROR: (node:19628) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T08:45:59.582Z] INFO: ==========================================
+[2026-09-25T08:45:59.584Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:45:59.589Z] INFO: Field name : media
+[2026-09-25T08:45:59.591Z] INFO: File name  : 3A.png
+[2026-09-25T08:45:59.593Z] INFO: Extension  : .png
+[2026-09-25T08:45:59.596Z] INFO: MIME type  : image/png
+[2026-09-25T08:45:59.598Z] INFO: ==========================================
+[2026-09-25T08:45:59.673Z] INFO: ==========================================
+[2026-09-25T08:45:59.674Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:45:59.675Z] INFO: Field name : media
+[2026-09-25T08:45:59.676Z] INFO: File name  : 3B.png
+[2026-09-25T08:45:59.676Z] INFO: Extension  : .png
+[2026-09-25T08:45:59.677Z] INFO: MIME type  : image/png
+[2026-09-25T08:45:59.677Z] INFO: ==========================================
+[2026-09-25T08:54:32.804Z] INFO: ==========================================
+[2026-09-25T08:54:32.806Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:54:32.807Z] INFO: Field name : media
+[2026-09-25T08:54:32.808Z] INFO: File name  : 4A.png
+[2026-09-25T08:54:32.809Z] INFO: Extension  : .png
+[2026-09-25T08:54:32.810Z] INFO: MIME type  : image/png
+[2026-09-25T08:54:32.812Z] INFO: ==========================================
+[2026-09-25T08:54:32.862Z] INFO: ==========================================
+[2026-09-25T08:54:32.864Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:54:32.866Z] INFO: Field name : media
+[2026-09-25T08:54:32.867Z] INFO: File name  : 4B.png
+[2026-09-25T08:54:32.868Z] INFO: Extension  : .png
+[2026-09-25T08:54:32.874Z] INFO: MIME type  : image/png
+[2026-09-25T08:54:32.875Z] INFO: ==========================================
+[2026-09-25T08:54:58.625Z] INFO: ==========================================
+[2026-09-25T08:54:58.628Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:54:58.629Z] INFO: Field name : media
+[2026-09-25T08:54:58.630Z] INFO: File name  : 1A.png
+[2026-09-25T08:54:58.631Z] INFO: Extension  : .png
+[2026-09-25T08:54:58.634Z] INFO: MIME type  : image/png
+[2026-09-25T08:54:58.636Z] INFO: ==========================================
+[2026-09-25T08:54:58.669Z] INFO: ==========================================
+[2026-09-25T08:54:58.671Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:54:58.672Z] INFO: Field name : media
+[2026-09-25T08:54:58.673Z] INFO: File name  : 1B.png
+[2026-09-25T08:54:58.674Z] INFO: Extension  : .png
+[2026-09-25T08:54:58.675Z] INFO: MIME type  : image/png
+[2026-09-25T08:54:58.675Z] INFO: ==========================================
+[2026-09-25T08:57:29.560Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-09-25T08:57:29.573Z] INFO: ========================================
+[2026-09-25T08:57:29.577Z] INFO: Hazel application starting
+[2026-09-25T08:57:29.579Z] INFO: Node version: v20.20.2
+[2026-09-25T08:57:29.580Z] INFO: Environment: production
+[2026-09-25T08:57:29.585Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:57:29.587Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:57:29.590Z] INFO: PORT: 5004
+[2026-09-25T08:57:29.592Z] INFO: ========================================
+[2026-09-25T08:57:31.479Z] INFO: App loaded successfully
+[2026-09-25T08:57:31.481Z] INFO: Connecting to MongoDB...
+[2026-09-25T08:57:31.499Z] INFO: Environment: production
+[2026-09-25T08:57:31.511Z] INFO: MongoDB URI exists: true
+[2026-09-25T08:57:31.562Z] INFO: Server running on port 5004
+[2026-09-25T08:57:31.568Z] INFO: Hazel backend started successfully
+[2026-09-25T08:57:32.190Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T08:57:32.568Z] ERROR: (node:6568) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T08:57:41.423Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-25T08:57:41.432Z] INFO: ========================================
+[2026-09-25T08:57:41.435Z] INFO: Hazel application starting
+[2026-09-25T08:57:41.436Z] INFO: Node version: v20.20.2
+[2026-09-25T08:57:41.438Z] INFO: Environment: production
+[2026-09-25T08:57:41.439Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:57:41.441Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T08:57:41.444Z] INFO: PORT: 5004
+[2026-09-25T08:57:41.446Z] INFO: ========================================
+[2026-09-25T08:57:42.792Z] INFO: App loaded successfully
+[2026-09-25T08:57:42.799Z] INFO: Connecting to MongoDB...
+[2026-09-25T08:57:42.810Z] INFO: Environment: production
+[2026-09-25T08:57:42.826Z] INFO: MongoDB URI exists: true
+[2026-09-25T08:57:42.893Z] INFO: Server running on port 5004
+[2026-09-25T08:57:42.901Z] INFO: Hazel backend started successfully
+[2026-09-25T08:57:43.457Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T08:57:43.866Z] ERROR: (node:17104) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T08:59:27.067Z] INFO: ==========================================
+[2026-09-25T08:59:27.068Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:59:27.069Z] INFO: Field name : media
+[2026-09-25T08:59:27.070Z] INFO: File name  : 3A.png
+[2026-09-25T08:59:27.072Z] INFO: Extension  : .png
+[2026-09-25T08:59:27.075Z] INFO: MIME type  : image/png
+[2026-09-25T08:59:27.078Z] INFO: ==========================================
+[2026-09-25T08:59:27.127Z] INFO: ==========================================
+[2026-09-25T08:59:27.128Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T08:59:27.129Z] INFO: Field name : media
+[2026-09-25T08:59:27.130Z] INFO: File name  : 3B.png
+[2026-09-25T08:59:27.131Z] INFO: Extension  : .png
+[2026-09-25T08:59:27.132Z] INFO: MIME type  : image/png
+[2026-09-25T08:59:27.132Z] INFO: ==========================================
+[2026-09-25T09:07:57.356Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-25T09:07:57.364Z] INFO: ========================================
+[2026-09-25T09:07:57.365Z] INFO: Hazel application starting
+[2026-09-25T09:07:57.366Z] INFO: Node version: v20.20.2
+[2026-09-25T09:07:57.367Z] INFO: Environment: production
+[2026-09-25T09:07:57.367Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:07:57.368Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:07:57.369Z] INFO: PORT: 5004
+[2026-09-25T09:07:57.370Z] INFO: ========================================
+[2026-09-25T09:07:59.336Z] INFO: App loaded successfully
+[2026-09-25T09:07:59.347Z] INFO: Connecting to MongoDB...
+[2026-09-25T09:07:59.349Z] INFO: Environment: production
+[2026-09-25T09:07:59.353Z] INFO: MongoDB URI exists: true
+[2026-09-25T09:07:59.473Z] INFO: Server running on port 5004
+[2026-09-25T09:07:59.477Z] INFO: Hazel backend started successfully
+[2026-09-25T09:08:00.173Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T09:08:00.572Z] ERROR: (node:18676) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T09:13:00.202Z] INFO: ==========================================
+[2026-09-25T09:13:00.203Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:13:00.204Z] INFO: Field name : media
+[2026-09-25T09:13:00.206Z] INFO: File name  : 3A.png
+[2026-09-25T09:13:00.208Z] INFO: Extension  : .png
+[2026-09-25T09:13:00.213Z] INFO: MIME type  : image/png
+[2026-09-25T09:13:00.215Z] INFO: ==========================================
+[2026-09-25T09:13:00.264Z] INFO: ==========================================
+[2026-09-25T09:13:00.265Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:13:00.265Z] INFO: Field name : media
+[2026-09-25T09:13:00.266Z] INFO: File name  : 3B.png
+[2026-09-25T09:13:00.267Z] INFO: Extension  : .png
+[2026-09-25T09:13:00.267Z] INFO: MIME type  : image/png
+[2026-09-25T09:13:00.268Z] INFO: ==========================================
+[2026-09-25T09:17:06.294Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-25T09:17:06.299Z] INFO: ========================================
+[2026-09-25T09:17:06.306Z] INFO: Hazel application starting
+[2026-09-25T09:17:06.308Z] INFO: Node version: v20.20.2
+[2026-09-25T09:17:06.309Z] INFO: Environment: production
+[2026-09-25T09:17:06.310Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:17:06.311Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:17:06.312Z] INFO: PORT: 5004
+[2026-09-25T09:17:06.313Z] INFO: ========================================
+[2026-09-25T09:17:06.323Z] ERROR: APPLICATION STARTUP FAILED
+[2026-09-25T09:17:06.324Z] ERROR: C:\Users\User05\Documents\newgit\hazel_server\app.js:34
+const app = express();
+      ^
+
+SyntaxError: Identifier 'app' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\newgit\hazel_server\server.js:72:15)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-09-25T09:17:11.795Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-25T09:17:11.802Z] INFO: ========================================
+[2026-09-25T09:17:11.804Z] INFO: Hazel application starting
+[2026-09-25T09:17:11.807Z] INFO: Node version: v20.20.2
+[2026-09-25T09:17:11.811Z] INFO: Environment: production
+[2026-09-25T09:17:11.814Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:17:11.815Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:17:11.817Z] INFO: PORT: 5004
+[2026-09-25T09:17:11.818Z] INFO: ========================================
+[2026-09-25T09:17:13.325Z] INFO: App loaded successfully
+[2026-09-25T09:17:13.332Z] INFO: Connecting to MongoDB...
+[2026-09-25T09:17:13.337Z] INFO: Environment: production
+[2026-09-25T09:17:13.338Z] INFO: MongoDB URI exists: true
+[2026-09-25T09:17:13.382Z] INFO: Server running on port 5004
+[2026-09-25T09:17:13.386Z] INFO: Hazel backend started successfully
+[2026-09-25T09:17:13.951Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T09:17:14.358Z] ERROR: (node:20036) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T09:18:25.403Z] INFO: ==========================================
+[2026-09-25T09:18:25.407Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:18:25.412Z] INFO: Field name : media
+[2026-09-25T09:18:25.427Z] INFO: File name  : 3A.png
+[2026-09-25T09:18:25.438Z] INFO: Extension  : .png
+[2026-09-25T09:18:25.441Z] INFO: MIME type  : image/png
+[2026-09-25T09:18:25.448Z] INFO: ==========================================
+[2026-09-25T09:18:25.521Z] INFO: ==========================================
+[2026-09-25T09:18:25.532Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:18:25.545Z] INFO: Field name : media
+[2026-09-25T09:18:25.554Z] INFO: File name  : 3B.png
+[2026-09-25T09:18:25.572Z] INFO: Extension  : .png
+[2026-09-25T09:18:25.580Z] INFO: MIME type  : image/png
+[2026-09-25T09:18:25.586Z] INFO: ==========================================
+[2026-09-25T09:19:04.895Z] INFO: ==========================================
+[2026-09-25T09:19:04.915Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:19:04.920Z] INFO: Field name : media
+[2026-09-25T09:19:04.923Z] INFO: File name  : 3A.png
+[2026-09-25T09:19:04.925Z] INFO: Extension  : .png
+[2026-09-25T09:19:04.928Z] INFO: MIME type  : image/png
+[2026-09-25T09:19:04.940Z] INFO: ==========================================
+[2026-09-25T09:19:04.986Z] INFO: ==========================================
+[2026-09-25T09:19:04.988Z] INFO: PRODUCT MEDIA UPLOAD
+[2026-09-25T09:19:04.990Z] INFO: Field name : media
+[2026-09-25T09:19:04.991Z] INFO: File name  : 3B.png
+[2026-09-25T09:19:04.992Z] INFO: Extension  : .png
+[2026-09-25T09:19:04.993Z] INFO: MIME type  : image/png
+[2026-09-25T09:19:04.996Z] INFO: ==========================================
+[2026-09-25T09:26:18.812Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-09-25T09:26:18.910Z] INFO: ========================================
+[2026-09-25T09:26:18.924Z] INFO: Hazel application starting
+[2026-09-25T09:26:18.926Z] INFO: Node version: v20.20.2
+[2026-09-25T09:26:18.929Z] INFO: Environment: production
+[2026-09-25T09:26:18.937Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:26:18.939Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:26:18.941Z] INFO: PORT: 5004
+[2026-09-25T09:26:18.943Z] INFO: ========================================
+[2026-09-25T09:26:20.175Z] INFO: App loaded successfully
+[2026-09-25T09:26:20.176Z] INFO: Connecting to MongoDB...
+[2026-09-25T09:26:20.177Z] INFO: Environment: production
+[2026-09-25T09:26:20.178Z] INFO: MongoDB URI exists: true
+[2026-09-25T09:26:20.197Z] INFO: Server running on port 5004
+[2026-09-25T09:26:20.198Z] INFO: Hazel backend started successfully
+[2026-09-25T09:26:20.756Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T09:26:21.167Z] ERROR: (node:17796) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+>>>>>>> filter_product_12_09_26
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-25T09:40:14.885Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-25T09:40:14.923Z] INFO: ========================================
+[2026-09-25T09:40:14.931Z] INFO: Hazel application starting
+[2026-09-25T09:40:14.939Z] INFO: Node version: v20.20.2
+[2026-09-25T09:40:14.945Z] INFO: Environment: production
+[2026-09-25T09:40:14.953Z] INFO: Working directory: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:40:14.964Z] INFO: __dirname: C:\Users\User05\Documents\newgit\hazel_server
+[2026-09-25T09:40:14.991Z] INFO: PORT: 5004
+[2026-09-25T09:40:14.999Z] INFO: ========================================
+[2026-09-25T09:40:17.430Z] INFO: App loaded successfully
+[2026-09-25T09:40:17.456Z] INFO: Connecting to MongoDB...
+[2026-09-25T09:40:17.477Z] INFO: Environment: production
+[2026-09-25T09:40:17.493Z] INFO: MongoDB URI exists: true
+[2026-09-25T09:40:17.606Z] INFO: Server running on port 5004
+[2026-09-25T09:40:17.622Z] INFO: Hazel backend started successfully
+[2026-09-25T09:40:18.238Z] INFO: MongoDB Connected Successfully!!
+[2026-09-25T09:40:18.692Z] ERROR: (node:7900) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
