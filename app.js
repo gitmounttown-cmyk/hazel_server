@@ -27,12 +27,9 @@ app.use (
   })
 );
 
-// ==========================================================
-// STATIC UPLOADS
-// ==========================================================
 
 
-// Serve the 'uploads' folder statically
+
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // ==========================================================
 // ROOT API
