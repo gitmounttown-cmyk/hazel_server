@@ -1,4 +1,4 @@
-const HeroSlide = require("../models/HeroSlide");
+const HeroSlide = require("../models/heroSlide");
 
 exports.getSlides = async (req, res) => {
   try {
