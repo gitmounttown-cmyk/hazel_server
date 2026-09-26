@@ -20,8 +20,8 @@ exports.createSlide = async (req, res) => {
     const createdSlides = [];
 
     for (const file of req.files) {
-      // PERMANENT FIX: Prepend the full backend port URL here
-      const imageUrl = `http://localhost:5004/uploads/${file.filename}`;
+      // Save relative path so it works universally in both Local and Live
+      const imageUrl = `/uploads/${file.filename}`;
       const newSlide = await HeroSlide.create({
         tag: tag || "PREMIUM COTTON NIGHTWEAR",
         image: imageUrl,
@@ -30,6 +30,27 @@ exports.createSlide = async (req, res) => {
     }
 
     res.status(201).json({ success: true, data: createdSlides });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updateSlide = async (req, res) => {
+  try {
+    const { tag } = req.body;
+    const slide = await HeroSlide.findById(req.params.id);
+
+    if (!slide) {
+      return res.status(404).json({ success: false, message: "Slide not found" });
+    }
+
+    if (tag) slide.tag = tag;
+    if (req.file) {
+      slide.image = `/uploads/${req.file.filename}`;
+    }
+
+    const updatedSlide = await slide.save();
+    res.status(200).json({ success: true, data: updatedSlide });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
