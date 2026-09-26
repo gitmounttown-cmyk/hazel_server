@@ -4,6 +4,7 @@ const router = express.Router();
 
 const {
   createOrder,
+  getUserOverview,
   getMyOrders,
   getOrderById,
   getAllOrders,
@@ -16,32 +17,38 @@ const {
 const { verifyToken } = require("../middleware/authMiddleware");
 
 // =============================================================
-// CUSTOMER
+// CUSTOMER ROUTES
 // =============================================================
 
+// User Overview Dashboard (Recent Orders, Profile Details, Saved Address, Wishlist)
+router.get("/user-overview", verifyToken, getUserOverview);
+
+// Create New Order
 router.post("/create", verifyToken, createOrder);
 
+// Fetch User Orders List
 router.get("/my-orders", verifyToken, getMyOrders);
 
-router.get("/admin/all", verifyToken, getAllOrders);
-
-// =============================================================
-// ADMIN
-// =============================================================
-
-router.patch("/status/:id", verifyToken, updateOrderStatus);
-
-router.patch("/tracking/:id", verifyToken, updateTracking);
-
-router.delete("/delete/:id", verifyToken, deleteOrder);
-
-// router.patch(
-//   "/:id/restore",
-//   protect,
-//   restoreOrder
-// );
+// Cancel Order
 router.patch("/cancel/:id", verifyToken, cancelOrder);
 
+// Fetch Single Order Details
 router.get("/:id", verifyToken, getOrderById);
+
+// =============================================================
+// ADMIN ROUTES
+// =============================================================
+
+// Fetch All Orders
+router.get("/admin/all", verifyToken, getAllOrders);
+
+// Update Status (CONFIRMED, PACKED, SHIPPED, DELIVERED)
+router.patch("/status/:id", verifyToken, updateOrderStatus);
+
+// Update Courier Tracking Details
+router.patch("/tracking/:id", verifyToken, updateTracking);
+
+// Soft Delete Order
+router.delete("/delete/:id", verifyToken, deleteOrder);
 
 module.exports = router;
