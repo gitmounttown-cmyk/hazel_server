@@ -1,7 +1,7 @@
 const express = require ('express');
 const cors = require ('cors');
 const path = require ('path');
-
+const heroRoutes = require("./src/routes/heroRoutes");
 const app = express ();
 
 app.use(express.json());
@@ -28,9 +28,8 @@ app.use (
 );
 
 
-
-
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // ==========================================================
 // ROOT API
 // ==========================================================
@@ -74,8 +73,8 @@ app.use ('/api/products', require ('./src/routes/productRoutes'));
 
 // Product variants currently disabled
 // app.use(
-//   "/api/product-variants",
-//   require("./src/routes/productVariantRoutes")
+//   "/api/product-variants",
+//   require("./src/routes/productVariantRoutes")
 // );
 
 // ==========================================================
@@ -120,6 +119,8 @@ app.use (
   '/api/trending-products',
   require ('./src/routes/trendingProductRoutes')
 );
+
+app.use ('/api/hero', heroRoutes);
 
 // ==========================================================
 // NOTIFICATIONS

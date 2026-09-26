@@ -64,9 +64,19 @@ exports.getProductById = async (req, res) => {
       });
     }
 
+    const relatedProducts = await Product.find({
+      categoryId: product.categoryId,
+      brandId: product.brandId,
+      _id: { $ne: product._id },
+      isDeleted: false,
+    })
+      .populate("categoryId")
+      .populate("brandId")
+      .limit(5);
+
     return res.status(200).json({
       success: true,
-      data: product,
+      data: { ...product.toObject(), relatedProducts },
     });
   } catch (error) {
     console.error("Error in getProductById:", error);
