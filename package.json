@@ -22,7 +22,7 @@
     "mongodb": "^7.5.0",
     "mongoose": "^9.9.2",
     "morgan": "^1.11.0",
-    "multer": "^2.2.0",
+    "multer": "^2.4.0",
     "nodemailer": "^9.0.5",
     "nodemon": "^3.1.14",
     "xlsx": "^0.18.5"
