@@ -3,9 +3,8 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { getSlides, createSlide, deleteSlide } = require("../controllers/heroController");
+const { getSlides, createSlide, updateSlide, deleteSlide } = require("../controllers/heroController");
 
-// Ensure uploads folder is created in the absolute project root
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -23,6 +22,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.route("/").get(getSlides).post(upload.array("images", 10), createSlide);
-router.route("/:id").delete(deleteSlide);
+router.route("/:id").put(upload.single("image"), updateSlide).delete(deleteSlide);
 
 module.exports = router;
