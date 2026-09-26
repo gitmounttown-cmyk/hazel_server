@@ -22,11 +22,15 @@ const orderItemSchema = new mongoose.Schema(
     },
 
     // =========================================================
-    // PRODUCT VARIANT
+    // VARIANT & SIZE IDs (Subdocuments within Product)
     // =========================================================
-    variant: {
+    variantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ProductVariant",
+      required: true,
+    },
+
+    sizeId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
 
@@ -98,6 +102,7 @@ const orderItemSchema = new mongoose.Schema(
       enum: [
         "PENDING",
         "CONFIRMED",
+        "PACKED",
         "PROCESSING",
         "SHIPPED",
         "DELIVERED",

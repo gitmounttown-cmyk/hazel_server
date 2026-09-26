@@ -59,6 +59,12 @@ const orderSchema = new mongoose.Schema(
         default: "",
       },
 
+      district: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
       city: {
         type: String,
         required: true,
@@ -139,7 +145,7 @@ const orderSchema = new mongoose.Schema(
     // =========================================================
     paymentMethod: {
       type: String,
-      enum: ["COD", "ONLINE"],
+      enum: ["COD", "ONLINE", "UPI", "CARD", "NET_BANKING", "WALLET"],
       required: true,
       default: "COD",
     },
@@ -165,6 +171,7 @@ const orderSchema = new mongoose.Schema(
       enum: [
         "PENDING",
         "CONFIRMED",
+        "PACKED",
         "PROCESSING",
         "SHIPPED",
         "OUT_FOR_DELIVERY",
@@ -180,8 +187,23 @@ const orderSchema = new mongoose.Schema(
     },
 
     // =========================================================
-    // DELIVERY
+    // DELIVERY & TIMESTAMPS
     // =========================================================
+    confirmedAt: {
+      type: Date,
+      default: null,
+    },
+
+    packedAt: {
+      type: Date,
+      default: null,
+    },
+
+    shippedAt: {
+      type: Date,
+      default: null,
+    },
+
     expectedDeliveryDate: {
       type: Date,
       default: null,
@@ -265,20 +287,16 @@ const orderSchema = new mongoose.Schema(
 );
 
 // =============================================================
-// ORDER NUMBER
+// ORDER NUMBER GENERATOR
 // =============================================================
-
-orderSchema.pre("save", async function (s) {
+orderSchema.pre("save", async function () {
   if (!this.isNew || this.orderNumber) {
-    return ;
+    return;
   }
 
   const timestamp = Date.now();
   const random = Math.floor(1000 + Math.random() * 9000);
-
   this.orderNumber = `HZL-${timestamp}-${random}`;
-
-
 });
 
 module.exports =
