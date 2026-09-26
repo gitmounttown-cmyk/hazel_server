@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const PDFDocument = require("pdfkit");
 
 const Order = require("../models/orderModel");
 const OrderItem = require("../models/orderItemModel");
@@ -384,6 +385,117 @@ exports.createOrder = async (req, res) => {
     });
   } finally {
     await session.endSession();
+  }
+};
+
+// ==========================================================
+// GENERATE & DOWNLOAD INVOICE PDF
+// GET /api/orders/:id/invoice
+// ==========================================================
+exports.generateInvoice = async (req, res) => {
+  try {
+    const userId = getUserId(req);
+
+    const query = { _id: req.params.id, isDeleted: false };
+    if (req.user?.role !== "admin") {
+      query.user = userId;
+    }
+
+    const order = await Order.findOne(query)
+      .populate("items")
+      .populate("user", "name email mobileNumber");
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    const doc = new PDFDocument({ margin: 50 });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=Invoice-${order.orderNumber}.pdf`
+    );
+
+    doc.pipe(res);
+
+    // --- HEADER ---
+    doc
+      .fontSize(20)
+      .text("INVOICE", { align: "right" })
+      .fontSize(10)
+      .text(`Invoice No: INV-${order.orderNumber}`, { align: "right" })
+      .text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, { align: "right" })
+      .moveDown();
+
+    // --- CUSTOMER DETAILS ---
+    doc
+      .fontSize(12)
+      .text("Tax Invoice / Bill of Supply", { underline: true })
+      .moveDown(0.5)
+      .fontSize(10)
+      .text(`Customer Name: ${order.shippingAddress.name}`)
+      .text(`Phone: ${order.shippingAddress.mobileNumber}`)
+      .text(
+        `Address: ${order.shippingAddress.addressLine1}, ${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.pincode}`
+      )
+      .moveDown();
+
+    // --- TABLE HEADERS ---
+    const tableTop = 230;
+    doc
+      .font("Helvetica-Bold")
+      .text("Item", 50, tableTop)
+      .text("Qty", 280, tableTop)
+      .text("Price", 350, tableTop)
+      .text("Total", 450, tableTop);
+
+    doc.moveTo(50, tableTop + 15).lineTo(550, tableTop + 15).stroke();
+
+    // --- TABLE ROWS ---
+    let y = tableTop + 25;
+    doc.font("Helvetica");
+
+    order.items.forEach((item) => {
+      doc
+        .text(`${item.productName} (${item.size})`, 50, y, { width: 220 })
+        .text(`${item.quantity}`, 280, y)
+        .text(`INR ${item.sellingPrice}`, 350, y)
+        .text(`INR ${item.totalPrice}`, 450, y);
+      y += 20;
+    });
+
+    doc.moveTo(50, y).lineTo(550, y).stroke();
+    y += 15;
+
+    // --- SUMMARY ---
+    doc.text(`Subtotal: INR ${order.subtotal}`, 350, y);
+    y += 15;
+    doc.text(`Discount: -INR ${order.discountAmount}`, 350, y);
+    y += 15;
+    doc.text(`Shipping: INR ${order.shippingCharge}`, 350, y);
+    y += 15;
+    doc
+      .font("Helvetica-Bold")
+      .text(`Total Amount: INR ${order.totalAmount}`, 350, y);
+
+    // --- FOOTER ---
+    doc
+      .font("Helvetica-Oblique")
+      .fontSize(10)
+      .text("Thank you for your business!", 50, 700, { align: "center" });
+
+    doc.end();
+  } catch (error) {
+    console.error("Invoice Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to generate invoice",
+      error: error.message,
+    });
   }
 };
 
