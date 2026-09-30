@@ -11,6 +11,7 @@ exports.getAllProducts = async (req, res) => {
     const limit = Math.max(1, parseInt(req.query.limit, 10) || 20);
     const skip = (page - 1) * limit;
 
+    // --- OLD FILTERS (Keep as is) ---
     const filter = {};
     if (req.query.categoryId) filter.categoryId = req.query.categoryId;
     if (req.query.subCategoryId) filter.subCategoryId = req.query.subCategoryId;
@@ -20,6 +21,23 @@ exports.getAllProducts = async (req, res) => {
     }
     if (req.query.search) {
       filter.name = { $regex: req.query.search, $options: "i" };
+    }
+
+    // --- NEW FILTERS (Added without breaking old ones) ---
+    // Handles comma-separated values (e.g., ?size=M,XL or ?fabric=Pure Cotton)
+    if (req.query.size) {
+      const sizesArray = req.query.size.split(",").map((s) => s.trim());
+      filter["variants.sizes.size"] = { $in: sizesArray };
+    }
+
+    if (req.query.fabric) {
+      const fabricsArray = req.query.fabric.split(",").map((f) => f.trim());
+      filter["variants.fabric"] = { $in: fabricsArray };
+    }
+
+    if (req.query.sleeve) {
+      const sleevesArray = req.query.sleeve.split(",").map((s) => s.trim());
+      filter["variants.sleeveStyle"] = { $in: sleevesArray };
     }
 
     const total = await Product.countDocuments(filter);
@@ -48,7 +66,6 @@ exports.getAllProducts = async (req, res) => {
     });
   }
 };
-
 // GET PRODUCT BY ID
 exports.getProductById = async (req, res) => {
   try {

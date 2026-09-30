@@ -167,6 +167,22 @@ const VariantSchema = new mongoose.Schema(
       default: "",
     },
 
+    details: {
+      type: [
+        {
+          key: {
+            type: String,
+            trim: true,
+          },
+          value: {
+            type: String,
+            trim: true,
+          },
+        },
+      ],
+      default: [],
+    },
+
     quantity: {
       type: Number,
       default: 0,

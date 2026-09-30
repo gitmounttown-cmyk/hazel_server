@@ -1,7 +1,6 @@
 const express = require ('express');
 const cors = require ('cors');
 const path = require ('path');
-const heroRoutes = require("./src/routes/heroRoutes");
 const app = express ();
 
 app.use(express.json());
@@ -120,7 +119,7 @@ app.use (
   require ('./src/routes/trendingProductRoutes')
 );
 
-app.use ('/api/hero', heroRoutes);
+app.use ('/api/hero', require('./src/routes/heroRoutes'));
 
 // ==========================================================
 // NOTIFICATIONS

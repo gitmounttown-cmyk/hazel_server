@@ -3328,3 +3328,1057 @@ Require stack:
 [2026-09-26T07:44:49.576Z] INFO: MongoDB Connected Successfully!!
 [2026-09-26T07:44:49.983Z] ERROR: (node:15452) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-26T12:32:36.897Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-26T12:32:36.905Z] INFO: ========================================
+[2026-09-26T12:32:36.907Z] INFO: Hazel application starting
+[2026-09-26T12:32:36.909Z] INFO: Node version: v24.16.0
+[2026-09-26T12:32:36.909Z] INFO: Environment: development
+[2026-09-26T12:32:36.909Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-26T12:32:36.910Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-26T12:32:36.911Z] INFO: PORT: 5004
+[2026-09-26T12:32:36.911Z] INFO: ========================================
+[2026-09-28T08:38:33.680Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-28T08:38:33.683Z] INFO: ========================================
+[2026-09-28T08:38:33.684Z] INFO: Hazel application starting
+[2026-09-28T08:38:33.685Z] INFO: Node version: v24.16.0
+[2026-09-28T08:38:33.685Z] INFO: Environment: development
+[2026-09-28T08:38:33.687Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T08:38:33.687Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T08:38:33.688Z] INFO: PORT: 5004
+[2026-09-28T08:38:33.690Z] INFO: ========================================
+[2026-09-28T08:39:00.325Z] INFO: App loaded successfully
+[2026-09-28T08:39:00.328Z] INFO: Connecting to MongoDB...
+[2026-09-28T08:39:00.332Z] INFO: Environment: development
+[2026-09-28T08:39:00.333Z] INFO: MongoDB URI exists: true
+[2026-09-28T08:39:00.392Z] INFO: Server running on port 5004
+[2026-09-28T08:39:00.406Z] INFO: Hazel backend started successfully
+[2026-09-28T08:39:00.521Z] ERROR: MongoDB Connection Failed
+[2026-09-28T08:39:00.528Z] ERROR: Error name: Error
+[2026-09-28T08:39:00.532Z] ERROR: Error message: querySrv EREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+[2026-09-28T08:39:00.534Z] ERROR: Full error: Error: querySrv EREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+[2026-09-28T09:07:46.630Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-28T09:07:46.634Z] INFO: ========================================
+[2026-09-28T09:07:46.635Z] INFO: Hazel application starting
+[2026-09-28T09:07:46.638Z] INFO: Node version: v24.16.0
+[2026-09-28T09:07:46.640Z] INFO: Environment: development
+[2026-09-28T09:07:46.643Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T09:07:46.645Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T09:07:46.649Z] INFO: PORT: 5004
+[2026-09-28T09:07:46.649Z] INFO: ========================================
+[2026-09-28T09:07:55.771Z] INFO: App loaded successfully
+[2026-09-28T09:07:55.772Z] INFO: Connecting to MongoDB...
+[2026-09-28T09:07:55.774Z] INFO: Environment: development
+[2026-09-28T09:07:55.776Z] INFO: MongoDB URI exists: true
+[2026-09-28T09:07:55.797Z] INFO: Server running on port 5004
+[2026-09-28T09:07:55.815Z] INFO: Hazel backend started successfully
+[2026-09-28T09:07:55.824Z] ERROR: MongoDB Connection Failed
+[2026-09-28T09:07:55.828Z] ERROR: Error name: Error
+[2026-09-28T09:07:55.829Z] ERROR: Error message: querySrv EREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+[2026-09-28T09:07:55.834Z] ERROR: Full error: Error: querySrv EREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+[2026-09-28T11:53:18.572Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-28T11:53:18.580Z] INFO: ========================================
+[2026-09-28T11:53:18.581Z] INFO: Hazel application starting
+[2026-09-28T11:53:18.582Z] INFO: Node version: v24.16.0
+[2026-09-28T11:53:18.583Z] INFO: Environment: development
+[2026-09-28T11:53:18.585Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T11:53:18.586Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-28T11:53:18.588Z] INFO: PORT: 5004
+[2026-09-28T11:53:18.590Z] INFO: ========================================
+[2026-09-28T11:53:20.567Z] INFO: App loaded successfully
+[2026-09-28T11:53:20.574Z] INFO: Connecting to MongoDB...
+[2026-09-28T11:53:20.579Z] INFO: Environment: development
+[2026-09-28T11:53:20.580Z] INFO: MongoDB URI exists: true
+[2026-09-28T11:53:20.624Z] INFO: Server running on port 5004
+[2026-09-28T11:53:20.625Z] INFO: Hazel backend started successfully
+[2026-09-29T06:51:19.688Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-09-29T06:51:19.783Z] INFO: ========================================
+[2026-09-29T06:51:19.794Z] INFO: Hazel application starting
+[2026-09-29T06:51:19.796Z] INFO: Node version: v24.16.0
+[2026-09-29T06:51:19.799Z] INFO: Environment: development
+[2026-09-29T06:51:19.800Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T06:51:19.834Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T06:51:19.845Z] INFO: PORT: 5004
+[2026-09-29T06:51:19.862Z] INFO: ========================================
+[2026-09-29T06:51:38.958Z] INFO: App loaded successfully
+[2026-09-29T06:51:38.959Z] INFO: Connecting to MongoDB...
+[2026-09-29T06:51:38.960Z] INFO: Environment: development
+[2026-09-29T06:51:38.960Z] INFO: MongoDB URI exists: true
+[2026-09-29T06:51:38.979Z] INFO: Server running on port 5004
+[2026-09-29T06:51:38.981Z] INFO: Hazel backend started successfully
+[2026-09-29T06:51:39.972Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T06:51:40.585Z] ERROR: (node:4780) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T06:53:34.983Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-29T06:53:34.985Z] INFO: ========================================
+[2026-09-29T06:53:34.987Z] INFO: Hazel application starting
+[2026-09-29T06:53:34.988Z] INFO: Node version: v24.16.0
+[2026-09-29T06:53:34.990Z] INFO: Environment: development
+[2026-09-29T06:53:34.992Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T06:53:34.994Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T06:53:34.995Z] INFO: PORT: 5004
+[2026-09-29T06:53:34.995Z] INFO: ========================================
+[2026-09-29T06:53:36.692Z] INFO: App loaded successfully
+[2026-09-29T06:53:36.696Z] INFO: Connecting to MongoDB...
+[2026-09-29T06:53:36.699Z] INFO: Environment: development
+[2026-09-29T06:53:36.706Z] INFO: MongoDB URI exists: true
+[2026-09-29T06:53:36.746Z] INFO: Server running on port 5004
+[2026-09-29T06:53:36.755Z] INFO: Hazel backend started successfully
+[2026-09-29T06:53:37.497Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T06:53:38.093Z] ERROR: (node:14728) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T07:42:24.524Z] INFO: 
+[2026-09-29T07:42:24.530Z] INFO: ====================================
+[2026-09-29T07:42:24.531Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T07:42:24.532Z] INFO: ====================================
+[2026-09-29T07:42:24.533Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:42:24.534Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:42:24.535Z] INFO: OTP           : 867420
+[2026-09-29T07:42:24.536Z] INFO: Expires At    : "2026-09-29T07:47:23.878Z"
+[2026-09-29T07:42:24.536Z] INFO: ====================================
+[2026-09-29T07:42:24.537Z] INFO: 
+[2026-09-29T07:42:32.756Z] INFO: 
+[2026-09-29T07:42:32.759Z] INFO: ====================================
+[2026-09-29T07:42:32.761Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T07:42:32.762Z] INFO: ====================================
+[2026-09-29T07:42:32.764Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:42:32.768Z] INFO: Entered OTP   : 867420
+[2026-09-29T07:42:32.770Z] INFO: OTP ID        : "6abb6be041cd9964bb34cd7a"
+[2026-09-29T07:42:32.781Z] INFO: Stored OTP    : 867420
+[2026-09-29T07:42:32.783Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:42:32.784Z] INFO: Expires At    : "2026-09-29T07:47:23.878Z"
+[2026-09-29T07:42:32.786Z] INFO: Attempts      : 0
+[2026-09-29T07:42:32.787Z] INFO: Max Attempts  : 5
+[2026-09-29T07:42:32.788Z] INFO: Is Verified   : false
+[2026-09-29T07:42:32.790Z] INFO: ====================================
+[2026-09-29T07:42:32.799Z] INFO: 
+[2026-09-29T07:44:18.483Z] INFO: 
+[2026-09-29T07:44:18.486Z] INFO: ====================================
+[2026-09-29T07:44:18.487Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T07:44:18.488Z] INFO: ====================================
+[2026-09-29T07:44:18.488Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:44:18.489Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:44:18.490Z] INFO: OTP           : 757166
+[2026-09-29T07:44:18.490Z] INFO: Expires At    : "2026-09-29T07:49:18.289Z"
+[2026-09-29T07:44:18.491Z] INFO: ====================================
+[2026-09-29T07:44:18.492Z] INFO: 
+[2026-09-29T07:44:25.639Z] INFO: 
+[2026-09-29T07:44:25.640Z] INFO: ====================================
+[2026-09-29T07:44:25.641Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T07:44:25.642Z] INFO: ====================================
+[2026-09-29T07:44:25.643Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:44:25.644Z] INFO: Entered OTP   : 757166
+[2026-09-29T07:44:25.645Z] INFO: OTP ID        : "6abb6c5241cd9964bb34cdf5"
+[2026-09-29T07:44:25.648Z] INFO: Stored OTP    : 757166
+[2026-09-29T07:44:25.649Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:44:25.651Z] INFO: Expires At    : "2026-09-29T07:49:18.289Z"
+[2026-09-29T07:44:25.654Z] INFO: Attempts      : 0
+[2026-09-29T07:44:25.656Z] INFO: Max Attempts  : 5
+[2026-09-29T07:44:25.656Z] INFO: Is Verified   : false
+[2026-09-29T07:44:25.657Z] INFO: ====================================
+[2026-09-29T07:44:25.658Z] INFO: 
+[2026-09-29T07:48:28.678Z] INFO: 
+[2026-09-29T07:48:28.681Z] INFO: ====================================
+[2026-09-29T07:48:28.682Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T07:48:28.684Z] INFO: ====================================
+[2026-09-29T07:48:28.686Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:48:28.694Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:48:28.701Z] INFO: OTP           : 544322
+[2026-09-29T07:48:28.702Z] INFO: Expires At    : "2026-09-29T07:53:28.491Z"
+[2026-09-29T07:48:28.704Z] INFO: ====================================
+[2026-09-29T07:48:28.707Z] INFO: 
+[2026-09-29T07:48:35.291Z] INFO: 
+[2026-09-29T07:48:35.293Z] INFO: ====================================
+[2026-09-29T07:48:35.295Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T07:48:35.296Z] INFO: ====================================
+[2026-09-29T07:48:35.297Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:48:35.298Z] INFO: Entered OTP   : 544322
+[2026-09-29T07:48:35.299Z] INFO: OTP ID        : "6abb6d4c41cd9964bb34ce70"
+[2026-09-29T07:48:35.301Z] INFO: Stored OTP    : 544322
+[2026-09-29T07:48:35.302Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:48:35.303Z] INFO: Expires At    : "2026-09-29T07:53:28.491Z"
+[2026-09-29T07:48:35.305Z] INFO: Attempts      : 0
+[2026-09-29T07:48:35.307Z] INFO: Max Attempts  : 5
+[2026-09-29T07:48:35.308Z] INFO: Is Verified   : false
+[2026-09-29T07:48:35.309Z] INFO: ====================================
+[2026-09-29T07:48:35.310Z] INFO: 
+[2026-09-29T07:52:41.835Z] INFO: 
+[2026-09-29T07:52:41.838Z] INFO: ====================================
+[2026-09-29T07:52:41.839Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T07:52:41.840Z] INFO: ====================================
+[2026-09-29T07:52:41.841Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:52:41.842Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:52:41.844Z] INFO: OTP           : 331610
+[2026-09-29T07:52:41.847Z] INFO: Expires At    : "2026-09-29T07:57:41.666Z"
+[2026-09-29T07:52:41.849Z] INFO: ====================================
+[2026-09-29T07:52:41.850Z] INFO: 
+[2026-09-29T07:52:47.386Z] INFO: 
+[2026-09-29T07:52:47.387Z] INFO: ====================================
+[2026-09-29T07:52:47.388Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T07:52:47.390Z] INFO: ====================================
+[2026-09-29T07:52:47.390Z] INFO: Mobile Number : 9150671005
+[2026-09-29T07:52:47.391Z] INFO: Entered OTP   : 331610
+[2026-09-29T07:52:47.391Z] INFO: OTP ID        : "6abb6e4941cd9964bb34ceeb"
+[2026-09-29T07:52:47.392Z] INFO: Stored OTP    : 331610
+[2026-09-29T07:52:47.393Z] INFO: Purpose       : LOGIN
+[2026-09-29T07:52:47.394Z] INFO: Expires At    : "2026-09-29T07:57:41.666Z"
+[2026-09-29T07:52:47.395Z] INFO: Attempts      : 0
+[2026-09-29T07:52:47.398Z] INFO: Max Attempts  : 5
+[2026-09-29T07:52:47.401Z] INFO: Is Verified   : false
+[2026-09-29T07:52:47.402Z] INFO: ====================================
+[2026-09-29T07:52:47.403Z] INFO: 
+[2026-09-29T08:00:01.135Z] INFO: 
+[2026-09-29T08:00:01.137Z] INFO: ====================================
+[2026-09-29T08:00:01.138Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T08:00:01.138Z] INFO: ====================================
+[2026-09-29T08:00:01.139Z] INFO: Mobile Number : 9150671005
+[2026-09-29T08:00:01.140Z] INFO: Purpose       : LOGIN
+[2026-09-29T08:00:01.142Z] INFO: OTP           : 456219
+[2026-09-29T08:00:01.143Z] INFO: Expires At    : "2026-09-29T08:05:00.942Z"
+[2026-09-29T08:00:01.147Z] INFO: ====================================
+[2026-09-29T08:00:01.148Z] INFO: 
+[2026-09-29T08:00:07.188Z] INFO: 
+[2026-09-29T08:00:07.190Z] INFO: ====================================
+[2026-09-29T08:00:07.191Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T08:00:07.191Z] INFO: ====================================
+[2026-09-29T08:00:07.192Z] INFO: Mobile Number : 9150671005
+[2026-09-29T08:00:07.193Z] INFO: Entered OTP   : 456219
+[2026-09-29T08:00:07.193Z] INFO: OTP ID        : "6abb700141cd9964bb34d05a"
+[2026-09-29T08:00:07.194Z] INFO: Stored OTP    : 456219
+[2026-09-29T08:00:07.196Z] INFO: Purpose       : LOGIN
+[2026-09-29T08:00:07.197Z] INFO: Expires At    : "2026-09-29T08:05:00.942Z"
+[2026-09-29T08:00:07.198Z] INFO: Attempts      : 0
+[2026-09-29T08:00:07.199Z] INFO: Max Attempts  : 5
+[2026-09-29T08:00:07.200Z] INFO: Is Verified   : false
+[2026-09-29T08:00:07.201Z] INFO: ====================================
+[2026-09-29T08:00:07.203Z] INFO: 
+[2026-09-29T08:47:47.889Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T08:48:07.892Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T08:51:35.808Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T08:51:55.822Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T08:56:36.249Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-29T08:56:36.252Z] INFO: ========================================
+[2026-09-29T08:56:36.253Z] INFO: Hazel application starting
+[2026-09-29T08:56:36.254Z] INFO: Node version: v24.16.0
+[2026-09-29T08:56:36.255Z] INFO: Environment: development
+[2026-09-29T08:56:36.258Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:36.262Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:36.264Z] INFO: PORT: 5004
+[2026-09-29T08:56:36.272Z] INFO: ========================================
+[2026-09-29T08:56:38.145Z] INFO: App loaded successfully
+[2026-09-29T08:56:38.147Z] INFO: Connecting to MongoDB...
+[2026-09-29T08:56:38.148Z] INFO: Environment: development
+[2026-09-29T08:56:38.150Z] INFO: MongoDB URI exists: true
+[2026-09-29T08:56:38.182Z] INFO: Server running on port 5004
+[2026-09-29T08:56:38.186Z] INFO: Hazel backend started successfully
+[2026-09-29T08:56:39.210Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T08:56:40.266Z] ERROR: (node:14792) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T08:56:49.228Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-29T08:56:49.232Z] INFO: ========================================
+[2026-09-29T08:56:49.233Z] INFO: Hazel application starting
+[2026-09-29T08:56:49.233Z] INFO: Node version: v24.16.0
+[2026-09-29T08:56:49.234Z] INFO: Environment: development
+[2026-09-29T08:56:49.235Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:49.238Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:49.240Z] INFO: PORT: 5004
+[2026-09-29T08:56:49.242Z] INFO: ========================================
+[2026-09-29T08:56:51.462Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-29T08:56:51.488Z] INFO: ========================================
+[2026-09-29T08:56:51.505Z] INFO: Hazel application starting
+[2026-09-29T08:56:51.508Z] INFO: Node version: v24.16.0
+[2026-09-29T08:56:51.511Z] INFO: Environment: development
+[2026-09-29T08:56:51.513Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:51.516Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T08:56:51.518Z] INFO: PORT: 5004
+[2026-09-29T08:56:51.520Z] INFO: ========================================
+[2026-09-29T08:56:52.673Z] INFO: App loaded successfully
+[2026-09-29T08:56:52.675Z] INFO: Connecting to MongoDB...
+[2026-09-29T08:56:52.676Z] INFO: Environment: development
+[2026-09-29T08:56:52.677Z] INFO: MongoDB URI exists: true
+[2026-09-29T08:56:52.698Z] INFO: Server running on port 5004
+[2026-09-29T08:56:52.700Z] INFO: Hazel backend started successfully
+[2026-09-29T08:56:53.491Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T08:56:54.092Z] ERROR: (node:19948) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T09:04:05.439Z] INFO: 
+[2026-09-29T09:04:05.445Z] INFO: ====================================
+[2026-09-29T09:04:05.446Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T09:04:05.447Z] INFO: ====================================
+[2026-09-29T09:04:05.447Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:04:05.448Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:04:05.449Z] INFO: OTP           : 676676
+[2026-09-29T09:04:05.450Z] INFO: Expires At    : "2026-09-29T09:09:05.275Z"
+[2026-09-29T09:04:05.451Z] INFO: ====================================
+[2026-09-29T09:04:05.452Z] INFO: 
+[2026-09-29T09:04:17.738Z] INFO: 
+[2026-09-29T09:04:17.739Z] INFO: ====================================
+[2026-09-29T09:04:17.740Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T09:04:17.741Z] INFO: ====================================
+[2026-09-29T09:04:17.742Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:04:17.743Z] INFO: Entered OTP   : 676676
+[2026-09-29T09:04:17.744Z] INFO: OTP ID        : "6abb7f055d6bcdaa878b0db4"
+[2026-09-29T09:04:17.750Z] INFO: Stored OTP    : 676676
+[2026-09-29T09:04:17.752Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:04:17.753Z] INFO: Expires At    : "2026-09-29T09:09:05.275Z"
+[2026-09-29T09:04:17.754Z] INFO: Attempts      : 0
+[2026-09-29T09:04:17.759Z] INFO: Max Attempts  : 5
+[2026-09-29T09:04:17.762Z] INFO: Is Verified   : false
+[2026-09-29T09:04:17.766Z] INFO: ====================================
+[2026-09-29T09:04:17.778Z] INFO: 
+[2026-09-29T09:04:47.107Z] INFO: 
+[2026-09-29T09:04:47.108Z] INFO: ====================================
+[2026-09-29T09:04:47.109Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T09:04:47.110Z] INFO: ====================================
+[2026-09-29T09:04:47.111Z] INFO: Mobile Number : 9876543210
+[2026-09-29T09:04:47.112Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:04:47.112Z] INFO: OTP           : 877993
+[2026-09-29T09:04:47.115Z] INFO: Expires At    : "2026-09-29T09:09:46.960Z"
+[2026-09-29T09:04:47.120Z] INFO: ====================================
+[2026-09-29T09:04:47.122Z] INFO: 
+[2026-09-29T09:04:53.521Z] INFO: 
+[2026-09-29T09:04:53.525Z] INFO: ====================================
+[2026-09-29T09:04:53.526Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T09:04:53.527Z] INFO: ====================================
+[2026-09-29T09:04:53.528Z] INFO: Mobile Number : 9876543210
+[2026-09-29T09:04:53.528Z] INFO: Entered OTP   : 877993
+[2026-09-29T09:04:53.529Z] INFO: OTP ID        : "6abb7f2f5d6bcdaa878b0e2f"
+[2026-09-29T09:04:53.530Z] INFO: Stored OTP    : 877993
+[2026-09-29T09:04:53.534Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:04:53.536Z] INFO: Expires At    : "2026-09-29T09:09:46.960Z"
+[2026-09-29T09:04:53.541Z] INFO: Attempts      : 0
+[2026-09-29T09:04:53.544Z] INFO: Max Attempts  : 5
+[2026-09-29T09:04:53.546Z] INFO: Is Verified   : false
+[2026-09-29T09:04:53.548Z] INFO: ====================================
+[2026-09-29T09:04:53.551Z] INFO: 
+[2026-09-29T09:05:14.225Z] INFO: 
+[2026-09-29T09:05:14.228Z] INFO: ====================================
+[2026-09-29T09:05:14.229Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T09:05:14.231Z] INFO: ====================================
+[2026-09-29T09:05:14.232Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:05:14.234Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:05:14.235Z] INFO: OTP           : 845116
+[2026-09-29T09:05:14.236Z] INFO: Expires At    : "2026-09-29T09:10:14.049Z"
+[2026-09-29T09:05:14.237Z] INFO: ====================================
+[2026-09-29T09:05:14.239Z] INFO: 
+[2026-09-29T09:05:20.799Z] INFO: 
+[2026-09-29T09:05:20.803Z] INFO: ====================================
+[2026-09-29T09:05:20.804Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T09:05:20.805Z] INFO: ====================================
+[2026-09-29T09:05:20.806Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:05:20.807Z] INFO: Entered OTP   : 845116
+[2026-09-29T09:05:20.807Z] INFO: OTP ID        : "6abb7f4a5d6bcdaa878b0eaa"
+[2026-09-29T09:05:20.809Z] INFO: Stored OTP    : 845116
+[2026-09-29T09:05:20.809Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:05:20.810Z] INFO: Expires At    : "2026-09-29T09:10:14.049Z"
+[2026-09-29T09:05:20.813Z] INFO: Attempts      : 0
+[2026-09-29T09:05:20.815Z] INFO: Max Attempts  : 5
+[2026-09-29T09:05:20.820Z] INFO: Is Verified   : false
+[2026-09-29T09:05:20.823Z] INFO: ====================================
+[2026-09-29T09:05:20.825Z] INFO: 
+[2026-09-29T09:16:21.502Z] ERROR: SEND OTP SERVICE ERROR: MongoNetworkError: read ECONNRESET
+    at Connection.onSocketError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connection.js:124:22)
+    at TLSSocket.emit (node:events:521:24)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:16:21.505Z] ERROR: SEND OTP CONTROLLER ERROR: MongoNetworkError: read ECONNRESET
+    at Connection.onSocketError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connection.js:124:22)
+    at TLSSocket.emit (node:events:521:24)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:16:39.781Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-29T09:16:39.784Z] INFO: ========================================
+[2026-09-29T09:16:39.785Z] INFO: Hazel application starting
+[2026-09-29T09:16:39.786Z] INFO: Node version: v24.16.0
+[2026-09-29T09:16:39.787Z] INFO: Environment: development
+[2026-09-29T09:16:39.788Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:16:39.788Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:16:39.790Z] INFO: PORT: 5004
+[2026-09-29T09:16:39.791Z] INFO: ========================================
+[2026-09-29T09:16:41.016Z] INFO: App loaded successfully
+[2026-09-29T09:16:41.018Z] INFO: Connecting to MongoDB...
+[2026-09-29T09:16:41.020Z] INFO: Environment: development
+[2026-09-29T09:16:41.021Z] INFO: MongoDB URI exists: true
+[2026-09-29T09:16:41.049Z] INFO: Server running on port 5004
+[2026-09-29T09:16:41.052Z] INFO: Hazel backend started successfully
+[2026-09-29T09:16:44.424Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T09:16:44.997Z] ERROR: (node:20732) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T09:16:48.506Z] INFO: 
+[2026-09-29T09:16:48.508Z] INFO: ====================================
+[2026-09-29T09:16:48.510Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T09:16:48.513Z] INFO: ====================================
+[2026-09-29T09:16:48.520Z] INFO: Mobile Number : 9876543210
+[2026-09-29T09:16:48.522Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:16:48.524Z] INFO: OTP           : 791275
+[2026-09-29T09:16:48.527Z] INFO: Expires At    : "2026-09-29T09:21:48.327Z"
+[2026-09-29T09:16:48.529Z] INFO: ====================================
+[2026-09-29T09:16:48.533Z] INFO: 
+[2026-09-29T09:16:55.954Z] INFO: 
+[2026-09-29T09:16:55.955Z] INFO: ====================================
+[2026-09-29T09:16:55.957Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T09:16:55.959Z] INFO: ====================================
+[2026-09-29T09:16:55.960Z] INFO: Mobile Number : 9876543210
+[2026-09-29T09:16:55.962Z] INFO: Entered OTP   : 791275
+[2026-09-29T09:16:55.963Z] INFO: OTP ID        : "6abb8200db88c3d97691b7e8"
+[2026-09-29T09:16:55.965Z] INFO: Stored OTP    : 791275
+[2026-09-29T09:16:55.966Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:16:55.967Z] INFO: Expires At    : "2026-09-29T09:21:48.327Z"
+[2026-09-29T09:16:55.968Z] INFO: Attempts      : 0
+[2026-09-29T09:16:55.970Z] INFO: Max Attempts  : 5
+[2026-09-29T09:16:55.971Z] INFO: Is Verified   : false
+[2026-09-29T09:16:55.972Z] INFO: ====================================
+[2026-09-29T09:16:55.973Z] INFO: 
+[2026-09-29T09:17:29.780Z] INFO: 
+[2026-09-29T09:17:29.782Z] INFO: ====================================
+[2026-09-29T09:17:29.784Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-09-29T09:17:29.786Z] INFO: ====================================
+[2026-09-29T09:17:29.788Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:17:29.794Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:17:29.798Z] INFO: OTP           : 408654
+[2026-09-29T09:17:29.800Z] INFO: Expires At    : "2026-09-29T09:22:29.625Z"
+[2026-09-29T09:17:29.802Z] INFO: ====================================
+[2026-09-29T09:17:29.803Z] INFO: 
+[2026-09-29T09:17:37.145Z] INFO: 
+[2026-09-29T09:17:37.147Z] INFO: ====================================
+[2026-09-29T09:17:37.149Z] INFO:         VERIFY OTP DEBUG
+[2026-09-29T09:17:37.150Z] INFO: ====================================
+[2026-09-29T09:17:37.152Z] INFO: Mobile Number : 9150671005
+[2026-09-29T09:17:37.153Z] INFO: Entered OTP   : 408654
+[2026-09-29T09:17:37.155Z] INFO: OTP ID        : "6abb8229db88c3d97691b863"
+[2026-09-29T09:17:37.156Z] INFO: Stored OTP    : 408654
+[2026-09-29T09:17:37.157Z] INFO: Purpose       : LOGIN
+[2026-09-29T09:17:37.158Z] INFO: Expires At    : "2026-09-29T09:22:29.625Z"
+[2026-09-29T09:17:37.160Z] INFO: Attempts      : 0
+[2026-09-29T09:17:37.161Z] INFO: Max Attempts  : 5
+[2026-09-29T09:17:37.163Z] INFO: Is Verified   : false
+[2026-09-29T09:17:37.163Z] INFO: ====================================
+[2026-09-29T09:17:37.164Z] INFO: 
+[2026-09-29T09:46:43.417Z] ERROR: Error in getAllProducts: MongoNetworkError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at TLSSocket.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connect.js:314:44)
+    at Object.onceWrapper (node:events:631:26)
+    at TLSSocket.emit (node:events:509:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:46:43.495Z] ERROR: Error in getAllProducts: MongoNetworkError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at TLSSocket.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connect.js:314:44)
+    at Object.onceWrapper (node:events:631:26)
+    at TLSSocket.emit (node:events:509:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:46:43.758Z] ERROR: Error in getAllProducts: MongoNetworkError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at TLSSocket.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connect.js:314:44)
+    at Object.onceWrapper (node:events:631:26)
+    at TLSSocket.emit (node:events:509:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:46:44.001Z] ERROR: Error in getAllProducts: MongoNetworkError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at TLSSocket.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cmap\connect.js:314:44)
+    at Object.onceWrapper (node:events:631:26)
+    at TLSSocket.emit (node:events:509:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-09-29T09:46:56.833Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-29T09:46:56.837Z] INFO: ========================================
+[2026-09-29T09:46:56.837Z] INFO: Hazel application starting
+[2026-09-29T09:46:56.839Z] INFO: Node version: v24.16.0
+[2026-09-29T09:46:56.840Z] INFO: Environment: development
+[2026-09-29T09:46:56.843Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:46:56.844Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:46:56.847Z] INFO: PORT: 5004
+[2026-09-29T09:46:56.849Z] INFO: ========================================
+[2026-09-29T09:46:58.576Z] INFO: App loaded successfully
+[2026-09-29T09:46:58.582Z] INFO: Connecting to MongoDB...
+[2026-09-29T09:46:58.588Z] INFO: Environment: development
+[2026-09-29T09:46:58.592Z] INFO: MongoDB URI exists: true
+[2026-09-29T09:46:58.643Z] INFO: Server running on port 5004
+[2026-09-29T09:46:58.646Z] INFO: Hazel backend started successfully
+[2026-09-29T09:47:12.064Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:47:22.095Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:47:32.030Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:48:48.099Z] ERROR: MongoDB Connection Failed
+[2026-09-29T09:48:48.102Z] ERROR: Error name: Error
+[2026-09-29T09:48:48.103Z] ERROR: Error message: querySrv ETIMEOUT _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+[2026-09-29T09:48:48.104Z] ERROR: Full error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+[2026-09-29T09:50:06.698Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-29T09:50:06.701Z] INFO: ========================================
+[2026-09-29T09:50:06.702Z] INFO: Hazel application starting
+[2026-09-29T09:50:06.702Z] INFO: Node version: v24.16.0
+[2026-09-29T09:50:06.703Z] INFO: Environment: development
+[2026-09-29T09:50:06.704Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:50:06.705Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T09:50:06.705Z] INFO: PORT: 5004
+[2026-09-29T09:50:06.706Z] INFO: ========================================
+[2026-09-29T09:50:07.595Z] INFO: App loaded successfully
+[2026-09-29T09:50:07.598Z] INFO: Connecting to MongoDB...
+[2026-09-29T09:50:07.599Z] INFO: Environment: development
+[2026-09-29T09:50:07.600Z] INFO: MongoDB URI exists: true
+[2026-09-29T09:50:07.621Z] INFO: Server running on port 5004
+[2026-09-29T09:50:07.624Z] INFO: Hazel backend started successfully
+[2026-09-29T09:50:23.318Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:33.331Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:43.288Z] ERROR: Error in getAllProducts: MongooseError: Operation `products.countDocuments()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:48.519Z] ERROR: Get Categories Error: MongooseError: Operation `categories.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:48.524Z] ERROR: Get Videos Error: MongooseError: Operation `videos.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:48.526Z] ERROR: GET ALL TRENDING PRODUCTS ERROR: MongooseError: Operation `trendingproducts.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:48.528Z] ERROR: GET ALL NEW ARRIVALS ERROR: MongooseError: Operation `newarrivals.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:58.544Z] ERROR: Get Categories Error: MongooseError: Operation `categories.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:58.551Z] ERROR: Get Videos Error: MongooseError: Operation `videos.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:58.558Z] ERROR: GET ALL TRENDING PRODUCTS ERROR: MongooseError: Operation `trendingproducts.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:50:58.570Z] ERROR: GET ALL NEW ARRIVALS ERROR: MongooseError: Operation `newarrivals.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:142:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[2026-09-29T09:51:40.366Z] ERROR: MongoDB Connection Failed
+[2026-09-29T09:51:40.370Z] ERROR: Error name: Error
+[2026-09-29T09:51:40.371Z] ERROR: Error message: querySrv ETIMEOUT _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+[2026-09-29T09:51:40.372Z] ERROR: Full error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+[2026-09-29T10:05:32.552Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-29T10:05:32.557Z] INFO: ========================================
+[2026-09-29T10:05:32.558Z] INFO: Hazel application starting
+[2026-09-29T10:05:32.560Z] INFO: Node version: v24.16.0
+[2026-09-29T10:05:32.561Z] INFO: Environment: development
+[2026-09-29T10:05:32.562Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T10:05:32.563Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T10:05:32.566Z] INFO: PORT: 5004
+[2026-09-29T10:05:32.570Z] INFO: ========================================
+[2026-09-29T10:05:34.611Z] INFO: App loaded successfully
+[2026-09-29T10:05:34.620Z] INFO: Connecting to MongoDB...
+[2026-09-29T10:05:34.625Z] INFO: Environment: development
+[2026-09-29T10:05:34.628Z] INFO: MongoDB URI exists: true
+[2026-09-29T10:05:34.686Z] INFO: Server running on port 5004
+[2026-09-29T10:05:34.692Z] INFO: Hazel backend started successfully
+[2026-09-29T10:05:35.595Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T10:05:36.415Z] ERROR: (node:10648) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T10:28:55.910Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-09-29T10:28:55.918Z] INFO: ========================================
+[2026-09-29T10:28:55.924Z] INFO: Hazel application starting
+[2026-09-29T10:28:55.930Z] INFO: Node version: v24.16.0
+[2026-09-29T10:28:55.936Z] INFO: Environment: development
+[2026-09-29T10:28:55.944Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T10:28:55.951Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T10:28:55.958Z] INFO: PORT: 5004
+[2026-09-29T10:28:55.959Z] INFO: ========================================
+[2026-09-29T10:29:17.492Z] INFO: App loaded successfully
+[2026-09-29T10:29:17.498Z] INFO: Connecting to MongoDB...
+[2026-09-29T10:29:17.502Z] INFO: Environment: development
+[2026-09-29T10:29:17.508Z] INFO: MongoDB URI exists: true
+[2026-09-29T10:29:17.559Z] INFO: Server running on port 5004
+[2026-09-29T10:29:17.568Z] INFO: Hazel backend started successfully
+[2026-09-29T10:29:18.687Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T10:29:19.456Z] ERROR: (node:5856) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T12:03:26.178Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:26.984Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:28.066Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:29.072Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:29.438Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:29.607Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:56.211Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:57.008Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:538:9)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+[2026-09-29T12:03:58.094Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:59.097Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:59.463Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:03:59.633Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-00.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:05:03.017Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-29T12:05:03.020Z] INFO: ========================================
+[2026-09-29T12:05:03.021Z] INFO: Hazel application starting
+[2026-09-29T12:05:03.022Z] INFO: Node version: v24.16.0
+[2026-09-29T12:05:03.023Z] INFO: Environment: development
+[2026-09-29T12:05:03.024Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:05:03.024Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:05:03.025Z] INFO: PORT: 5004
+[2026-09-29T12:05:03.026Z] INFO: ========================================
+[2026-09-29T12:05:16.811Z] INFO: App loaded successfully
+[2026-09-29T12:05:16.812Z] INFO: Connecting to MongoDB...
+[2026-09-29T12:05:16.813Z] INFO: Environment: development
+[2026-09-29T12:05:16.814Z] INFO: MongoDB URI exists: true
+[2026-09-29T12:05:16.839Z] INFO: Server running on port 5004
+[2026-09-29T12:05:16.842Z] INFO: Hazel backend started successfully
+[2026-09-29T12:05:21.395Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T12:05:22.103Z] ERROR: (node:14120) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T12:06:46.986Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-01.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:07:06.995Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-01.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async Collection.findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:313:24)
+    at async model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2773:15)
+    at async maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:65)
+[2026-09-29T12:08:02.335Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-29T12:08:02.337Z] INFO: ========================================
+[2026-09-29T12:08:02.338Z] INFO: Hazel application starting
+[2026-09-29T12:08:02.339Z] INFO: Node version: v24.16.0
+[2026-09-29T12:08:02.339Z] INFO: Environment: development
+[2026-09-29T12:08:02.340Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:08:02.341Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:08:02.341Z] INFO: PORT: 5004
+[2026-09-29T12:08:02.343Z] INFO: ========================================
+[2026-09-29T12:08:03.227Z] INFO: App loaded successfully
+[2026-09-29T12:08:03.228Z] INFO: Connecting to MongoDB...
+[2026-09-29T12:08:03.229Z] INFO: Environment: development
+[2026-09-29T12:08:03.230Z] INFO: MongoDB URI exists: true
+[2026-09-29T12:08:03.251Z] INFO: Server running on port 5004
+[2026-09-29T12:08:03.254Z] INFO: Hazel backend started successfully
+[2026-09-29T12:08:05.659Z] INFO: MongoDB Connected Successfully!!
+[2026-09-29T12:08:06.389Z] ERROR: (node:1964) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-29T12:59:45.030Z] INFO: ◇ injected env (17) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-09-29T12:59:45.034Z] INFO: ========================================
+[2026-09-29T12:59:45.035Z] INFO: Hazel application starting
+[2026-09-29T12:59:45.036Z] INFO: Node version: v24.16.0
+[2026-09-29T12:59:45.037Z] INFO: Environment: development
+[2026-09-29T12:59:45.039Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:59:45.039Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-29T12:59:45.040Z] INFO: PORT: 5004
+[2026-09-29T12:59:45.040Z] INFO: ========================================
+[2026-09-30T04:26:17.960Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-09-30T04:26:17.969Z] INFO: ========================================
+[2026-09-30T04:26:17.974Z] INFO: Hazel application starting
+[2026-09-30T04:26:17.984Z] INFO: Node version: v24.16.0
+[2026-09-30T04:26:17.989Z] INFO: Environment: development
+[2026-09-30T04:26:18.020Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T04:26:18.024Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T04:26:18.043Z] INFO: PORT: 5004
+[2026-09-30T04:26:18.069Z] INFO: ========================================
+[2026-09-30T04:26:20.520Z] INFO: App loaded successfully
+[2026-09-30T04:26:20.541Z] INFO: Connecting to MongoDB...
+[2026-09-30T04:26:20.651Z] INFO: Environment: development
+[2026-09-30T04:26:20.724Z] INFO: MongoDB URI exists: true
+[2026-09-30T04:26:20.936Z] INFO: Server running on port 5004
+[2026-09-30T04:26:21.001Z] INFO: Hazel backend started successfully
+[2026-09-30T04:26:22.101Z] INFO: MongoDB Connected Successfully!!
+[2026-09-30T04:26:22.669Z] ERROR: (node:8732) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-30T04:41:22.151Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-09-30T04:41:22.154Z] INFO: ========================================
+[2026-09-30T04:41:22.155Z] INFO: Hazel application starting
+[2026-09-30T04:41:22.156Z] INFO: Node version: v24.16.0
+[2026-09-30T04:41:22.157Z] INFO: Environment: development
+[2026-09-30T04:41:22.158Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T04:41:22.159Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T04:41:22.159Z] INFO: PORT: 5004
+[2026-09-30T04:41:22.160Z] INFO: ========================================
+[2026-09-30T04:41:37.734Z] INFO: App loaded successfully
+[2026-09-30T04:41:37.735Z] INFO: Connecting to MongoDB...
+[2026-09-30T04:41:37.736Z] INFO: Environment: development
+[2026-09-30T04:41:37.737Z] INFO: MongoDB URI exists: true
+[2026-09-30T04:41:37.755Z] INFO: Server running on port 5004
+[2026-09-30T04:41:37.757Z] INFO: Hazel backend started successfully
+[2026-09-30T04:41:38.562Z] INFO: MongoDB Connected Successfully!!
+[2026-09-30T04:41:39.085Z] ERROR: (node:8740) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-30T05:36:21.819Z] ERROR: Error in getProductById: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:260:22)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:21.835Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:260:22)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:21.838Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:260:22)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:21.842Z] ERROR: Get Videos Error: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:260:22)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:21.847Z] ERROR: Get Categories Error: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:260:22)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async [Symbol.asyncIterator] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:253:34)
+    at async FindCursor.toArray (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:405:26)
+    at async model.Query._find (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2475:14)
+[2026-09-30T05:36:51.856Z] ERROR: GET ALL TRENDING PRODUCTS ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:51.864Z] ERROR: GET ALL NEW ARRIVALS ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async [Symbol.asyncIterator] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:253:34)
+    at async FindCursor.toArray (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:405:26)
+    at async model.Query._find (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2475:14)
+[2026-09-30T05:36:51.873Z] ERROR: Error in getProductById: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:51.892Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:36:51.903Z] ERROR: AUTH MIDDLEWARE ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:37:21.889Z] ERROR: Get Categories Error: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async [Symbol.asyncIterator] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:253:34)
+    at async FindCursor.toArray (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:405:26)
+    at async model.Query._find (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2475:14)
+[2026-09-30T05:37:21.933Z] ERROR: Get Videos Error: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:37:21.945Z] ERROR: GET ALL TRENDING PRODUCTS ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+[2026-09-30T05:37:21.964Z] ERROR: GET ALL NEW ARRIVALS ERROR: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-msxjrub-shard-00-02.oaaml4x.mongodb.net
+    at Topology.selectServer (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\sdam\topology.js:348:38)
+    at async executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:157:18)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async FindCursor._initialize (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:619:27)
+    at async FindCursor.fetchBatch (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:653:13)
+    at async FindCursor.next (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:325:17)
+    at async [Symbol.asyncIterator] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:253:34)
+    at async FindCursor.toArray (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\cursor\abstract_cursor.js:405:26)
+    at async model.Query._find (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2475:14)
+[2026-09-30T06:48:25.486Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-09-30T06:48:25.489Z] INFO: ========================================
+[2026-09-30T06:48:25.490Z] INFO: Hazel application starting
+[2026-09-30T06:48:25.491Z] INFO: Node version: v24.16.0
+[2026-09-30T06:48:25.493Z] INFO: Environment: development
+[2026-09-30T06:48:25.496Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T06:48:25.499Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T06:48:25.504Z] INFO: PORT: 5004
+[2026-09-30T06:48:25.507Z] INFO: ========================================
+[2026-09-30T06:48:34.115Z] INFO: App loaded successfully
+[2026-09-30T06:48:34.127Z] INFO: Connecting to MongoDB...
+[2026-09-30T06:48:34.129Z] INFO: Environment: development
+[2026-09-30T06:48:34.149Z] INFO: MongoDB URI exists: true
+[2026-09-30T06:48:34.381Z] INFO: Server running on port 5004
+[2026-09-30T06:48:34.389Z] INFO: Hazel backend started successfully
+[2026-09-30T06:48:34.984Z] INFO: MongoDB Connected Successfully!!
+[2026-09-30T06:48:35.438Z] ERROR: (node:9572) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-09-30T07:51:32.493Z] INFO: ◇ injected env (17) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-09-30T07:51:32.500Z] INFO: ========================================
+[2026-09-30T07:51:32.502Z] INFO: Hazel application starting
+[2026-09-30T07:51:32.503Z] INFO: Node version: v24.16.0
+[2026-09-30T07:51:32.504Z] INFO: Environment: development
+[2026-09-30T07:51:32.505Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T07:51:32.510Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-09-30T07:51:32.513Z] INFO: PORT: 5004
+[2026-09-30T07:51:32.514Z] INFO: ========================================
+[2026-09-30T07:51:33.852Z] INFO: App loaded successfully
+[2026-09-30T07:51:33.854Z] INFO: Connecting to MongoDB...
+[2026-09-30T07:51:33.856Z] INFO: Environment: development
+[2026-09-30T07:51:33.857Z] INFO: MongoDB URI exists: true
+[2026-09-30T07:51:33.880Z] INFO: Server running on port 5004
+[2026-09-30T07:51:33.884Z] INFO: Hazel backend started successfully
+[2026-09-30T07:51:34.377Z] INFO: MongoDB Connected Successfully!!
+[2026-09-30T07:51:34.769Z] ERROR: (node:6108) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
