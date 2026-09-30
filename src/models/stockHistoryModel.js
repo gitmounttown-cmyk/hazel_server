@@ -8,18 +8,12 @@ const stockHistorySchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-
     inventoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Inventory",
       required: true,
       index: true,
     },
-
-    // ==========================================
-    // MOVEMENT
-    // ==========================================
-
     type: {
       type: String,
       enum: [
@@ -35,52 +29,40 @@ const stockHistorySchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-
     quantity: {
       type: Number,
       required: true,
       min: 0,
     },
-
     previousQuantity: {
       type: Number,
       required: true,
       min: 0,
     },
-
     newQuantity: {
       type: Number,
       required: true,
       min: 0,
     },
-
-    // ==========================================
-    // REFERENCE
-    // ==========================================
-
     referenceId: {
       type: mongoose.Schema.Types.ObjectId,
       default: null,
     },
-
     referenceType: {
       type: String,
       default: "",
       trim: true,
     },
-
     reason: {
       type: String,
       default: "",
       trim: true,
     },
-
     note: {
       type: String,
       default: "",
       trim: true,
     },
-
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -92,19 +74,9 @@ const stockHistorySchema = new mongoose.Schema(
   }
 );
 
-stockHistorySchema.index({
-  productId: 1,
-  createdAt: -1,
-});
-
-stockHistorySchema.index({
-  type: 1,
-  createdAt: -1,
-});
+stockHistorySchema.index({ productId: 1, createdAt: -1 });
+stockHistorySchema.index({ type: 1, createdAt: -1 });
 
 module.exports =
   mongoose.models.StockHistory ||
-  mongoose.model(
-    "StockHistory",
-    stockHistorySchema
-  );
+  mongoose.model("StockHistory", stockHistorySchema);
