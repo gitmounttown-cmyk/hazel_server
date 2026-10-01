@@ -124,7 +124,7 @@ const addToCart = async (req, res) => {
       quantity = 1,
       price,
       discountPrice,
-      siz
+      selectedSize
     } = req.body;
 
     // --------------------------------------------------------
@@ -255,6 +255,8 @@ const addToCart = async (req, res) => {
             price: originalPrice,
 
             discountPrice: finalDiscountPrice,
+
+            selectedSize: selectedSize,
           },
         ],
 
@@ -273,7 +275,7 @@ const addToCart = async (req, res) => {
       const existingItem = cart.items.find(
         (item) =>
           item.product.toString() === productId.toString() &&
-          item.variant.toString() === variantId.toString(),
+          item.variant.toString() === variantId.toString() && item.selectedSize === selectedSize
       );
 
       // ------------------------------------------------------
@@ -301,6 +303,7 @@ const addToCart = async (req, res) => {
           price: originalPrice,
 
           discountPrice: finalDiscountPrice,
+          selectedSize: selectedSize,
         });
       }
     }

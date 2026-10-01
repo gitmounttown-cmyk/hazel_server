@@ -53,6 +53,11 @@ const cartItemSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+
+    selectedSize: {
+      type: String,
+      required: true,
+    },
   },
   {
     _id: true,
