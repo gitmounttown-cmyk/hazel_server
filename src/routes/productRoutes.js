@@ -1,8 +1,11 @@
 const express = require("express");
+
 const router = express.Router();
 
 const { verifyToken } = require("../middleware/authMiddleware");
+
 const { uploadProductMedia } = require("../middleware/uploadMiddleware");
+
 const {
   createProduct,
   uploadProductMediaHandler,
@@ -12,8 +15,17 @@ const {
   deleteProduct,
 } = require("../controllers/productController");
 
-// 1. ALL GET/POST STATIC ROUTES
+
+// ============================================================
+// GET ALL PRODUCTS
+// ============================================================
+
 router.get("/all", getAllProducts);
+
+
+// ============================================================
+// UPLOAD PRODUCT MEDIA
+// ============================================================
 
 router.post(
   "/upload-media",
@@ -22,6 +34,11 @@ router.post(
   uploadProductMediaHandler
 );
 
+
+// ============================================================
+// CREATE PRODUCT
+// ============================================================
+
 router.post(
   "/create",
   verifyToken,
@@ -29,22 +46,36 @@ router.post(
   createProduct
 );
 
-// 2. PUT ROUTES (Supports BOTH /update/:productId and /:productId to guarantee no 404s)
+
+// ============================================================
+// UPDATE PRODUCT
+// ============================================================
+
 router.put(
-  ["/update/:productId", "/:productId"],
+  "/update/:productId",
   verifyToken,
   uploadProductMedia.array("media", 10),
   updateProduct
 );
 
-// 3. DELETE ROUTES
+
+// ============================================================
+// DELETE PRODUCT
+// ============================================================
+
 router.delete(
-  ["/delete/:productId", "/:productId"],
+  "/delete/:productId",
   verifyToken,
   deleteProduct
 );
 
-// 4. GET SINGLE PRODUCT BY ID (Must stay at the bottom)
+
+// ============================================================
+// GET PRODUCT BY ID
+// IMPORTANT: Keep this at the bottom
+// ============================================================
+
 router.get("/:productId", getProductById);
+
 
 module.exports = router;

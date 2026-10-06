@@ -1,11 +1,24 @@
 const express = require("express");
-const router = express.Router();
-const { createOrder, verifyPayment } = require("../controllers/paymentController");
 
-// Endpoint to generate Razorpay order ID
+const router = express.Router();
+
+const {
+  createOrder,
+  verifyPayment,
+} = require("../controllers/paymentController");
+
+// ============================================================
+// CREATE RAZORPAY ORDER
+// POST /api/payment/create-order
+// ============================================================
+
 router.post("/create-order", createOrder);
 
-// Endpoint to verify checkout payment signature
+// ============================================================
+// VERIFY RAZORPAY PAYMENT
+// POST /api/payment/verify
+// ============================================================
+
 router.post("/verify", verifyPayment);
 
 module.exports = router;
