@@ -10,27 +10,116 @@ const Notification = require("../models/notificationModel");
 const User = require("../models/userModel");
 const Wishlist = require("../models/wishlistModel");
 
-// ==========================================================
-// HELPER: GET USER ID FROM AUTH MIDDLEWARE
-// ==========================================================
+// =============================================================
+// GET USER ID
+// =============================================================
+
 const getUserId = (req) => {
-  return req.user?.id || req.user?._id || req.user?.userId || null;
+  return (
+    req.user?.id ||
+    req.user?._id ||
+    req.user?.userId ||
+    null
+  );
 };
 
-// ==========================================================
-// CREATE ORDER (HANDLES EMBEDDED VARIANTS & SIZES)
+// =============================================================
+// GET VARIANT
+// =============================================================
+
+const getVariant = (
+  product,
+  variantId
+) => {
+  return product.variants?.find(
+    (variant) =>
+      variant._id.toString() ===
+      variantId.toString()
+  );
+};
+
+// =============================================================
+// GET SIZE
+// =============================================================
+
+const getSize = (
+  variant,
+  sizeId
+) => {
+  return variant?.sizes?.find(
+    (size) =>
+      size._id.toString() ===
+      sizeId.toString()
+  );
+};
+
+// =============================================================
+// GET VARIANT PRICE
+// =============================================================
+
+const getVariantPrice = (
+  variant
+) => {
+  const mrp =
+    Number(variant.price);
+
+  const discountPrice =
+    Number(
+      variant.discountPrice
+    );
+
+  if (
+    Number.isFinite(
+      discountPrice
+    ) &&
+    discountPrice > 0 &&
+    discountPrice < mrp
+  ) {
+    return {
+      mrp,
+      sellingPrice:
+        discountPrice,
+    };
+  }
+
+  if (
+    Number.isFinite(mrp) &&
+    mrp > 0
+  ) {
+    return {
+      mrp,
+      sellingPrice: mrp,
+    };
+  }
+
+  return null;
+};
+
+// =============================================================
+// CREATE COD ORDER
+//
 // POST /api/orders/create
-// ==========================================================
-exports.createOrder = async (req, res) => {
-  const session = await mongoose.startSession();
+//
+// ONLINE PAYMENT MUST USE:
+// POST /api/payment/create-order
+// =============================================================
+
+exports.createOrder = async (
+  req,
+  res
+) => {
+  const session =
+    await mongoose.startSession();
 
   try {
-    const userId = getUserId(req);
+    const userId =
+      getUserId(req);
 
     if (!userId) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required",
+        message:
+          "Authentication required.",
       });
     }
 
@@ -42,483 +131,1262 @@ exports.createOrder = async (req, res) => {
       customerNote = "",
     } = req.body;
 
-    if (!Array.isArray(items) || items.length === 0) {
+    // =========================================================
+    // ONLY COD
+    // =========================================================
+
+    const normalizedPaymentMethod =
+      String(
+        paymentMethod
+      )
+        .trim()
+        .toUpperCase();
+
+    if (
+      normalizedPaymentMethod !==
+      "COD"
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Order items are required",
+        message:
+          "Online payments must use /api/payment/create-order.",
       });
     }
 
-    if (!addressId || !mongoose.Types.ObjectId.isValid(addressId)) {
+    if (
+      !Array.isArray(items) ||
+      items.length === 0
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Valid Address ID is required",
+        message:
+          "Order items are required.",
       });
     }
 
-    const allowedPaymentMethods = ["COD", "UPI", "CARD", "NET_BANKING", "WALLET"];
-    const normalizedPaymentMethod = String(paymentMethod).trim().toUpperCase();
-
-    if (!allowedPaymentMethods.includes(normalizedPaymentMethod)) {
+    if (
+      !addressId ||
+      !mongoose.Types.ObjectId.isValid(
+        addressId
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Invalid payment method",
-        allowedPaymentMethods,
+        message:
+          "Valid Address ID is required.",
       });
     }
 
     session.startTransaction();
 
-    // 1. Fetch Shipping Address
-    const address = await Address.findOne({
-      _id: addressId,
-      user: userId,
-      isActive: true,
-    }).session(session);
+    // =========================================================
+    // ADDRESS
+    // =========================================================
+
+    const address =
+      await Address.findOne({
+        _id: addressId,
+        user: userId,
+        isActive: true,
+      }).session(session);
 
     if (!address) {
-      await session.abortTransaction();
-      return res.status(404).json({
-        success: false,
-        message: "Address not found or inactive",
-      });
+      throw new Error(
+        "Address not found or inactive."
+      );
     }
 
-    const addressLine1 = [address.houseNo, address.street].filter(Boolean).join(", ");
-    const addressLine2 = [address.area, address.landmark].filter(Boolean).join(", ");
+    const addressLine1 = [
+      address.houseNo,
+      address.street,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    const addressLine2 = [
+      address.area,
+      address.landmark,
+    ]
+      .filter(Boolean)
+      .join(", ");
 
     const shippingAddress = {
       name: address.fullName,
-      mobileNumber: address.mobileNumber,
+      mobileNumber:
+        address.mobileNumber,
       addressLine1,
       addressLine2,
-      district: address.district || "",
+      district:
+        address.district || "",
       city: address.city,
       state: address.state,
       pincode: address.pincode,
-      country: address.country || "India",
+      country:
+        address.country ||
+        "India",
     };
 
-    if (
-      !shippingAddress.name ||
-      !shippingAddress.mobileNumber ||
-      !shippingAddress.addressLine1 ||
-      !shippingAddress.city ||
-      !shippingAddress.state ||
-      !shippingAddress.pincode
-    ) {
-      await session.abortTransaction();
-      return res.status(400).json({
-        success: false,
-        message: "Required fields are missing in the selected address",
-      });
-    }
+    // =========================================================
+    // PROCESS ITEMS
+    // =========================================================
 
     let subtotal = 0;
+
     const orderItemsData = [];
 
-    // 2. Process Items & Validate Subdocument Variants/Sizes
     for (const item of items) {
-      if (!item.variantId || !mongoose.Types.ObjectId.isValid(item.variantId)) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Valid variantId is required" });
+      if (
+        !item.product ||
+        !mongoose.Types.ObjectId.isValid(
+          item.product
+        )
+      ) {
+        throw new Error(
+          "Valid product ID is required."
+        );
       }
 
-      if (!item.sizeId || !mongoose.Types.ObjectId.isValid(item.sizeId)) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Valid sizeId is required" });
+      if (
+        !item.variantId ||
+        !mongoose.Types.ObjectId.isValid(
+          item.variantId
+        )
+      ) {
+        throw new Error(
+          "Valid variantId is required."
+        );
       }
 
-      const quantity = Number(item.quantity);
-      if (!Number.isInteger(quantity) || quantity <= 0) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Quantity must be a positive integer" });
+      if (
+        !item.sizeId ||
+        !mongoose.Types.ObjectId.isValid(
+          item.sizeId
+        )
+      ) {
+        throw new Error(
+          "Valid sizeId is required."
+        );
       }
 
-      // Query Product containing the specific variant subdocument
-      const product = await Product.findOne({
-        "variants._id": item.variantId,
-        isDeleted: { $ne: true },
-      }).session(session);
+      const quantity =
+        Number(item.quantity);
+
+      if (
+        !Number.isInteger(
+          quantity
+        ) ||
+        quantity <= 0
+      ) {
+        throw new Error(
+          "Quantity must be a positive integer."
+        );
+      }
+
+      const product =
+        await Product.findOne({
+          _id: item.product,
+          isDeleted: {
+            $ne: true,
+          },
+        }).session(session);
 
       if (!product) {
-        await session.abortTransaction();
-        return res.status(404).json({
-          success: false,
-          message: `Product with variant ID ${item.variantId} not found`,
-        });
+        throw new Error(
+          "Product not found."
+        );
       }
 
-      // Find subdocument instances
-      const variant = product.variants.id(item.variantId);
+      const variant =
+        getVariant(
+          product,
+          item.variantId
+        );
+
       if (!variant) {
-        await session.abortTransaction();
-        return res.status(404).json({
-          success: false,
-          message: `Variant ${item.variantId} not found`,
-        });
+        throw new Error(
+          `Variant not found for ${product.name}.`
+        );
       }
 
-      if (variant.isActive === false || product.isActive === false) {
-        await session.abortTransaction();
-        return res.status(400).json({
-          success: false,
-          message: `Product or variant is inactive`,
-        });
+      if (
+        variant.isActive === false ||
+        product.isActive === false
+      ) {
+        throw new Error(
+          "Product or variant is inactive."
+        );
       }
 
-      const selectedSize = variant.sizes?.id(item.sizeId);
+      const selectedSize =
+        getSize(
+          variant,
+          item.sizeId
+        );
+
       if (!selectedSize) {
-        await session.abortTransaction();
-        return res.status(404).json({
-          success: false,
-          message: `Size ${item.sizeId} not found in variant`,
-        });
+        throw new Error(
+          `Size not found for ${product.name}.`
+        );
       }
 
-      const stock = Number(selectedSize.stockQuantity || 0);
+      const stock =
+        Number(
+          selectedSize.stockQuantity ||
+            0
+        );
 
-      if (stock < quantity) {
-        await session.abortTransaction();
-        return res.status(400).json({
-          success: false,
-          message: `Insufficient stock for ${product.name} - ${selectedSize.size}`,
-          availableStock: stock,
-          requestedQuantity: quantity,
-        });
+      if (
+        stock < quantity
+      ) {
+        throw new Error(
+          `Insufficient stock for ${product.name} - ${selectedSize.size}.`
+        );
       }
 
-      const sellingPrice = Number(
-        variant.sellingPrice ?? variant.price ?? product.sellingPrice ?? product.price ?? 0
-      );
-      const mrp = Number(variant.mrp ?? product.mrp ?? sellingPrice);
+      const priceData =
+        getVariantPrice(
+          variant
+        );
 
-      if (sellingPrice <= 0) {
-        await session.abortTransaction();
-        return res.status(400).json({
-          success: false,
-          message: `Invalid selling price for ${product.name}`,
-        });
+      if (!priceData) {
+        throw new Error(
+          `Invalid price for ${product.name}.`
+        );
       }
 
-      const totalPrice = sellingPrice * quantity;
+      const totalPrice =
+        priceData.sellingPrice *
+        quantity;
+
       subtotal += totalPrice;
 
-      let image =
-        variant.image ||
-        (variant.images && variant.images[0]) ||
-        product.thumbnail ||
-        product.image ||
-        (product.images && product.images[0]) ||
-        "";
-
-      let color = typeof variant.color === "object" ? variant.color.name : (variant.colorName || variant.color || "");
+      const imageMedia =
+        variant.media?.find(
+          (media) =>
+            media.type ===
+            "image"
+        );
 
       orderItemsData.push({
-        product: product._id,
-        variantId: variant._id,
-        sizeId: selectedSize._id,
-        productName: product.name || product.productName || "",
-        sku: variant.sku || "",
-        image,
-        size: selectedSize.size || "",
-        color,
-        mrp,
-        sellingPrice,
+        product:
+          product._id,
+
+        variantId:
+          variant._id,
+
+        sizeId:
+          selectedSize._id,
+
+        productName:
+          product.name,
+
+        sku:
+          selectedSize.sku ||
+          "",
+
+        image:
+          imageMedia?.imageURL ||
+          "",
+
+        size:
+          selectedSize.size ||
+          "",
+
+        color:
+          String(
+            variant.color ||
+              ""
+          ).toUpperCase(),
+
+        mrp:
+          priceData.mrp,
+
+        sellingPrice:
+          priceData.sellingPrice,
+
         quantity,
+
         totalPrice,
       });
     }
 
-    // 3. Handle Coupon Discounts
+    // =========================================================
+    // COUPON
+    // =========================================================
+
     let coupon = null;
     let discountAmount = 0;
 
-    if (couponCode && String(couponCode).trim() !== "") {
-      const normalizedCouponCode = String(couponCode).trim().toUpperCase();
+    if (
+      couponCode &&
+      String(couponCode).trim()
+    ) {
+      coupon =
+        await Coupon.findOne({
+          code:
+            String(
+              couponCode
+            )
+              .trim()
+              .toUpperCase(),
 
-      coupon = await Coupon.findOne({
-        code: normalizedCouponCode,
-        isActive: true,
-        isDeleted: false,
-      }).session(session);
+          isActive: true,
+          isDeleted: false,
+        }).session(session);
 
       if (!coupon) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Invalid coupon code" });
+        throw new Error(
+          "Invalid coupon code."
+        );
       }
 
-      const now = new Date();
-      if (coupon.startDate && now < coupon.startDate) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Coupon is not active yet" });
+      const now =
+        new Date();
+
+      if (
+        coupon.startDate &&
+        now < coupon.startDate
+      ) {
+        throw new Error(
+          "Coupon is not active yet."
+        );
       }
 
-      if (coupon.endDate && now > coupon.endDate) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Coupon has expired" });
+      if (
+        coupon.endDate &&
+        now > coupon.endDate
+      ) {
+        throw new Error(
+          "Coupon has expired."
+        );
       }
 
-      if (coupon.usageLimit != null && coupon.usedCount >= coupon.usageLimit) {
-        await session.abortTransaction();
-        return res.status(400).json({ success: false, message: "Coupon usage limit reached" });
+      if (
+        coupon.usageLimit != null &&
+        coupon.usedCount >=
+          coupon.usageLimit
+      ) {
+        throw new Error(
+          "Coupon usage limit reached."
+        );
       }
 
-      if (coupon.minimumOrderAmount != null && subtotal < coupon.minimumOrderAmount) {
-        await session.abortTransaction();
-        return res.status(400).json({
-          success: false,
-          message: `Minimum order amount for coupon is ₹${coupon.minimumOrderAmount}`,
-        });
+      if (
+        coupon.minimumOrderAmount !=
+          null &&
+        subtotal <
+          coupon.minimumOrderAmount
+      ) {
+        throw new Error(
+          `Minimum order amount is ₹${coupon.minimumOrderAmount}.`
+        );
       }
 
-      if (coupon.discountType === "PERCENTAGE") {
-        discountAmount = (subtotal * Number(coupon.discountValue || 0)) / 100;
-        if (coupon.maxDiscountAmount) {
-          discountAmount = Math.min(discountAmount, Number(coupon.maxDiscountAmount));
+      if (
+        coupon.discountType ===
+        "PERCENTAGE"
+      ) {
+        discountAmount =
+          subtotal *
+          Number(
+            coupon.discountValue ||
+              0
+          ) /
+          100;
+
+        if (
+          coupon.maxDiscountAmount
+        ) {
+          discountAmount =
+            Math.min(
+              discountAmount,
+              Number(
+                coupon.maxDiscountAmount
+              )
+            );
         }
-      } else if (coupon.discountType === "FIXED") {
-        discountAmount = Number(coupon.discountValue || 0);
+      } else if (
+        coupon.discountType ===
+        "FIXED"
+      ) {
+        discountAmount =
+          Number(
+            coupon.discountValue ||
+              0
+          );
       }
 
-      discountAmount = Math.max(0, Math.min(discountAmount, subtotal));
+      discountAmount =
+        Math.max(
+          0,
+          Math.min(
+            discountAmount,
+            subtotal
+          )
+        );
     }
 
-    const amountAfterDiscount = Math.max(subtotal - discountAmount, 0);
-    const shippingCharge = amountAfterDiscount >= 999 ? 0 : 50;
+    // =========================================================
+    // FINAL TOTAL
+    // =========================================================
+
+    const amountAfterDiscount =
+      Math.max(
+        subtotal -
+          discountAmount,
+        0
+      );
+
+    const shippingCharge =
+      amountAfterDiscount >=
+      999
+        ? 0
+        : 50;
+
     const taxAmount = 0;
-    const totalAmount = amountAfterDiscount + shippingCharge + taxAmount;
 
-    // 4. Create Order Record
-    const orderData = {
-      user: userId,
-      shippingAddress,
-      subtotal,
-      discountAmount,
-      shippingCharge,
-      taxAmount,
-      totalAmount,
-      coupon: coupon?._id || null,
-      couponCode: coupon?.code || "",
-      paymentMethod: normalizedPaymentMethod,
-      paymentStatus: "PENDING",
-      orderStatus: "PENDING",
-      customerNote: String(customerNote || "").trim(),
-    };
+    const totalAmount =
+      amountAfterDiscount +
+      shippingCharge +
+      taxAmount;
 
-    const createdOrders = await Order.create([orderData], { session });
-    const order = createdOrders[0];
-    const createdItems = [];
+    // =========================================================
+    // CREATE ORDER
+    // =========================================================
 
-    // 5. Create Order Items & Decrement Subdocument Stock
-    for (const item of orderItemsData) {
-      const createdOrderItems = await OrderItem.create([{ ...item, order: order._id }], { session });
-      const orderItem = createdOrderItems[0];
-      createdItems.push(orderItem._id);
+    const orderDocs =
+      await Order.create(
+        [
+          {
+            user: userId,
 
-      // Decrement stock using arrayFilters on nested subdocuments
-      const updatedProduct = await Product.findOneAndUpdate(
+            shippingAddress,
+
+            subtotal,
+
+            discountAmount,
+
+            shippingCharge,
+
+            taxAmount,
+
+            totalAmount,
+
+            coupon:
+              coupon?._id ||
+              null,
+
+            couponCode:
+              coupon?.code ||
+              "",
+
+            paymentMethod:
+              "COD",
+
+            paymentStatus:
+              "PENDING",
+
+            orderStatus:
+              "CONFIRMED",
+
+            confirmedAt:
+              new Date(),
+
+            customerNote:
+              String(
+                customerNote ||
+                  ""
+              ).trim(),
+          },
+        ],
         {
-          _id: item.product,
-          "variants._id": item.variantId,
-          "variants.sizes._id": item.sizeId,
-          "variants.sizes.stockQuantity": { $gte: item.quantity },
-        },
-        {
-          $inc: { "variants.$[variant].sizes.$[size].stockQuantity": -item.quantity },
-        },
-        {
-          new: true,
           session,
-          arrayFilters: [{ "variant._id": item.variantId }, { "size._id": item.sizeId }],
         }
       );
 
+    const order =
+      orderDocs[0];
+
+    const itemIds = [];
+
+    // =========================================================
+    // CREATE ITEMS + DEDUCT COD STOCK
+    // =========================================================
+
+    for (
+      const itemData of
+        orderItemsData
+    ) {
+      const itemDocs =
+        await OrderItem.create(
+          [
+            {
+              ...itemData,
+              order:
+                order._id,
+              itemStatus:
+                "CONFIRMED",
+            },
+          ],
+          {
+            session,
+          }
+        );
+
+      itemIds.push(
+        itemDocs[0]._id
+      );
+
+      const updatedProduct =
+        await Product.findOneAndUpdate(
+          {
+            _id:
+              itemData.product,
+
+            "variants._id":
+              itemData.variantId,
+
+            "variants.sizes._id":
+              itemData.sizeId,
+
+            "variants.sizes.stockQuantity":
+              {
+                $gte:
+                  itemData.quantity,
+              },
+          },
+          {
+            $inc: {
+              "variants.$[variant].sizes.$[size].stockQuantity":
+                -itemData.quantity,
+            },
+          },
+          {
+            new: true,
+            session,
+
+            arrayFilters: [
+              {
+                "variant._id":
+                  itemData.variantId,
+              },
+              {
+                "size._id":
+                  itemData.sizeId,
+              },
+            ],
+          }
+        );
+
       if (!updatedProduct) {
-        throw new Error(`Stock changed during order processing. Please try again.`);
+        throw new Error(
+          `Stock changed for ${itemData.productName}.`
+        );
       }
+
+      // Update variant quantity
+      const variant =
+        updatedProduct.variants.id(
+          itemData.variantId
+        );
+
+      if (variant) {
+        variant.quantity =
+          variant.sizes.reduce(
+            (
+              total,
+              size
+            ) =>
+              total +
+              Number(
+                size.stockQuantity ||
+                  0
+              ),
+            0
+          );
+      }
+
+      // Update availability
+      const totalStock =
+        updatedProduct.variants.reduce(
+          (
+            total,
+            currentVariant
+          ) =>
+            total +
+            Number(
+              currentVariant.quantity ||
+                0
+            ),
+          0
+        );
+
+      updatedProduct.availability =
+        totalStock > 0
+          ? "In Stock"
+          : "Out of Stock";
+
+      await updatedProduct.save({
+        session,
+      });
     }
 
-    order.items = createdItems;
-    await order.save({ session });
+    order.items =
+      itemIds;
+
+    await order.save({
+      session,
+    });
 
     if (coupon) {
-      await Coupon.findByIdAndUpdate(coupon._id, { $inc: { usedCount: 1 } }, { session });
+      await Coupon.findByIdAndUpdate(
+        coupon._id,
+        {
+          $inc: {
+            usedCount: 1,
+          },
+        },
+        {
+          session,
+        }
+      );
     }
 
     await session.commitTransaction();
 
-    // Send Notification
+    // =========================================================
+    // NOTIFICATION
+    // =========================================================
+
     try {
       await Notification.create({
         user: userId,
-        title: "Order Placed",
-        message: `Your order ${order.orderNumber} has been placed successfully.`,
-        type: "ORDER",
-        order: order._id,
-        redirectType: "ORDER",
-        redirectId: order._id,
+
+        title:
+          "Order Placed",
+
+        message:
+          `Your COD order ${order.orderNumber} has been placed successfully.`,
+
+        type:
+          "ORDER",
+
+        order:
+          order._id,
+
+        redirectType:
+          "ORDER",
+
+        redirectId:
+          order._id,
       });
-    } catch (nErr) {
-      console.error("Order Notification Error:", nErr);
+    } catch (notificationError) {
+      console.error(
+        "Notification Error:",
+        notificationError
+      );
     }
 
-    const populatedOrder = await Order.findById(order._id)
-      .populate("items")
-      .populate("coupon", "code discountType discountValue")
-      .populate("user", "name email mobileNumber");
+    const populatedOrder =
+      await Order.findById(
+        order._id
+      )
+        .populate("items")
+        .populate(
+          "coupon",
+          "code discountType discountValue"
+        )
+        .populate(
+          "user",
+          "name email mobileNumber"
+        );
 
     return res.status(201).json({
       success: true,
-      message: "Order created successfully",
-      data: populatedOrder,
+      message:
+        "COD order created successfully.",
+      data:
+        populatedOrder,
     });
   } catch (error) {
-    if (session.inTransaction()) {
+    if (
+      session.inTransaction()
+    ) {
       await session.abortTransaction();
     }
-    console.error("createOrder error:", error);
+
+    console.error(
+      "CREATE COD ORDER ERROR:",
+      error
+    );
+
     return res.status(500).json({
       success: false,
-      message: "Failed to create order",
-      error: error.message,
+      message:
+        error.message ||
+        "Failed to create order.",
     });
   } finally {
     await session.endSession();
   }
 };
 
-// ==========================================================
-// GENERATE & DOWNLOAD INVOICE PDF
-// GET /api/orders/:id/invoice
-// ==========================================================
-exports.generateInvoice = async (req, res) => {
+// =============================================================
+// GET USER OVERVIEW
+// =============================================================
+
+exports.getUserOverview = async (
+  req,
+  res
+) => {
   try {
-    const userId = getUserId(req);
+    const userId =
+      getUserId(req);
 
-    const query = { _id: req.params.id, isDeleted: false };
-    if (req.user?.role !== "admin") {
-      query.user = userId;
-    }
-
-    const order = await Order.findOne(query)
-      .populate("items")
-      .populate("user", "name email mobileNumber");
-
-    if (!order) {
-      return res.status(404).json({
+    if (!userId) {
+      return res.status(401).json({
         success: false,
-        message: "Order not found",
+        message:
+          "Authentication required.",
       });
     }
 
-    const doc = new PDFDocument({ margin: 50 });
+    const user =
+      await User.findById(
+        userId
+      ).select(
+        "name email mobileNumber isMobileVerified"
+      );
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=Invoice-${order.orderNumber}.pdf`
-    );
+    const recentOrders =
+      await Order.find({
+        user: userId,
+        isDeleted: false,
+      })
+        .populate("items")
+        .sort({
+          createdAt: -1,
+        })
+        .limit(2);
 
-    doc.pipe(res);
+    const defaultAddress =
+      await Address.findOne({
+        user: userId,
+        isActive: true,
+        isDefault: true,
+      });
 
-    // --- HEADER ---
-    doc
-      .fontSize(20)
-      .text("INVOICE", { align: "right" })
-      .fontSize(10)
-      .text(`Invoice No: INV-${order.orderNumber}`, { align: "right" })
-      .text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, { align: "right" })
-      .moveDown();
+    const wishlist =
+      await Wishlist.findOne({
+        user: userId,
+      }).populate({
+        path: "products",
+        limit: 4,
+        select:
+          "name variants availability",
+      });
 
-    // --- CUSTOMER DETAILS ---
-    doc
-      .fontSize(12)
-      .text("Tax Invoice / Bill of Supply", { underline: true })
-      .moveDown(0.5)
-      .fontSize(10)
-      .text(`Customer Name: ${order.shippingAddress.name}`)
-      .text(`Phone: ${order.shippingAddress.mobileNumber}`)
-      .text(
-        `Address: ${order.shippingAddress.addressLine1}, ${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.pincode}`
-      )
-      .moveDown();
+    return res.json({
+      success: true,
 
-    // --- TABLE HEADERS ---
-    const tableTop = 230;
-    doc
-      .font("Helvetica-Bold")
-      .text("Item", 50, tableTop)
-      .text("Qty", 280, tableTop)
-      .text("Price", 350, tableTop)
-      .text("Total", 450, tableTop);
+      data: {
+        userDetails:
+          user,
 
-    doc.moveTo(50, tableTop + 15).lineTo(550, tableTop + 15).stroke();
+        recentOrders,
 
-    // --- TABLE ROWS ---
-    let y = tableTop + 25;
-    doc.font("Helvetica");
+        savedAddress:
+          defaultAddress ||
+          null,
 
-    order.items.forEach((item) => {
-      doc
-        .text(`${item.productName} (${item.size})`, 50, y, { width: 220 })
-        .text(`${item.quantity}`, 280, y)
-        .text(`INR ${item.sellingPrice}`, 350, y)
-        .text(`INR ${item.totalPrice}`, 450, y);
-      y += 20;
+        savedForLater:
+          wishlist
+            ? wishlist.products
+            : [],
+      },
     });
-
-    doc.moveTo(50, y).lineTo(550, y).stroke();
-    y += 15;
-
-    // --- SUMMARY ---
-    doc.text(`Subtotal: INR ${order.subtotal}`, 350, y);
-    y += 15;
-    doc.text(`Discount: -INR ${order.discountAmount}`, 350, y);
-    y += 15;
-    doc.text(`Shipping: INR ${order.shippingCharge}`, 350, y);
-    y += 15;
-    doc
-      .font("Helvetica-Bold")
-      .text(`Total Amount: INR ${order.totalAmount}`, 350, y);
-
-    // --- FOOTER ---
-    doc
-      .font("Helvetica-Oblique")
-      .fontSize(10)
-      .text("Thank you for your business!", 50, 700, { align: "center" });
-
-    doc.end();
   } catch (error) {
-    console.error("Invoice Error:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to generate invoice",
-      error: error.message,
+      message:
+        "Failed to fetch account overview.",
+      error:
+        error.message,
     });
   }
 };
 
-// ==========================================================
-// CANCEL ORDER & RESTORE STOCK
-// PATCH /api/orders/cancel/:id
-// ==========================================================
-exports.cancelOrder = async (req, res) => {
-  try {
-    const userId = getUserId(req);
-    const { reason = "" } = req.body;
+// =============================================================
+// GET MY ORDERS
+// =============================================================
 
-    const query = { _id: req.params.id, isDeleted: false };
-    if (req.user?.role !== "admin") {
-      query.user = userId;
+exports.getMyOrders = async (
+  req,
+  res
+) => {
+  try {
+    const userId =
+      getUserId(req);
+
+    const orders =
+      await Order.find({
+        user: userId,
+        isDeleted: false,
+      })
+        .populate("items")
+        .populate(
+          "coupon",
+          "code discountType discountValue"
+        )
+        .sort({
+          createdAt: -1,
+        });
+
+    return res.json({
+      success: true,
+      count:
+        orders.length,
+      data:
+        orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message:
+        "Failed to fetch orders.",
+      error:
+        error.message,
+    });
+  }
+};
+
+// =============================================================
+// GET SINGLE ORDER
+// =============================================================
+
+exports.getOrderById = async (
+  req,
+  res
+) => {
+  try {
+    const userId =
+      getUserId(req);
+
+    const query = {
+      _id:
+        req.params.id,
+      isDeleted:
+        false,
+    };
+
+    if (
+      req.user?.role !==
+      "admin"
+    ) {
+      query.user =
+        userId;
     }
 
-    const order = await Order.findOne(query);
+    const order =
+      await Order.findOne(
+        query
+      )
+        .populate("items")
+        .populate(
+          "user",
+          "name email mobileNumber"
+        )
+        .populate(
+          "coupon",
+          "code discountType discountValue"
+        )
+        .populate(
+          "payment"
+        );
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order not found",
+        message:
+          "Order not found.",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data:
+        order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message:
+        "Failed to fetch order.",
+      error:
+        error.message,
+    });
+  }
+};
+
+// =============================================================
+// GET ALL ORDERS - ADMIN
+// =============================================================
+
+exports.getAllOrders = async (
+  req,
+  res
+) => {
+  try {
+    const {
+      status,
+      paymentStatus,
+      search,
+      page = 1,
+      limit = 20,
+    } = req.query;
+
+    const query = {
+      isDeleted: false,
+    };
+
+    if (status) {
+      query.orderStatus =
+        status;
+    }
+
+    if (paymentStatus) {
+      query.paymentStatus =
+        paymentStatus;
+    }
+
+    if (search) {
+      query.orderNumber = {
+        $regex:
+          search,
+        $options: "i",
+      };
+    }
+
+    const pageNumber =
+      Math.max(
+        1,
+        Number(page)
+      );
+
+    const limitNumber =
+      Math.max(
+        1,
+        Number(limit)
+      );
+
+    const skip =
+      (pageNumber - 1) *
+      limitNumber;
+
+    const [
+      orders,
+      total,
+    ] = await Promise.all([
+      Order.find(query)
+        .populate(
+          "user",
+          "name email mobileNumber"
+        )
+        .populate("items")
+        .populate("payment")
+        .sort({
+          createdAt: -1,
+        })
+        .skip(skip)
+        .limit(limitNumber),
+
+      Order.countDocuments(
+        query
+      ),
+    ]);
+
+    return res.json({
+      success: true,
+      data:
+        orders,
+
+      pagination: {
+        total,
+        page:
+          pageNumber,
+        limit:
+          limitNumber,
+        totalPages:
+          Math.ceil(
+            total /
+              limitNumber
+          ),
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message:
+        "Failed to fetch orders.",
+      error:
+        error.message,
+    });
+  }
+};
+
+// =============================================================
+// UPDATE ORDER STATUS - ADMIN
+// =============================================================
+
+exports.updateOrderStatus =
+  async (req, res) => {
+    try {
+      const {
+        orderStatus,
+      } = req.body;
+
+      const allowedStatuses = [
+        "PENDING",
+        "CONFIRMED",
+        "PACKED",
+        "PROCESSING",
+        "SHIPPED",
+        "OUT_FOR_DELIVERY",
+        "DELIVERED",
+        "CANCELLED",
+        "RETURN_REQUESTED",
+        "RETURNED",
+        "REFUND_REQUESTED",
+        "REFUNDED",
+      ];
+
+      if (
+        !allowedStatuses.includes(
+          orderStatus
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid order status.",
+        });
+      }
+
+      const updates = {
+        orderStatus,
+      };
+
+      if (
+        orderStatus ===
+        "CONFIRMED"
+      ) {
+        updates.confirmedAt =
+          new Date();
+      }
+
+      if (
+        orderStatus ===
+        "PACKED"
+      ) {
+        updates.packedAt =
+          new Date();
+      }
+
+      if (
+        orderStatus ===
+        "SHIPPED"
+      ) {
+        updates.shippedAt =
+          new Date();
+      }
+
+      if (
+        orderStatus ===
+        "DELIVERED"
+      ) {
+        updates.deliveredAt =
+          new Date();
+      }
+
+      if (
+        orderStatus ===
+        "CANCELLED"
+      ) {
+        updates.cancelledAt =
+          new Date();
+      }
+
+      const order =
+        await Order.findByIdAndUpdate(
+          req.params.id,
+          updates,
+          {
+            new: true,
+            runValidators:
+              true,
+          }
+        );
+
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Order not found.",
+        });
+      }
+
+      await OrderItem.updateMany(
+        {
+          order:
+            order._id,
+        },
+        {
+          itemStatus:
+            orderStatus,
+        }
+      );
+
+      await Notification.create({
+        user:
+          order.user,
+
+        title:
+          "Order Status Updated",
+
+        message:
+          `Your order ${order.orderNumber} status is now ${orderStatus}.`,
+
+        type:
+          "ORDER",
+
+        order:
+          order._id,
+
+        redirectType:
+          "ORDER",
+
+        redirectId:
+          order._id,
+      });
+
+      return res.json({
+        success: true,
+        message:
+          "Order status updated successfully.",
+        data:
+          order,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to update order status.",
+        error:
+          error.message,
+      });
+    }
+  };
+
+// =============================================================
+// UPDATE TRACKING
+// =============================================================
+
+exports.updateTracking =
+  async (req, res) => {
+    try {
+      const {
+        courierName,
+        trackingNumber,
+        trackingUrl,
+        expectedDeliveryDate,
+      } = req.body;
+
+      const order =
+        await Order.findByIdAndUpdate(
+          req.params.id,
+          {
+            courierName,
+            trackingNumber,
+            trackingUrl,
+            expectedDeliveryDate,
+          },
+          {
+            new: true,
+            runValidators:
+              true,
+          }
+        );
+
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Order not found.",
+        });
+      }
+
+      return res.json({
+        success: true,
+        message:
+          "Tracking details updated successfully.",
+        data:
+          order,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to update tracking details.",
+        error:
+          error.message,
+      });
+    }
+  };
+
+// =============================================================
+// CANCEL ORDER
+// =============================================================
+
+exports.cancelOrder = async (
+  req,
+  res
+) => {
+  const session =
+    await mongoose.startSession();
+
+  try {
+    const userId =
+      getUserId(req);
+
+    const {
+      reason = "",
+    } = req.body;
+
+    const query = {
+      _id:
+        req.params.id,
+      isDeleted:
+        false,
+    };
+
+    if (
+      req.user?.role !==
+      "admin"
+    ) {
+      query.user =
+        userId;
+    }
+
+    const order =
+      await Order.findOne(
+        query
+      );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Order not found.",
       });
     }
 
@@ -531,373 +1399,459 @@ exports.cancelOrder = async (req, res) => {
       "REFUNDED",
     ];
 
-    if (nonCancelableStatuses.includes(order.orderStatus)) {
+    if (
+      nonCancelableStatuses.includes(
+        order.orderStatus
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: `Order cannot be cancelled when status is ${order.orderStatus}`,
+        message:
+          `Order cannot be cancelled when status is ${order.orderStatus}.`,
       });
     }
 
-    order.orderStatus = "CANCELLED";
-    order.cancelledAt = new Date();
-    order.cancellationReason = reason;
+    session.startTransaction();
 
-    await order.save();
+    order.orderStatus =
+      "CANCELLED";
 
-    const items = await OrderItem.find({ order: order._id });
+    order.cancelledAt =
+      new Date();
 
-    // Restore stock to subdocuments
-    for (const item of items) {
-      await Product.findOneAndUpdate(
-        {
-          _id: item.product,
-          "variants._id": item.variantId,
-          "variants.sizes._id": item.sizeId,
-        },
-        {
-          $inc: {
-            "variants.$[variant].sizes.$[size].stockQuantity": item.quantity,
+    order.cancellationReason =
+      reason;
+
+    await order.save({
+      session,
+    });
+
+    const items =
+      await OrderItem.find({
+        order:
+          order._id,
+      }).session(session);
+
+    // =========================================================
+    // RESTORE STOCK ONLY IF STOCK WAS DEDUCTED
+    //
+    // COD = stock already deducted
+    // ONLINE PAID = stock already deducted
+    // ONLINE PENDING = stock NOT deducted
+    // =========================================================
+
+    const stockWasDeducted =
+      order.paymentMethod ===
+        "COD" ||
+      order.paymentStatus ===
+        "PAID";
+
+    if (
+      stockWasDeducted
+    ) {
+      for (
+        const item of items
+      ) {
+        await Product.findOneAndUpdate(
+          {
+            _id:
+              item.product,
+
+            "variants._id":
+              item.variantId,
+
+            "variants.sizes._id":
+              item.sizeId,
           },
+          {
+            $inc: {
+              "variants.$[variant].sizes.$[size].stockQuantity":
+                item.quantity,
+            },
+          },
+          {
+            session,
+
+            arrayFilters: [
+              {
+                "variant._id":
+                  item.variantId,
+              },
+              {
+                "size._id":
+                  item.sizeId,
+              },
+            ],
+          }
+        );
+
+        item.itemStatus =
+          "CANCELLED";
+
+        item.cancellationReason =
+          reason;
+
+        await item.save({
+          session,
+        });
+      }
+    } else {
+      await OrderItem.updateMany(
+        {
+          order:
+            order._id,
         },
         {
-          arrayFilters: [
-            { "variant._id": item.variantId },
-            { "size._id": item.sizeId },
-          ],
+          itemStatus:
+            "CANCELLED",
+          cancellationReason:
+            reason,
+        },
+        {
+          session,
+        }
+      );
+    }
+
+    await session.commitTransaction();
+
+    return res.json({
+      success: true,
+      message:
+        "Order cancelled successfully.",
+      data:
+        order,
+    });
+  } catch (error) {
+    if (
+      session.inTransaction()
+    ) {
+      await session.abortTransaction();
+    }
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Failed to cancel order.",
+      error:
+        error.message,
+    });
+  } finally {
+    await session.endSession();
+  }
+};
+
+// =============================================================
+// INVOICE
+// =============================================================
+
+exports.generateInvoice =
+  async (req, res) => {
+    try {
+      const userId =
+        getUserId(req);
+
+      const query = {
+        _id:
+          req.params.id,
+        isDeleted:
+          false,
+      };
+
+      if (
+        req.user?.role !==
+        "admin"
+      ) {
+        query.user =
+          userId;
+      }
+
+      const order =
+        await Order.findOne(
+          query
+        )
+          .populate("items")
+          .populate(
+            "user",
+            "name email mobileNumber"
+          );
+
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Order not found.",
+        });
+      }
+
+      const doc =
+        new PDFDocument({
+          margin: 50,
+        });
+
+      res.setHeader(
+        "Content-Type",
+        "application/pdf"
+      );
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=Invoice-${order.orderNumber}.pdf`
+      );
+
+      doc.pipe(res);
+
+      doc
+        .fontSize(20)
+        .text("INVOICE", {
+          align: "right",
+        });
+
+      doc
+        .fontSize(10)
+        .text(
+          `Invoice No: INV-${order.orderNumber}`,
+          {
+            align:
+              "right",
+          }
+        )
+        .text(
+          `Date: ${new Date(
+            order.createdAt
+          ).toLocaleDateString()}`,
+          {
+            align:
+              "right",
+          }
+        )
+        .moveDown();
+
+      doc
+        .fontSize(12)
+        .text(
+          "Tax Invoice / Bill of Supply",
+          {
+            underline:
+              true,
+          }
+        )
+        .moveDown(0.5);
+
+      doc
+        .fontSize(10)
+        .text(
+          `Customer Name: ${order.shippingAddress.name}`
+        )
+        .text(
+          `Phone: ${order.shippingAddress.mobileNumber}`
+        )
+        .text(
+          `Address: ${order.shippingAddress.addressLine1}, ${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.pincode}`
+        )
+        .moveDown();
+
+      const tableTop = 230;
+
+      doc
+        .font(
+          "Helvetica-Bold"
+        )
+        .text(
+          "Item",
+          50,
+          tableTop
+        )
+        .text(
+          "Qty",
+          280,
+          tableTop
+        )
+        .text(
+          "Price",
+          350,
+          tableTop
+        )
+        .text(
+          "Total",
+          450,
+          tableTop
+        );
+
+      doc
+        .moveTo(
+          50,
+          tableTop + 15
+        )
+        .lineTo(
+          550,
+          tableTop + 15
+        )
+        .stroke();
+
+      let y =
+        tableTop + 25;
+
+      doc.font(
+        "Helvetica"
+      );
+
+      order.items.forEach(
+        (item) => {
+          doc
+            .text(
+              `${item.productName} (${item.size})`,
+              50,
+              y,
+              {
+                width: 220,
+              }
+            )
+            .text(
+              `${item.quantity}`,
+              280,
+              y
+            )
+            .text(
+              `INR ${item.sellingPrice}`,
+              350,
+              y
+            )
+            .text(
+              `INR ${item.totalPrice}`,
+              450,
+              y
+            );
+
+          y += 20;
         }
       );
 
-      item.itemStatus = "CANCELLED";
-      item.cancellationReason = reason;
-      await item.save();
-    }
+      doc
+        .moveTo(
+          50,
+          y
+        )
+        .lineTo(
+          550,
+          y
+        )
+        .stroke();
 
-    return res.json({
-      success: true,
-      message: "Order cancelled successfully",
-      data: order,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to cancel order",
-      error: error.message,
-    });
-  }
-};
+      y += 15;
 
-// ==========================================================
-// GET USER DASHBOARD OVERVIEW
-// GET /api/orders/user-overview
-// ==========================================================
-exports.getUserOverview = async (req, res) => {
-  try {
-    const userId = getUserId(req);
+      doc.text(
+        `Subtotal: INR ${order.subtotal}`,
+        350,
+        y
+      );
 
-    if (!userId) {
-      return res.status(401).json({
+      y += 15;
+
+      doc.text(
+        `Discount: -INR ${order.discountAmount}`,
+        350,
+        y
+      );
+
+      y += 15;
+
+      doc.text(
+        `Shipping: INR ${order.shippingCharge}`,
+        350,
+        y
+      );
+
+      y += 15;
+
+      doc
+        .font(
+          "Helvetica-Bold"
+        )
+        .text(
+          `Total Amount: INR ${order.totalAmount}`,
+          350,
+          y
+        );
+
+      doc
+        .font(
+          "Helvetica-Oblique"
+        )
+        .fontSize(10)
+        .text(
+          "Thank you for your business!",
+          50,
+          700,
+          {
+            align:
+              "center",
+          }
+        );
+
+      doc.end();
+    } catch (error) {
+      console.error(
+        "Invoice Error:",
+        error
+      );
+
+      return res.status(500).json({
         success: false,
-        message: "Authentication required",
+        message:
+          "Failed to generate invoice.",
+        error:
+          error.message,
       });
     }
+  };
 
-    const user = await User.findById(userId).select("name email mobileNumber isMobileVerified");
+// =============================================================
+// DELETE ORDER
+// =============================================================
 
-    const recentOrders = await Order.find({
-      user: userId,
-      isDeleted: false,
-    })
-      .populate("items")
-      .sort({ createdAt: -1 })
-      .limit(2);
+exports.deleteOrder =
+  async (req, res) => {
+    try {
+      const userId =
+        getUserId(req);
 
-    const defaultAddress = await Address.findOne({
-      user: userId,
-      isActive: true,
-      isDefault: true,
-    });
+      const order =
+        await Order.findByIdAndUpdate(
+          req.params.id,
+          {
+            isDeleted:
+              true,
+            deletedAt:
+              new Date(),
+            deletedBy:
+              userId,
+          },
+          {
+            new: true,
+          }
+        );
 
-    const wishlist = await Wishlist.findOne({ user: userId }).populate({
-      path: "products",
-      limit: 4,
-      select: "name price sellingPrice images thumbnail",
-    });
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Order not found.",
+        });
+      }
 
-    return res.json({
-      success: true,
-      data: {
-        userDetails: user,
-        recentOrders,
-        savedAddress: defaultAddress || null,
-        savedForLater: wishlist ? wishlist.products : [],
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch account overview",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// GET MY ORDERS
-// GET /api/orders/my-orders
-// ==========================================================
-exports.getMyOrders = async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    const orders = await Order.find({
-      user: userId,
-      isDeleted: false,
-    })
-      .populate("items")
-      .populate("coupon", "code discountType discountValue")
-      .sort({ createdAt: -1 });
-
-    return res.json({
-      success: true,
-      count: orders.length,
-      data: orders,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// GET SINGLE ORDER BY ID
-// GET /api/orders/:id
-// ==========================================================
-exports.getOrderById = async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    const query = { _id: req.params.id, isDeleted: false };
-    if (req.user?.role !== "admin") {
-      query.user = userId;
-    }
-
-    const order = await Order.findOne(query)
-      .populate("items")
-      .populate("user", "name email mobileNumber")
-      .populate("coupon", "code discountType discountValue");
-
-    if (!order) {
-      return res.status(404).json({
+      return res.json({
+        success: true,
+        message:
+          "Order deleted successfully.",
+      });
+    } catch (error) {
+      return res.status(500).json({
         success: false,
-        message: "Order not found",
+        message:
+          "Failed to delete order.",
+        error:
+          error.message,
       });
     }
-
-    return res.json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch order",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// ADMIN: GET ALL ORDERS
-// GET /api/orders/admin/all
-// ==========================================================
-exports.getAllOrders = async (req, res) => {
-  try {
-    const { status, paymentStatus, search, page = 1, limit = 20 } = req.query;
-
-    const query = { isDeleted: false };
-
-    if (status) query.orderStatus = status;
-    if (paymentStatus) query.paymentStatus = paymentStatus;
-    if (search) query.orderNumber = { $regex: search,$options: "i" };
-
-    const skip = (Number(page) - 1) * Number(limit);
-
-    const [orders, total] = await Promise.all([
-      Order.find(query)
-        .populate("user", "name email mobileNumber")
-        .populate("items")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(Number(limit)),
-      Order.countDocuments(query),
-    ]);
-
-    return res.json({
-      success: true,
-      data: orders,
-      pagination: {
-        total,
-        page: Number(page),
-        limit: Number(limit),
-        totalPages: Math.ceil(total / Number(limit)),
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// ADMIN: UPDATE ORDER STATUS
-// PATCH /api/orders/status/:id
-// ==========================================================
-exports.updateOrderStatus = async (req, res) => {
-  try {
-    const { orderStatus } = req.body;
-
-    const allowedStatuses = [
-      "PENDING",
-      "CONFIRMED",
-      "PACKED",
-      "PROCESSING",
-      "SHIPPED",
-      "OUT_FOR_DELIVERY",
-      "DELIVERED",
-      "CANCELLED",
-      "RETURN_REQUESTED",
-      "RETURNED",
-      "REFUND_REQUESTED",
-      "REFUNDED",
-    ];
-
-    if (!allowedStatuses.includes(orderStatus)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid order status",
-      });
-    }
-
-    const updates = { orderStatus };
-    if (orderStatus === "CONFIRMED") updates.confirmedAt = new Date();
-    if (orderStatus === "PACKED") updates.packedAt = new Date();
-    if (orderStatus === "SHIPPED") updates.shippedAt = new Date();
-    if (orderStatus === "DELIVERED") updates.deliveredAt = new Date();
-    if (orderStatus === "CANCELLED") updates.cancelledAt = new Date();
-
-    const order = await Order.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    await OrderItem.updateMany({ order: order._id }, { itemStatus: orderStatus });
-
-    await Notification.create({
-      user: order.user,
-      title: "Order Status Updated",
-      message: `Your order ${order.orderNumber} status is now ${orderStatus}.`,
-      type: "ORDER",
-      order: order._id,
-      redirectType: "ORDER",
-      redirectId: order._id,
-    });
-
-    return res.json({
-      success: true,
-      message: "Order status updated successfully",
-      data: order,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to update order status",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// ADMIN: UPDATE TRACKING DETAILS
-// PATCH /api/orders/tracking/:id
-// ==========================================================
-exports.updateTracking = async (req, res) => {
-  try {
-    const { courierName, trackingNumber, trackingUrl, expectedDeliveryDate } = req.body;
-
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { courierName, trackingNumber, trackingUrl, expectedDeliveryDate },
-      { new: true, runValidators: true }
-    );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    return res.json({
-      success: true,
-      message: "Tracking details updated successfully",
-      data: order,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to update tracking details",
-      error: error.message,
-    });
-  }
-};
-
-// ==========================================================
-// ADMIN: DELETE ORDER (SOFT DELETE)
-// DELETE /api/orders/delete/:id
-// ==========================================================
-exports.deleteOrder = async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      {
-        isDeleted: true,
-        deletedAt: new Date(),
-        deletedBy: userId,
-      },
-      { new: true }
-    );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    return res.json({
-      success: true,
-      message: "Order deleted successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to delete order",
-      error: error.message,
-    });
-  }
-};
+  };

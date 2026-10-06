@@ -4,64 +4,50 @@ const mongoose = require("mongoose");
 // CART ITEM SCHEMA
 // ============================================================
 
-const cartItemSchema = new mongoose.Schema(
+const CartItemSchema = new mongoose.Schema(
   {
-    // ----------------------------------------------------------
-    // Product
-    // ----------------------------------------------------------
-
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
     },
 
-    variant: {
+    variantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ProductVariant",
       required: true,
     },
-    // ----------------------------------------------------------
-    // Quantity
-    // ----------------------------------------------------------
+
+    color: {
+      type: String,
+      required: true,
+      trim: true,
+      uppercase: true,
+    },
+
+    size: {
+      type: String,
+      required: true,
+      trim: true,
+      uppercase: true,
+    },
 
     quantity: {
       type: Number,
       required: true,
       min: 1,
-      default: 1,
     },
 
-    // ----------------------------------------------------------
-    // Original Product Price
-    // ----------------------------------------------------------
-
+    // Store the price used when item was added.
+    // Final payment should still be validated against Product.
     price: {
       type: Number,
       required: true,
       min: 0,
-      default: 0,
-    },
-
-    // ----------------------------------------------------------
-    // Discount Price
-    // ----------------------------------------------------------
-
-    discountPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-      default: 0,
-    },
-
-    selectedSize: {
-      type: String,
-      required: true,
     },
   },
   {
     _id: true,
-  },
+  }
 );
 
 // ============================================================
@@ -70,50 +56,28 @@ const cartItemSchema = new mongoose.Schema(
 
 const cartSchema = new mongoose.Schema(
   {
-    // ----------------------------------------------------------
-    // User
-    // ----------------------------------------------------------
-
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "UserModel",
+      ref: "User",
       required: true,
       unique: true,
       index: true,
     },
 
-    // ----------------------------------------------------------
-    // Cart Items
-    // ----------------------------------------------------------
-
     items: {
-      type: [cartItemSchema],
+      type: [CartItemSchema],
       default: [],
     },
-
-    // ----------------------------------------------------------
-    // Total Items
-    // ----------------------------------------------------------
 
     totalItems: {
       type: Number,
       default: 0,
-      min: 0,
     },
-
-    // ----------------------------------------------------------
-    // Total Amount
-    // ----------------------------------------------------------
 
     totalAmount: {
       type: Number,
       default: 0,
-      min: 0,
     },
-
-    // ----------------------------------------------------------
-    // Cart Status
-    // ----------------------------------------------------------
 
     status: {
       type: String,
@@ -123,11 +87,7 @@ const cartSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
-
-// ============================================================
-// EXPORT
-// ============================================================
 
 module.exports = mongoose.model("Cart", cartSchema);

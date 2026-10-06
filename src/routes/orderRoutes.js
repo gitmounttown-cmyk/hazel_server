@@ -1,5 +1,11 @@
 const express = require("express");
-const router = express.Router();
+
+const router =
+  express.Router();
+
+const {
+  verifyToken,
+} = require("../middleware/authMiddleware");
 
 const {
   createOrder,
@@ -14,34 +20,79 @@ const {
   deleteOrder,
 } = require("../controllers/orderController");
 
-const { verifyToken } = require("../middleware/authMiddleware");
-
 // =============================================================
 // CUSTOMER ROUTES
 // =============================================================
 
-router.get("/user-overview", verifyToken, getUserOverview);
+// User dashboard
+router.get(
+  "/user-overview",
+  verifyToken,
+  getUserOverview
+);
 
-router.post("/create", verifyToken, createOrder);
+// COD order
+router.post(
+  "/create",
+  verifyToken,
+  createOrder
+);
 
-router.get("/my-orders", verifyToken, getMyOrders);
+// User orders
+router.get(
+  "/my-orders",
+  verifyToken,
+  getMyOrders
+);
 
-router.patch("/cancel/:id", verifyToken, cancelOrder);
+// Cancel order
+router.patch(
+  "/cancel/:id",
+  verifyToken,
+  cancelOrder
+);
 
-router.get("/:id/invoice", verifyToken, generateInvoice);
+// Invoice
+router.get(
+  "/:id/invoice",
+  verifyToken,
+  generateInvoice
+);
 
-router.get("/:id", verifyToken, getOrderById);
+// Single order
+router.get(
+  "/:id",
+  verifyToken,
+  getOrderById
+);
 
 // =============================================================
 // ADMIN ROUTES
 // =============================================================
 
-router.get("/admin/all", verifyToken, getAllOrders);
+router.get(
+  "/admin/all",
+  verifyToken,
+  getAllOrders
+);
 
-router.patch("/status/:id", verifyToken, updateOrderStatus);
+router.patch(
+  "/status/:id",
+  verifyToken,
+  updateOrderStatus
+);
 
-router.patch("/tracking/:id", verifyToken, updateTracking);
+router.patch(
+  "/tracking/:id",
+  verifyToken,
+  updateTracking
+);
 
-router.delete("/delete/:id", verifyToken, deleteOrder);
+router.delete(
+  "/delete/:id",
+  verifyToken,
+  deleteOrder
+);
 
-module.exports = router;
+module.exports =
+  router;

@@ -8,45 +8,45 @@ const {
   updateCartQuantity,
   removeFromCart,
   clearCart,
-  getCartCount,
 } = require("../controllers/cartController");
 
-const { verifyToken } = require("../middleware/authMiddleware");
+const {
+  verifyToken,
+} = require("../middleware/authMiddleware");
 
-// ============================================================
-// ADD PRODUCT TO CART
-// ============================================================
+// Add
+router.post(
+  "/add",
+  verifyToken,
+  addToCart
+);
 
-router.post("/add", verifyToken, addToCart);
+// Get
+router.get(
+  "/all",
+  verifyToken,
+  getCart
+);
 
-// ============================================================
-// GET CART
-// ============================================================
+// Update
+router.put(
+  "/update",
+  verifyToken,
+  updateCartQuantity
+);
 
-router.get("/all", verifyToken, getCart);
+// Remove
+router.delete(
+  "/remove",
+  verifyToken,
+  removeFromCart
+);
 
-// ============================================================
-// GET CART COUNT
-// ============================================================
-
-router.get("/count", verifyToken, getCartCount);
-
-// ============================================================
-// UPDATE CART QUANTITY
-// ============================================================
-
-router.put("/update/:itemId", verifyToken, updateCartQuantity);
-
-// ============================================================
-// REMOVE CART ITEM
-// ============================================================
-
-router.delete("/remove/:itemId", verifyToken, removeFromCart);
-
-// ============================================================
-// CLEAR CART
-// ============================================================
-
-router.delete("/clear", verifyToken, clearCart);
+// Clear
+router.delete(
+  "/clear",
+  verifyToken,
+  clearCart
+);
 
 module.exports = router;

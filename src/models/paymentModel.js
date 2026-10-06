@@ -2,35 +2,61 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
+    // =========================================================
+    // USER
+    // =========================================================
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false,
+      required: true,
+      index: true,
     },
 
-    // Razorpay Order ID
-    orderId: {
+    // =========================================================
+    // HAZEL ECOMMERCE ORDER
+    // =========================================================
+    ecommerceOrder: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+      required: true,
+      index: true,
+    },
+
+    // =========================================================
+    // RAZORPAY ORDER ID
+    // =========================================================
+    razorpayOrderId: {
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
 
-    // Razorpay Payment ID
-    paymentId: {
+    // =========================================================
+    // RAZORPAY PAYMENT ID
+    // =========================================================
+    razorpayPaymentId: {
       type: String,
       default: null,
+      sparse: true,
+      index: true,
     },
 
-    // Razorpay payment signature
+    // =========================================================
+    // RAZORPAY SIGNATURE
+    // =========================================================
     signature: {
       type: String,
       default: null,
     },
 
-    // Customer-facing amount in INR
+    // =========================================================
+    // AMOUNT
+    // =========================================================
     amount: {
       type: Number,
       required: true,
+      min: 1,
     },
 
     currency: {
@@ -39,15 +65,41 @@ const paymentSchema = new mongoose.Schema(
       uppercase: true,
     },
 
+    // =========================================================
+    // PAYMENT STATUS
+    // =========================================================
     status: {
       type: String,
-      enum: ["created", "paid", "failed"],
+      enum: [
+        "created",
+        "paid",
+        "failed",
+        "cancelled",
+        "refunded",
+      ],
       default: "created",
+      index: true,
     },
 
+    // =========================================================
+    // RECEIPT
+    // =========================================================
     receipt: {
       type: String,
       required: true,
+    },
+
+    // =========================================================
+    // REFUND
+    // =========================================================
+    refundId: {
+      type: String,
+      default: null,
+    },
+
+    refundAmount: {
+      type: Number,
+      default: 0,
     },
   },
   {
@@ -55,4 +107,6 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Payment", paymentSchema);
+module.exports =
+  mongoose.models.Payment ||
+  mongoose.model("Payment", paymentSchema);

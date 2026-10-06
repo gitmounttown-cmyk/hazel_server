@@ -145,7 +145,14 @@ const orderSchema = new mongoose.Schema(
     // =========================================================
     paymentMethod: {
       type: String,
-      enum: ["COD", "ONLINE", "UPI", "CARD", "NET_BANKING", "WALLET"],
+      enum: [
+        "COD",
+        "ONLINE",
+        "UPI",
+        "CARD",
+        "NET_BANKING",
+        "WALLET",
+      ],
       required: true,
       default: "COD",
     },
@@ -161,6 +168,28 @@ const orderSchema = new mongoose.Schema(
         "PARTIALLY_REFUNDED",
       ],
       default: "PENDING",
+      index: true,
+    },
+
+    // =========================================================
+    // RAZORPAY REFERENCES
+    // =========================================================
+    razorpayOrderId: {
+      type: String,
+      default: "",
+      index: true,
+    },
+
+    razorpayPaymentId: {
+      type: String,
+      default: "",
+      index: true,
+    },
+
+    payment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+      default: null,
     },
 
     // =========================================================
@@ -187,7 +216,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     // =========================================================
-    // DELIVERY & TIMESTAMPS
+    // DELIVERY TIMESTAMPS
     // =========================================================
     confirmedAt: {
       type: Date,
@@ -217,12 +246,6 @@ const orderSchema = new mongoose.Schema(
     cancelledAt: {
       type: Date,
       default: null,
-    },
-
-    cancellationReason: {
-      type: String,
-      trim: true,
-      default: "",
     },
 
     // =========================================================
@@ -287,17 +310,21 @@ const orderSchema = new mongoose.Schema(
 );
 
 // =============================================================
-// ORDER NUMBER GENERATOR
+// ORDER NUMBER
 // =============================================================
-orderSchema.pre("save", async function () {
+
+orderSchema.pre("save", function () {
   if (!this.isNew || this.orderNumber) {
-    return;
+    return ;
   }
 
   const timestamp = Date.now();
   const random = Math.floor(1000 + Math.random() * 9000);
+
   this.orderNumber = `HZL-${timestamp}-${random}`;
+
 });
 
 module.exports =
-  mongoose.models.Order || mongoose.model("Order", orderSchema);
+  mongoose.models.Order ||
+  mongoose.model("Order", orderSchema);

@@ -19,10 +19,11 @@ const orderItemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
+      index: true,
     },
 
     // =========================================================
-    // VARIANT & SIZE IDs (Subdocuments within Product)
+    // VARIANT & SIZE
     // =========================================================
     variantId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -68,7 +69,7 @@ const orderItemSchema = new mongoose.Schema(
     },
 
     // =========================================================
-    // PRICE
+    // PRICE SNAPSHOT
     // =========================================================
     mrp: {
       type: Number,
