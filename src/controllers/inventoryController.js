@@ -1,185 +1,584 @@
 const Inventory = require("../models/inventoryModel");
-const StockHistory = require("../models/stockHistoryModel");
 const Product = require("../models/productModel");
 
-const updateStockStatus = (inventory) => {
-  inventory.availableQuantity = Math.max(0, inventory.quantity - inventory.reservedQuantity);
-  if (inventory.availableQuantity <= 0) {
-    inventory.stockStatus = "OUT_OF_STOCK";
-  } else if (inventory.availableQuantity <= inventory.lowStockThreshold) {
-    inventory.stockStatus = "LOW_STOCK";
-  } else {
-    inventory.stockStatus = "IN_STOCK";
-  }
-};
+const {
+  syncProductInventory,
+  syncAllProductInventory,
+  updateProductSizeStock,
+} = require("../services/inventoryService");
 
-exports.getAllInventory = async (req, res) => {
+// ============================================================
+// GET INVENTORY SUMMARY
+// ============================================================
+
+exports.getInventorySummary = async (
+  req,
+  res
+) => {
   try {
-    const { page = 1, limit = 20, search = "", status } = req.query;
-    const skip = (Math.max(1, Number(page)) - 1) * Number(limit);
-    const filter = { isDeleted: false };
-
-    if (status) filter.stockStatus = status.toUpperCase();
-
-    if (search) {
-      const products = await Product.find({
-        isDeleted: { $ne: true },
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { sku: { $regex: search, $options: "i" } },
-        ],
+    // Only count inventory belonging to non-deleted products
+    const activeProducts =
+      await Product.find({
+        isDeleted: {
+          $ne: true,
+        },
       }).select("_id");
 
-      filter.productId = { $in: products.map((p) => p._id) };
-    }
+    const productIds =
+      activeProducts.map(
+        (product) => product._id
+      );
 
-    const [inventory, total] = await Promise.all([
-      Inventory.find(filter)
-        .populate("productId", "name sku price images")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(Number(limit)),
-      Inventory.countDocuments(filter),
-    ]);
-
-    return res.status(200).json({
-      success: true,
-      data: inventory,
-      pagination: {
-        page: Number(page),
-        limit: Number(limit),
-        total,
-        totalPages: Math.ceil(total / Number(limit)),
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-exports.getStockOverview = async (req, res) => {
-  try {
-    const [totalProducts, inStock, lowStock, outOfStock, stockData] = await Promise.all([
-      Inventory.countDocuments({ isDeleted: false, isActive: true }),
-      Inventory.countDocuments({ isDeleted: false, isActive: true, stockStatus: "IN_STOCK" }),
-      Inventory.countDocuments({ isDeleted: false, isActive: true, stockStatus: "LOW_STOCK" }),
-      Inventory.countDocuments({ isDeleted: false, isActive: true, stockStatus: "OUT_OF_STOCK" }),
-      Inventory.aggregate([
-        { $match: { isDeleted: false, isActive: true } },
-        {
-          $group: {
-            _id: null,
-            totalQuantity: { $sum: "$quantity" },
-            totalAvailableQuantity: { $sum: "$availableQuantity" },
-            totalReservedQuantity: { $sum: "$reservedQuantity" },
-            totalStockValue: { $sum: { $multiply: ["$quantity", "$purchasePrice"] } },
-            totalSellingValue: { $sum: { $multiply: ["$quantity", "$sellingPrice"] } },
-          },
+    const totalProducts =
+      await Inventory.countDocuments({
+        productId: {
+          $in: productIds,
         },
-      ]),
-    ]);
+      });
 
-    const summary = stockData[0] || {};
+    const lowStockItems =
+      await Inventory.countDocuments({
+        productId: {
+          $in: productIds,
+        },
+
+        stockStatus:
+          "LOW_STOCK",
+      });
+
+    const outOfStockItems =
+      await Inventory.countDocuments({
+        productId: {
+          $in: productIds,
+        },
+
+        stockStatus:
+          "OUT_OF_STOCK",
+      });
+
+    const inStockItems =
+      await Inventory.countDocuments({
+        productId: {
+          $in: productIds,
+        },
+
+        stockStatus:
+          "IN_STOCK",
+      });
+
     return res.status(200).json({
       success: true,
+
       data: {
         totalProducts,
-        inStock,
-        lowStock,
-        outOfStock,
-        totalQuantity: summary.totalQuantity || 0,
-        totalAvailableQuantity: summary.totalAvailableQuantity || 0,
-        totalReservedQuantity: summary.reservedQuantity || 0,
-        totalStockValue: summary.totalStockValue || 0,
-        totalSellingValue: summary.totalSellingValue || 0,
+        lowStockItems,
+        outOfStockItems,
+        inStockItems,
       },
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
+    console.error(
+      "getInventorySummary error:",
+      error
+    );
 
-exports.getLowStock = async (req, res) => {
-  try {
-    const lowStock = await Inventory.find({
-      isDeleted: false,
-      isActive: true,
-      $expr: {
-        $and: [
-          { $gt: ["$availableQuantity", 0] },
-          { $lte: ["$availableQuantity", "$lowStockThreshold"] },
-        ],
-      },
-    })
-      .populate("productId", "name sku price images")
-      .sort({ availableQuantity: 1 });
+    return res.status(500).json({
+      success: false,
 
-    return res.status(200).json({ success: true, count: lowStock.length, data: lowStock });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-exports.stockIn = async (req, res) => {
-  try {
-    const { productId, quantity, reason = "Stock added" } = req.body;
-    const inventory = await Inventory.findOne({ productId, isDeleted: false });
-    if (!inventory) return res.status(404).json({ success: false, message: "Inventory not found" });
-
-    const addQuantity = Number(quantity);
-    const previousQuantity = inventory.quantity;
-    inventory.quantity += addQuantity;
-    inventory.lastStockIn = new Date();
-    updateStockStatus(inventory);
-    await inventory.save();
-
-    await StockHistory.create({
-      productId,
-      inventoryId: inventory._id,
-      type: "STOCK_IN",
-      quantity: addQuantity,
-      previousQuantity,
-      newQuantity: inventory.quantity,
-      reason,
-      createdBy: req.user?.id || req.user?._id || null,
+      message:
+        error.message ||
+        "Failed to get inventory summary",
     });
-
-    return res.status(200).json({ success: true, data: inventory });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-exports.stockOut = async (req, res) => {
-  try {
-    const { productId, quantity, reason = "Stock removed" } = req.body;
-    const inventory = await Inventory.findOne({ productId, isDeleted: false });
-    if (!inventory) return res.status(404).json({ success: false, message: "Inventory not found" });
+// ============================================================
+// GET ALL INVENTORY
+// ============================================================
 
-    const removeQuantity = Number(quantity);
-    if (removeQuantity > inventory.availableQuantity) {
-      return res.status(400).json({ success: false, message: "Insufficient stock" });
+exports.getAllInventory = async (
+  req,
+  res
+) => {
+  try {
+    const page = Math.max(
+      1,
+      parseInt(
+        req.query.page,
+        10
+      ) || 1
+    );
+
+    const limit = Math.max(
+      1,
+      parseInt(
+        req.query.limit,
+        10
+      ) || 20
+    );
+
+    const skip =
+      (page - 1) * limit;
+
+    const filter = {};
+
+    // ----------------------------------------------------------
+    // STATUS
+    // ----------------------------------------------------------
+
+    if (req.query.status) {
+      filter.stockStatus =
+        req.query.status;
     }
 
-    const previousQuantity = inventory.quantity;
-    inventory.quantity -= removeQuantity;
-    inventory.lastStockOut = new Date();
-    updateStockStatus(inventory);
-    await inventory.save();
+    // ----------------------------------------------------------
+    // SEARCH
+    // ----------------------------------------------------------
 
-    await StockHistory.create({
-      productId,
-      inventoryId: inventory._id,
-      type: "STOCK_OUT",
-      quantity: removeQuantity,
-      previousQuantity,
-      newQuantity: inventory.quantity,
-      reason,
-      createdBy: req.user?.id || req.user?._id || null,
+    if (req.query.search) {
+      const search =
+        req.query.search.trim();
+
+      if (search) {
+        const matchingProducts =
+          await Product.find({
+            isDeleted: {
+              $ne: true,
+            },
+
+            $or: [
+              {
+                name: {
+                  $regex: search,
+                  $options: "i",
+                },
+              },
+
+              {
+                "variants.color": {
+                  $regex: search,
+                  $options: "i",
+                },
+              },
+
+              {
+                "variants.sizes.sku": {
+                  $regex: search,
+                  $options: "i",
+                },
+              },
+
+              {
+                "variants.sizes.barcode": {
+                  $regex: search,
+                  $options: "i",
+                },
+              },
+            ],
+          }).select("_id");
+
+        const productIds =
+          matchingProducts.map(
+            (product) =>
+              product._id
+          );
+
+        filter.productId = {
+          $in: productIds,
+        };
+      }
+    }
+
+    // ----------------------------------------------------------
+    // COUNT
+    // ----------------------------------------------------------
+
+    const total =
+      await Inventory.countDocuments(
+        filter
+      );
+
+    // ----------------------------------------------------------
+    // DATA
+    // ----------------------------------------------------------
+
+    const inventory =
+      await Inventory.find(filter)
+        .populate({
+          path: "productId",
+
+          select:
+            "name categoryId brandId variants isActive isDeleted",
+
+          populate: [
+            {
+              path: "categoryId",
+              select: "name",
+            },
+
+            {
+              path: "brandId",
+              select: "name",
+            },
+          ],
+        })
+
+        .sort({
+          updatedAt: -1,
+        })
+
+        .skip(skip)
+
+        .limit(limit)
+
+        .lean();
+
+    return res.status(200).json({
+      success: true,
+
+      count:
+        inventory.length,
+
+      total,
+
+      page,
+
+      pages:
+        Math.ceil(
+          total / limit
+        ) || 1,
+
+      data: inventory,
     });
-
-    return res.status(200).json({ success: true, data: inventory });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    console.error(
+      "getAllInventory error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "Failed to get inventory",
+    });
+  }
+};
+
+// ============================================================
+// GET INVENTORY BY ID
+// ============================================================
+
+exports.getInventoryById = async (
+  req,
+  res
+) => {
+  try {
+    const {
+      inventoryId,
+    } = req.params;
+
+    const inventory =
+      await Inventory.findById(
+        inventoryId
+      ).populate({
+        path: "productId",
+
+        populate: [
+          {
+            path: "categoryId",
+            select: "name",
+          },
+
+          {
+            path: "brandId",
+            select: "name",
+          },
+        ],
+      });
+
+    if (!inventory) {
+      return res.status(404).json({
+        success: false,
+
+        message:
+          "Inventory not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+
+      data: inventory,
+    });
+  } catch (error) {
+    console.error(
+      "getInventoryById error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "Failed to get inventory",
+    });
+  }
+};
+
+// ============================================================
+// GET INVENTORY BY PRODUCT
+// ============================================================
+
+exports.getInventoryByProduct =
+  async (req, res) => {
+    try {
+      const {
+        productId,
+      } = req.params;
+
+      const inventory =
+        await Inventory.findOne({
+          productId,
+        }).populate(
+          "productId"
+        );
+
+      if (!inventory) {
+        return res.status(404).json({
+          success: false,
+
+          message:
+            "Inventory not found",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+
+        data: inventory,
+      });
+    } catch (error) {
+      console.error(
+        "getInventoryByProduct error:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+
+        message:
+          error.message ||
+          "Failed to get inventory",
+      });
+    }
+  };
+
+// ============================================================
+// UPDATE STOCK
+// ============================================================
+
+exports.updateStock = async (
+  req,
+  res
+) => {
+  try {
+    const {
+      inventoryId,
+    } = req.params;
+
+    const {
+      variantId,
+      sizeId,
+      stockQuantity,
+    } = req.body;
+
+    // ----------------------------------------------------------
+    // VALIDATION
+    // ----------------------------------------------------------
+
+    if (!variantId || !sizeId) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "variantId and sizeId are required",
+      });
+    }
+
+    const quantity =
+      Number(stockQuantity);
+
+    if (
+      !Number.isFinite(quantity) ||
+      quantity < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "stockQuantity must be a valid number >= 0",
+      });
+    }
+
+    // ----------------------------------------------------------
+    // FIND INVENTORY
+    // ----------------------------------------------------------
+
+    const inventory =
+      await Inventory.findById(
+        inventoryId
+      );
+
+    if (!inventory) {
+      return res.status(404).json({
+        success: false,
+
+        message:
+          "Inventory not found",
+      });
+    }
+
+    // ----------------------------------------------------------
+    // FIND PRODUCT
+    // ----------------------------------------------------------
+
+    const product =
+      await Product.findById(
+        inventory.productId
+      );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+
+        message:
+          "Product not found",
+      });
+    }
+
+    // ----------------------------------------------------------
+    // UPDATE PRODUCT STOCK
+    // ----------------------------------------------------------
+
+    const result =
+      await updateProductSizeStock({
+        product,
+        variantId,
+        sizeId,
+        stockQuantity:
+          quantity,
+      });
+
+    return res.status(200).json({
+      success: true,
+
+      message:
+        "Stock updated successfully",
+
+      data: {
+        inventory:
+          result.inventory,
+
+        product:
+          result.product,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "updateStock error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "Failed to update stock",
+    });
+  }
+};
+
+// ============================================================
+// SYNC ONE PRODUCT
+// ============================================================
+
+exports.syncInventory = async (
+  req,
+  res
+) => {
+  try {
+    const {
+      productId,
+    } = req.params;
+
+    const inventory =
+      await syncProductInventory(
+        productId,
+        {
+          notify: true,
+        }
+      );
+
+    return res.status(200).json({
+      success: true,
+
+      message:
+        "Inventory synchronized successfully",
+
+      data: inventory,
+    });
+  } catch (error) {
+    console.error(
+      "syncInventory error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "Failed to synchronize inventory",
+    });
+  }
+};
+
+// ============================================================
+// SYNC ALL PRODUCTS
+// ============================================================
+
+exports.syncAllInventory = async (
+  req,
+  res
+) => {
+  try {
+    const result =
+      await syncAllProductInventory();
+
+    return res.status(200).json({
+      success: true,
+
+      message:
+        "All inventory synchronized successfully",
+
+      data: result,
+    });
+  } catch (error) {
+    console.error(
+      "syncAllInventory error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        error.message ||
+        "Failed to synchronize all inventory",
+    });
   }
 };

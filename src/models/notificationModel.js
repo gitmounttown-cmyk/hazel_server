@@ -1,110 +1,120 @@
 const mongoose = require("mongoose");
 
-const notificationSchema = new mongoose.Schema(
+const InventorySchema = new mongoose.Schema(
   {
-    // =========================================================
-    // USER
-    // =========================================================
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      index: true,
-    },
+    // ============================================================
+    // PRODUCT
+    // ============================================================
 
-    // =========================================================
-    // NOTIFICATION
-    // =========================================================
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    message: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    type: {
-      type: String,
-      enum: [
-        "ORDER",
-        "PAYMENT",
-        "DELIVERY",
-        "OFFER",
-        "COUPON",
-        "REVIEW",
-        "SYSTEM",
-        "OTHER",
-      ],
-      default: "SYSTEM",
-      index: true,
-    },
-
-    // =========================================================
-    // OPTIONAL REFERENCES
-    // =========================================================
-    order: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
-      default: null,
-    },
-
-    product: {
+    productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
-      default: null,
-    },
-
-    // =========================================================
-    // REDIRECT
-    // =========================================================
-    redirectType: {
-      type: String,
-      enum: [
-        "NONE",
-        "ORDER",
-        "PRODUCT",
-        "CATEGORY",
-        "COUPON",
-        "URL",
-      ],
-      default: "NONE",
-    },
-
-    redirectId: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: null,
-    },
-
-    redirectUrl: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-
-    // =========================================================
-    // READ STATUS
-    // =========================================================
-    isRead: {
-      type: Boolean,
-      default: false,
+      required: true,
+      unique: true,
       index: true,
     },
 
-    readAt: {
+    // ============================================================
+    // STOCK
+    // ============================================================
+
+    quantity: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    reservedQuantity: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    availableQuantity: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    // ============================================================
+    // STOCK SETTINGS
+    // ============================================================
+
+    lowStockThreshold: {
+      type: Number,
+      default: 10,
+      min: 0,
+    },
+
+    reorderQuantity: {
+      type: Number,
+      default: 10,
+      min: 0,
+    },
+
+    // ============================================================
+    // PRICE
+    // ============================================================
+
+    purchasePrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    sellingPrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    // ============================================================
+    // STATUS
+    // ============================================================
+
+    stockStatus: {
+      type: String,
+      enum: [
+        "IN_STOCK",
+        "LOW_STOCK",
+        "OUT_OF_STOCK",
+      ],
+      default: "OUT_OF_STOCK",
+      index: true,
+    },
+
+    // ============================================================
+    // STOCK MOVEMENT
+    // ============================================================
+
+    lastStockIn: {
       type: Date,
       default: null,
     },
 
-    // =========================================================
-    // SOFT DELETE
-    // =========================================================
+    lastStockOut: {
+      type: Date,
+      default: null,
+    },
+
+    // ============================================================
+    // STATUS
+    // ============================================================
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
     isDeleted: {
       type: Boolean,
       default: false,
+      index: true,
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {
@@ -112,6 +122,24 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
-module.exports =
-  mongoose.models.Notification ||
-  mongoose.model("Notification", notificationSchema);
+// ============================================================
+// INDEXES
+// ============================================================
+
+InventorySchema.index({
+  stockStatus: 1,
+  isDeleted: 1,
+});
+
+InventorySchema.index({
+  availableQuantity: 1,
+});
+
+InventorySchema.index({
+  createdAt: -1,
+});
+
+module.exports = mongoose.model(
+  "Inventory",
+  InventorySchema
+);
