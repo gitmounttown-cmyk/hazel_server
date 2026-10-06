@@ -1,50 +1,21 @@
+const mongoose = require("mongoose");
+
 const Inventory = require("../models/inventoryModel");
 const Product = require("../models/productModel");
-const Notification = require("../models/notificationModel");
 
 // ============================================================
-// GLOBAL INVENTORY SETTINGS
+// UPDATE INVENTORY STATUS
 // ============================================================
 
-const LOW_STOCK_THRESHOLD = 10;
-
-// ============================================================
-// CALCULATE TOTAL PRODUCT STOCK
-// ============================================================
-
-const calculateProductStock = (product) => {
-  let totalQuantity = 0;
-
-  if (!product || !Array.isArray(product.variants)) {
-    return 0;
-  }
-
-  product.variants.forEach((variant) => {
-    if (Array.isArray(variant.sizes)) {
-      variant.sizes.forEach((size) => {
-        totalQuantity += Number(size.stockQuantity) || 0;
-      });
-    } else {
-      totalQuantity += Number(variant.quantity) || 0;
-    }
-  });
-
-  return totalQuantity;
-};
-
-// ============================================================
-// GET STOCK STATUS
-// ============================================================
-
-const getStockStatus = (
-  availableQuantity,
-  threshold = LOW_STOCK_THRESHOLD
+const calculateStockStatus = (
+  availableStock,
+  lowStockThreshold
 ) => {
-  if (availableQuantity <= 0) {
+  if (availableStock <= 0) {
     return "OUT_OF_STOCK";
   }
 
-  if (availableQuantity <= threshold) {
+  if (availableStock <= lowStockThreshold) {
     return "LOW_STOCK";
   }
 
@@ -52,345 +23,165 @@ const getStockStatus = (
 };
 
 // ============================================================
-// BUILD INVENTORY VARIANTS
+// RECALCULATE PRODUCT QUANTITY
 // ============================================================
 
-const buildInventoryVariants = (product) => {
-  if (!product || !Array.isArray(product.variants)) {
-    return [];
-  }
+const calculateProductStock = (product) => {
+  let totalStock = 0;
 
-  return product.variants.map((variant) => ({
-    variantId: variant._id,
-
-    color: variant.color || "",
-
-    sizes: Array.isArray(variant.sizes)
-      ? variant.sizes.map((size) => ({
-          sizeId: size._id,
-          size: size.size || "",
-          sku: size.sku || "",
-          barcode: size.barcode || "",
-          stockQuantity:
-            Number(size.stockQuantity) || 0,
-        }))
-      : [],
-  }));
-};
-
-// ============================================================
-// CREATE LOW STOCK NOTIFICATION
-// ============================================================
-
-const createLowStockNotification = async ({
-  product,
-  inventory,
-}) => {
-  if (!Notification) {
-    return null;
-  }
-
-  const existingNotification =
-    await Notification.findOne({
-      productId: product._id,
-      type: "LOW_STOCK",
-      isResolved: false,
+  product.variants.forEach((variant) => {
+    variant.sizes.forEach((size) => {
+      totalStock += Number(size.stockQuantity || 0);
     });
-
-  if (existingNotification) {
-    return existingNotification;
-  }
-
-  return Notification.create({
-    type: "LOW_STOCK",
-    title: "Low Stock Alert",
-    message:
-      `${product.name} has only ` +
-      `${inventory.availableStock} items remaining.`,
-
-    productId: product._id,
-    inventoryId: inventory._id,
-
-    recipientRole: "all",
-
-    isRead: false,
-    isResolved: false,
   });
+
+  return totalStock;
 };
 
 // ============================================================
-// CREATE OUT OF STOCK NOTIFICATION
+// RECALCULATE INVENTORY TOTALS
 // ============================================================
 
-const createOutOfStockNotification = async ({
-  product,
-  inventory,
-}) => {
-  if (!Notification) {
-    return null;
-  }
+const calculateInventoryTotals = (inventory) => {
+  let totalStock = 0;
 
-  const existingNotification =
-    await Notification.findOne({
-      productId: product._id,
-      type: "OUT_OF_STOCK",
-      isResolved: false,
+  inventory.variants.forEach((variant) => {
+    variant.sizes.forEach((size) => {
+      totalStock += Number(size.stockQuantity || 0);
     });
-
-  if (existingNotification) {
-    return existingNotification;
-  }
-
-  return Notification.create({
-    type: "OUT_OF_STOCK",
-    title: "Out of Stock",
-    message:
-      `${product.name} is currently out of stock.`,
-
-    productId: product._id,
-    inventoryId: inventory._id,
-
-    recipientRole: "all",
-
-    isRead: false,
-    isResolved: false,
   });
-};
 
-// ============================================================
-// RESOLVE STOCK NOTIFICATIONS
-// ============================================================
-
-const resolveStockNotifications = async (
-  productId
-) => {
-  if (!Notification) {
-    return;
-  }
-
-  await Notification.updateMany(
-    {
-      productId,
-
-      type: {
-        $in: [
-          "LOW_STOCK",
-          "OUT_OF_STOCK",
-        ],
-      },
-
-      isResolved: false,
-    },
-
-    {
-      $set: {
-        isResolved: true,
-      },
-    }
+  const reservedStock = Number(
+    inventory.reservedStock || 0
   );
+
+  const availableStock = Math.max(
+    0,
+    totalStock - reservedStock
+  );
+
+  inventory.totalStock = totalStock;
+
+  inventory.availableStock = availableStock;
+
+  inventory.stockStatus = calculateStockStatus(
+    availableStock,
+    Number(inventory.lowStockThreshold || 10)
+  );
+
+  inventory.lastSyncedAt = new Date();
 };
 
 // ============================================================
-// HANDLE STOCK NOTIFICATION
-// ============================================================
-
-const handleStockNotification = async ({
-  product,
-  inventory,
-  previousStatus,
-}) => {
-  const currentStatus =
-    inventory.stockStatus;
-
-  if (
-    currentStatus === "LOW_STOCK" &&
-    previousStatus !== "LOW_STOCK"
-  ) {
-    await createLowStockNotification({
-      product,
-      inventory,
-    });
-  }
-
-  if (
-    currentStatus === "OUT_OF_STOCK" &&
-    previousStatus !== "OUT_OF_STOCK"
-  ) {
-    await createOutOfStockNotification({
-      product,
-      inventory,
-    });
-  }
-
-  if (currentStatus === "IN_STOCK") {
-    await resolveStockNotifications(
-      product._id
-    );
-  }
-};
-
-// ============================================================
-// SYNC ONE PRODUCT → INVENTORY
+// SYNC PRODUCT -> INVENTORY
 // ============================================================
 
 const syncProductInventory = async (
-  productOrId,
+  productId,
   options = {}
 ) => {
-  let product;
+  const { session = null } = options;
 
-  // ----------------------------------------------------------
-  // ACCEPT PRODUCT DOCUMENT OR PRODUCT ID
-  // ----------------------------------------------------------
+  const productQuery = Product.findById(productId);
 
-  if (
-    productOrId &&
-    typeof productOrId === "object" &&
-    productOrId.variants
-  ) {
-    product = productOrId;
-  } else {
-    product =
-      await Product.findById(productOrId);
+  if (session) {
+    productQuery.session(session);
   }
+
+  const product = await productQuery;
 
   if (!product) {
     throw new Error("Product not found");
   }
 
-  // ----------------------------------------------------------
-  // CALCULATE TOTAL STOCK
-  // ----------------------------------------------------------
-
-  const totalQuantity =
-    calculateProductStock(product);
-
-  // ----------------------------------------------------------
-  // BUILD VARIANTS
-  // ----------------------------------------------------------
-
-  const inventoryVariants =
-    buildInventoryVariants(product);
-
-  // ----------------------------------------------------------
-  // FIND EXISTING INVENTORY
-  // ----------------------------------------------------------
-
-  let inventory =
-    await Inventory.findOne({
-      productId: product._id,
-    });
-
-  const previousStatus =
-    inventory?.stockStatus || null;
-
-  // ----------------------------------------------------------
-  // RESERVED STOCK
-  // ----------------------------------------------------------
-
-  const reservedStock =
-    Number(inventory?.reservedStock) || 0;
-
-  // ----------------------------------------------------------
-  // AVAILABLE STOCK
-  // ----------------------------------------------------------
-
-  const availableStock =
-    Math.max(
-      totalQuantity - reservedStock,
-      0
-    );
-
-  // ----------------------------------------------------------
-  // STOCK STATUS
-  // ----------------------------------------------------------
-
-  const stockStatus =
-    getStockStatus(
-      availableStock,
-      LOW_STOCK_THRESHOLD
-    );
-
-  // ----------------------------------------------------------
-  // INVENTORY DATA
-  // ----------------------------------------------------------
-
-  const inventoryData = {
+  let inventoryQuery = Inventory.findOne({
     productId: product._id,
+  });
 
-    totalStock: totalQuantity,
+  if (session) {
+    inventoryQuery.session(session);
+  }
 
-    availableStock,
-
-    reservedStock,
-
-    stockStatus,
-
-    lowStockThreshold:
-      LOW_STOCK_THRESHOLD,
-
-    variants: inventoryVariants,
-
-    lastSyncedAt: new Date(),
-  };
+  let inventory = await inventoryQuery;
 
   // ----------------------------------------------------------
-  // CREATE INVENTORY
+  // CREATE INVENTORY IF NOT EXISTS
   // ----------------------------------------------------------
 
   if (!inventory) {
-    inventory =
-      await Inventory.create(
-        inventoryData
-      );
-  }
-
-  // ----------------------------------------------------------
-  // UPDATE INVENTORY
-  // ----------------------------------------------------------
-
-  else {
-    inventory.totalStock =
-      totalQuantity;
-
-    inventory.availableStock =
-      availableStock;
-
-    inventory.reservedStock =
-      reservedStock;
-
-    inventory.stockStatus =
-      stockStatus;
-
-    inventory.lowStockThreshold =
-      LOW_STOCK_THRESHOLD;
-
-    inventory.variants =
-      inventoryVariants;
-
-    inventory.lastSyncedAt =
-      new Date();
-
-    await inventory.save();
-  }
-
-  // ----------------------------------------------------------
-  // NOTIFICATIONS
-  // ----------------------------------------------------------
-
-  if (options.notify !== false) {
-    await handleStockNotification({
-      product,
-      inventory,
-      previousStatus,
+    inventory = new Inventory({
+      productId: product._id,
+      totalStock: 0,
+      availableStock: 0,
+      reservedStock: 0,
+      lowStockThreshold: 10,
+      stockStatus: "OUT_OF_STOCK",
+      variants: [],
     });
   }
+
+  // ----------------------------------------------------------
+  // BUILD INVENTORY VARIANTS
+  // ----------------------------------------------------------
+
+  inventory.variants = product.variants.map(
+    (productVariant) => ({
+      variantId: productVariant._id,
+
+      color: productVariant.color || "",
+
+      sizes: productVariant.sizes.map(
+        (productSize) => ({
+          sizeId: productSize._id,
+
+          size: productSize.size || "",
+
+          sku: productSize.sku || "",
+
+          barcode: productSize.barcode || "",
+
+          stockQuantity: Number(
+            productSize.stockQuantity || 0
+          ),
+        })
+      ),
+    })
+  );
+
+  calculateInventoryTotals(inventory);
+
+  await inventory.save({
+    session,
+  });
 
   return inventory;
 };
 
 // ============================================================
-// UPDATE SPECIFIC SIZE STOCK
+// SYNC ALL PRODUCTS
+// ============================================================
+
+const syncAllProductInventory = async () => {
+  const products = await Product.find({
+    isDeleted: {
+      $ne: true,
+    },
+  });
+
+  let syncedCount = 0;
+
+  for (const product of products) {
+    await syncProductInventory(product._id);
+    syncedCount++;
+  }
+
+  return {
+    syncedCount,
+  };
+};
+
+// ============================================================
+// UPDATE PRODUCT SIZE STOCK
 // ============================================================
 
 const updateProductSizeStock = async ({
@@ -399,78 +190,58 @@ const updateProductSizeStock = async ({
   sizeId,
   stockQuantity,
 }) => {
-  if (!product) {
-    throw new Error(
-      "Product is required"
-    );
-  }
-
-  // ----------------------------------------------------------
-  // FIND VARIANT
-  // ----------------------------------------------------------
-
-  const variant =
-    product.variants.id(variantId);
-
-  if (!variant) {
-    throw new Error(
-      "Product variant not found"
-    );
-  }
-
-  // ----------------------------------------------------------
-  // FIND SIZE
-  // ----------------------------------------------------------
-
-  const size =
-    variant.sizes.id(sizeId);
-
-  if (!size) {
-    throw new Error(
-      "Product size not found"
-    );
-  }
-
-  // ----------------------------------------------------------
-  // VALIDATE QUANTITY
-  // ----------------------------------------------------------
-
-  const quantity =
-    Number(stockQuantity);
+  const quantity = Number(stockQuantity);
 
   if (
     !Number.isFinite(quantity) ||
     quantity < 0
   ) {
     throw new Error(
-      "Stock quantity must be a valid number greater than or equal to 0"
+      "stockQuantity must be a valid number >= 0"
     );
+  }
+
+  const variant = product.variants.find(
+    (item) =>
+      String(item._id) === String(variantId)
+  );
+
+  if (!variant) {
+    throw new Error("Product variant not found");
+  }
+
+  const size = variant.sizes.find(
+    (item) =>
+      String(item._id) === String(sizeId)
+  );
+
+  if (!size) {
+    throw new Error("Product size not found");
   }
 
   // ----------------------------------------------------------
   // UPDATE PRODUCT STOCK
   // ----------------------------------------------------------
 
-  size.stockQuantity =
-    Math.floor(quantity);
+  size.stockQuantity = quantity;
 
-  // Product pre-save middleware
-  // recalculates:
-  // variant.quantity
-  // product.availability
+  const totalProductStock =
+    calculateProductStock(product);
+
+  product.availability =
+    totalProductStock > 0
+      ? "In Stock"
+      : "Out of Stock";
 
   await product.save();
 
   // ----------------------------------------------------------
-  // SYNC PRODUCT → INVENTORY
+  // SYNC INVENTORY
   // ----------------------------------------------------------
 
   const inventory =
     await syncProductInventory(
-      product,
-      {
-        notify: true,
-      }
+      product._id
     );
 
   return {
@@ -480,92 +251,251 @@ const updateProductSizeStock = async ({
 };
 
 // ============================================================
-// SYNC ALL PRODUCTS
+// DECREASE STOCK AFTER SUCCESSFUL PAYMENT
 // ============================================================
 
-const syncAllProductInventory =
-  async () => {
-    const products =
-      await Product.find({
-        isDeleted: {
-          $ne: true,
-        },
-      });
-
-    console.log(
-      `Found ${products.length} products for inventory synchronization`
+const decreaseStockAfterPayment = async ({
+  orderItems,
+  session,
+}) => {
+  if (!session) {
+    throw new Error(
+      "MongoDB transaction session is required"
     );
+  }
 
-    let created = 0;
-    let updated = 0;
-    let failed = 0;
+  const updatedItems = [];
 
-    const errors = [];
+  for (const orderItem of orderItems) {
+    const productId =
+      orderItem.product;
 
-    for (const product of products) {
-      try {
-        const existing =
-          await Inventory.findOne({
-            productId: product._id,
-          });
+    const variantId =
+      orderItem.variantId;
 
-        await syncProductInventory(
-          product,
-          {
-            notify: false,
-          }
-        );
+    const sizeId =
+      orderItem.sizeId;
 
-        if (existing) {
-          updated++;
-        } else {
-          created++;
-        }
-      } catch (error) {
-        failed++;
+    const quantity =
+      Number(orderItem.quantity);
 
-        errors.push({
-          productId:
-            product._id,
-
-          productName:
-            product.name,
-
-          message:
-            error.message,
-        });
-
-        console.error(
-          `Inventory sync failed for ${product.name}:`,
-          error.message
-        );
-      }
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        productId
+      )
+    ) {
+      throw new Error(
+        `Invalid product ID for order item ${orderItem._id}`
+      );
     }
 
-    return {
-      totalProducts:
-        products.length,
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        variantId
+      )
+    ) {
+      throw new Error(
+        `Invalid variant ID for order item ${orderItem._id}`
+      );
+    }
 
-      created,
+    if (
+      !mongoose.Types.ObjectId.isValid(
+        sizeId
+      )
+    ) {
+      throw new Error(
+        `Invalid size ID for order item ${orderItem._id}`
+      );
+    }
 
-      updated,
+    if (
+      !Number.isInteger(quantity) ||
+      quantity <= 0
+    ) {
+      throw new Error(
+        `Invalid quantity for order item ${orderItem._id}`
+      );
+    }
 
-      failed,
+    // ========================================================
+    // 1. DECREASE PRODUCT STOCK
+    // ========================================================
 
-      errors,
-    };
-  };
+    const updatedProduct =
+      await Product.findOneAndUpdate(
+        {
+          _id: productId,
 
-// ============================================================
-// EXPORT
-// ============================================================
+          "variants._id": variantId,
+
+          "variants.sizes._id": sizeId,
+
+          "variants.sizes.stockQuantity": {
+            $gte: quantity,
+          },
+        },
+        {
+          $inc: {
+            "variants.$[variant].sizes.$[size].stockQuantity":
+              -quantity,
+          },
+        },
+        {
+          new: true,
+
+          session,
+
+          arrayFilters: [
+            {
+              "variant._id": variantId,
+            },
+            {
+              "size._id": sizeId,
+            },
+          ],
+        }
+      );
+
+    // ========================================================
+    // STOCK NOT AVAILABLE
+    // ========================================================
+
+    if (!updatedProduct) {
+      throw new Error(
+        `Insufficient stock for product ${productId}, variant ${variantId}, size ${sizeId}`
+      );
+    }
+
+    // ========================================================
+    // 2. RECALCULATE PRODUCT AVAILABILITY
+    // ========================================================
+
+    const totalProductStock =
+      calculateProductStock(
+        updatedProduct
+      );
+
+    updatedProduct.availability =
+      totalProductStock > 0
+        ? "In Stock"
+        : "Out of Stock";
+
+    await updatedProduct.save({
+      session,
+    });
+
+    // ========================================================
+    // 3. UPDATE INVENTORY
+    // ========================================================
+
+    const inventory =
+      await Inventory.findOne({
+        productId,
+      }).session(session);
+
+    if (!inventory) {
+      throw new Error(
+        `Inventory not found for product ${productId}`
+      );
+    }
+
+    // ========================================================
+    // FIND INVENTORY VARIANT
+    // ========================================================
+
+    const inventoryVariant =
+      inventory.variants.find(
+        (variant) =>
+          String(variant.variantId) ===
+          String(variantId)
+      );
+
+    if (!inventoryVariant) {
+      throw new Error(
+        `Inventory variant not found: ${variantId}`
+      );
+    }
+
+    // ========================================================
+    // FIND INVENTORY SIZE
+    // ========================================================
+
+    const inventorySize =
+      inventoryVariant.sizes.find(
+        (size) =>
+          String(size.sizeId) ===
+          String(sizeId)
+      );
+
+    if (!inventorySize) {
+      throw new Error(
+        `Inventory size not found: ${sizeId}`
+      );
+    }
+
+    // ========================================================
+    // DOUBLE-CHECK INVENTORY STOCK
+    // ========================================================
+
+    if (
+      Number(inventorySize.stockQuantity) <
+      quantity
+    ) {
+      throw new Error(
+        `Inventory stock is insufficient for ${orderItem.productName}`
+      );
+    }
+
+    // ========================================================
+    // DECREASE INVENTORY STOCK
+    // ========================================================
+
+    inventorySize.stockQuantity =
+      Number(
+        inventorySize.stockQuantity
+      ) - quantity;
+
+    // ========================================================
+    // RECALCULATE INVENTORY TOTALS
+    // ========================================================
+
+    calculateInventoryTotals(
+      inventory
+    );
+
+    await inventory.save({
+      session,
+    });
+
+    updatedItems.push({
+      orderItemId: orderItem._id,
+
+      productId,
+
+      variantId,
+
+      sizeId,
+
+      quantity,
+
+      remainingProductStock:
+        totalProductStock,
+
+      remainingInventoryStock:
+        inventorySize.stockQuantity,
+    });
+  }
+
+  return updatedItems;
+};
 
 module.exports = {
-  LOW_STOCK_THRESHOLD,
-  calculateProductStock,
-  getStockStatus,
-  buildInventoryVariants,
   syncProductInventory,
-  updateProductSizeStock,
+
   syncAllProductInventory,
+
+  updateProductSizeStock,
+
+  decreaseStockAfterPayment,
 };
