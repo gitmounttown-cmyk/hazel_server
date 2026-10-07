@@ -5833,3 +5833,51 @@ Require stack:
 [2026-10-07T12:03:22.507Z] INFO: MongoDB Connected Successfully!!
 [2026-10-07T12:03:22.899Z] ERROR: (node:9240) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T12:47:02.556Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-10-07T12:47:02.560Z] INFO: ========================================
+[2026-10-07T12:47:02.561Z] INFO: Hazel application starting
+[2026-10-07T12:47:02.561Z] INFO: Node version: v24.16.0
+[2026-10-07T12:47:02.563Z] INFO: Environment: development
+[2026-10-07T12:47:02.566Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:47:02.567Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:47:02.568Z] INFO: PORT: 5004
+[2026-10-07T12:47:02.569Z] INFO: ========================================
+[2026-10-07T12:47:04.413Z] INFO: =================================
+[2026-10-07T12:47:04.414Z] INFO: RAZORPAY CONFIG
+[2026-10-07T12:47:04.416Z] INFO: =================================
+[2026-10-07T12:47:04.417Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T12:47:04.418Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T12:47:04.419Z] INFO: =================================
+[2026-10-07T12:47:04.534Z] INFO: App loaded successfully
+[2026-10-07T12:47:04.536Z] INFO: Connecting to MongoDB...
+[2026-10-07T12:47:04.540Z] INFO: Environment: development
+[2026-10-07T12:47:04.543Z] INFO: MongoDB URI exists: true
+[2026-10-07T12:47:04.570Z] INFO: Server running on port 5004
+[2026-10-07T12:47:04.573Z] INFO: Hazel backend started successfully
+[2026-10-07T12:47:04.998Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T12:47:05.368Z] ERROR: (node:1136) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T12:55:00.773Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-07T12:55:00.781Z] INFO: ========================================
+[2026-10-07T12:55:00.785Z] INFO: Hazel application starting
+[2026-10-07T12:55:00.787Z] INFO: Node version: v24.16.0
+[2026-10-07T12:55:00.795Z] INFO: Environment: development
+[2026-10-07T12:55:00.799Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:55:00.803Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:55:00.805Z] INFO: PORT: 5004
+[2026-10-07T12:55:00.816Z] INFO: ========================================
+[2026-10-07T12:55:02.786Z] INFO: =================================
+[2026-10-07T12:55:02.790Z] INFO: RAZORPAY CONFIG
+[2026-10-07T12:55:02.791Z] INFO: =================================
+[2026-10-07T12:55:02.793Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T12:55:02.796Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T12:55:02.804Z] INFO: =================================
+[2026-10-07T12:55:02.954Z] INFO: App loaded successfully
+[2026-10-07T12:55:02.963Z] INFO: Connecting to MongoDB...
+[2026-10-07T12:55:02.978Z] INFO: Environment: development
+[2026-10-07T12:55:02.990Z] INFO: MongoDB URI exists: true
+[2026-10-07T12:55:03.068Z] INFO: Server running on port 5004
+[2026-10-07T12:55:03.073Z] INFO: Hazel backend started successfully
+[2026-10-07T12:55:03.622Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T12:55:03.988Z] ERROR: (node:1112) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
