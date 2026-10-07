@@ -43,6 +43,23 @@ const CartItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
+      default: 0,
+    },
+
+    // ----------------------------------------------------------
+    // Discount Price
+    // ----------------------------------------------------------
+
+    discountPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
+    },
+
+    selectedSize: {
+      type: String,
+      required: false,
     },
   },
   {
@@ -91,3 +108,4 @@ const cartSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Cart", cartSchema);
+
