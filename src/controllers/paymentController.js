@@ -70,8 +70,9 @@ const getVariantImage = (variant) => {
   );
 };
 
-const calculateShipping = (amount) => {
-  return Number(amount) >= 999 ? 0 : 50;
+// SHIPPING ALWAYS 0
+const calculateShipping = () => {
+  return 0;
 };
 
 const generateOrderNumber = () => {
@@ -264,8 +265,8 @@ exports.createOrder = async (req, res) => {
     }
 
     const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
-    const shippingCharge = calculateShipping(amountAfterDiscount);
-    const taxAmount = 0;
+    const shippingCharge = calculateShipping(); // Returns 0
+    const taxAmount = Math.round(amountAfterDiscount * 0.09);
     const totalAmount = amountAfterDiscount + shippingCharge + taxAmount;
 
     if (totalAmount <= 0) {
@@ -526,7 +527,6 @@ exports.verifyPayment = async (req, res) => {
       throw new Error("No order items found.");
     }
 
-    // Decrease stock if stock tracking service exists
     let stockResult = null;
     if (typeof decreaseStockAfterPayment === "function") {
       stockResult = await decreaseStockAfterPayment({
@@ -560,7 +560,6 @@ exports.verifyPayment = async (req, res) => {
       );
     }
 
-    // Clear cart after payment
     await Cart.findOneAndUpdate(
       { userId, status: "active" },
       {
