@@ -93,6 +93,10 @@ const isValidObjectId = (id) => {
 // CREATE RAZORPAY ORDER
 // ============================================================
 
+// ============================================================
+// CREATE RAZORPAY ORDER
+// ============================================================
+
 exports.createOrder = async (req, res) => {
   let session;
 
@@ -106,7 +110,8 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    const { addressId, couponCode = "", customerNote = "" } = req.body;
+    // Accept frontend amount directly
+    const { addressId, couponCode = "", customerNote = "", amount } = req.body;
 
     const user = await User.findById(userId);
 
@@ -265,9 +270,11 @@ exports.createOrder = async (req, res) => {
     }
 
     const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
-    const shippingCharge = calculateShipping(); // Returns 0
+    const shippingCharge = 0;
     const taxAmount = Math.round(amountAfterDiscount * 0.09);
-    const totalAmount = amountAfterDiscount + shippingCharge + taxAmount;
+
+    // USE FRONTEND UI TOTAL IF PROVIDED, OTHERWISE FALLBACK TO BACKEND CALCULATION
+    const totalAmount = amount && Number(amount) > 0 ? Number(amount) : (amountAfterDiscount + shippingCharge + taxAmount);
 
     if (totalAmount <= 0) {
       throw new Error("Invalid order amount.");
@@ -332,7 +339,7 @@ exports.createOrder = async (req, res) => {
     const receipt = generateReceipt();
 
     const razorpayOrder = await razorpayInstance.orders.create({
-      amount: Math.round(totalAmount * 100),
+      amount: Math.round(totalAmount * 100), // Uses the exact frontend UI total
       currency: "INR",
       receipt,
       notes: {
