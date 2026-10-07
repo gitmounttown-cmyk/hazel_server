@@ -17,28 +17,12 @@ const CartItemSchema = new mongoose.Schema(
       required: true,
     },
 
-    color: {
-      type: String,
-      required: true,
-      trim: true,
-      uppercase: true,
-    },
-
-    size: {
-      type: String,
-      required: true,
-      trim: true,
-      uppercase: true,
-    },
-
     quantity: {
       type: Number,
       required: true,
       min: 1,
     },
 
-    // Store the price used when item was added.
-    // Final payment should still be validated against Product.
     price: {
       type: Number,
       required: true,
@@ -60,6 +44,12 @@ const CartItemSchema = new mongoose.Schema(
     selectedSize: {
       type: String,
       required: false,
+    },
+
+    discountPrice: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
   },
   {
