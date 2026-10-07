@@ -67,7 +67,7 @@ exports.addToCart = async (req, res) => {
       });
     }
 
-    const { productId, variantId, quantity,  selectedSize } = req.body;
+    const { productId, variantId, quantity, size } = req.body;
 
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
@@ -156,7 +156,7 @@ exports.addToCart = async (req, res) => {
             quantity: requestedQuantity,
             price,
             discountPrice,
-            selectedSize,
+            size: size || null,
           },
         ],
         totalItems: requestedQuantity,
@@ -195,6 +195,7 @@ exports.addToCart = async (req, res) => {
         quantity: requestedQuantity,
         price,
         discountPrice,
+        size: size || null,
       });
     }
 
