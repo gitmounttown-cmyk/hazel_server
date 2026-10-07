@@ -192,6 +192,7 @@ exports.createOrder = async (req, res) => {
       orderItemsData.push({
         product: product._id,
         variantId: variant._id,
+        sizeId: cartItem.sizeId || variant.sizeId || variant._id,
         productName: product.name,
         sku: variant.sku || "",
         image: getVariantImage(variant),
@@ -283,10 +284,16 @@ exports.createOrder = async (req, res) => {
           orderNumber,
           items: [],
           shippingAddress: {
-            name: address.name || user.name || "",
-            mobileNumber: address.mobileNumber || user.mobileNumber || "",
-            addressLine1: address.addressLine1 || "",
-            addressLine2: address.addressLine2 || "",
+            name: address.fullName || address.name || user.name || "",
+            mobileNumber: address.mobileNumber || address.phone || user.mobileNumber || "",
+            addressLine1:
+              address.addressLine1 ||
+              [address.houseNo, address.street].filter(Boolean).join(", ") ||
+              address.houseNo ||
+              address.street ||
+              address.line1 ||
+              "",
+            addressLine2: address.addressLine2 || address.area || "",
             district: address.district || "",
             city: address.city || "",
             state: address.state || "",

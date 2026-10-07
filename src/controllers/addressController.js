@@ -2,52 +2,71 @@ const mongoose = require("mongoose");
 const Address = require("../models/addressModel");
 const User = require("../models/userModel");
 
+// ============================================================
+// HELPERS
+// ============================================================
+
+const getUserId = (req) => {
+  return req.user?.id || req.user?._id || req.user?.userId;
+};
+
+// ============================================================
 // CREATE ADDRESS
+// ============================================================
+
 const createAddress = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
 
-    const {
-      addressType,
-      fullName,
-      mobileNumber,
-      alternateMobileNumber,
-      houseNo,
-      street,
-      area,
-      landmark,
-      city,
-      district,
-      state,
-      country,
-      pincode,
-      latitude,
-      longitude,
-      placeId,
-      isDefault,
-    } = req.body;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid user ID",
+        message: "Invalid or missing user ID.",
       });
     }
 
-    // Fallback to logged-in user details if empty
+    // Map properties with fallbacks for both frontend key standards
+    const fullNameInput =
+      req.body.fullName || req.body.name || req.body.nameCustomer;
+    const mobileNumberInput =
+      req.body.mobileNumber || req.body.phone || req.body.phoneNumber;
+    const houseNoInput =
+      req.body.houseNo ||
+      req.body.addressLine1 ||
+      req.body.address ||
+      req.body.street;
+    const streetInput = req.body.street || req.body.addressLine2 || "";
+    const cityInput = req.body.city;
+    const stateInput = req.body.state;
+    const pincodeInput =
+      req.body.pincode || req.body.zipCode || req.body.postalCode;
+
+    // Fallback to logged-in user details if name/mobile are missing
     const user = await User.findById(userId);
-    const finalFullName = fullName || user?.name || "Customer";
-    const finalMobile = mobileNumber || user?.mobileNumber;
+    const finalFullName = fullNameInput || user?.name || "Customer";
+    const finalMobile = mobileNumberInput || user?.mobileNumber;
 
-    if (!finalFullName || !finalMobile || !houseNo || !city || !state || !pincode) {
+    // Validate required fields
+    if (
+      !finalFullName ||
+      !finalMobile ||
+      !houseNoInput ||
+      !cityInput ||
+      !stateInput ||
+      !pincodeInput
+    ) {
       return res.status(400).json({
         success: false,
-        message: "fullName, mobileNumber, houseNo, city, state, and pincode are required",
+        message:
+          "fullName, mobileNumber, houseNo (or addressLine1), city, state, and pincode are required.",
       });
     }
 
-    const existingAddresses = await Address.find({ user: userId, isActive: true });
-    let makeDefault = Boolean(isDefault);
+    const existingAddresses = await Address.find({
+      user: userId,
+      isActive: true,
+    });
+    let makeDefault = Boolean(req.body.isDefault);
 
     if (existingAddresses.length === 0) {
       makeDefault = true;
@@ -62,140 +81,173 @@ const createAddress = async (req, res) => {
 
     const address = await Address.create({
       user: userId,
-      addressType: addressType || "Home",
+      addressType: req.body.addressType || "Home",
       fullName: finalFullName,
       mobileNumber: finalMobile,
-      alternateMobileNumber: alternateMobileNumber || "",
-      houseNo,
-      street: street || "",
-      area: area || "",
-      landmark: landmark || "",
-      city,
-      district: district || "",
-      state,
-      country: country || "India",
-      pincode,
-      latitude: latitude ? Number(latitude) : null,
-      longitude: longitude ? Number(longitude) : null,
-      placeId: placeId || "",
+      alternateMobileNumber: req.body.alternateMobileNumber || "",
+      houseNo: houseNoInput,
+      street: streetInput,
+      area: req.body.area || "",
+      landmark: req.body.landmark || "",
+      city: cityInput,
+      district: req.body.district || cityInput || "",
+      state: stateInput,
+      country: req.body.country || "India",
+      pincode: pincodeInput,
+      latitude: req.body.latitude ? Number(req.body.latitude) : null,
+      longitude: req.body.longitude ? Number(req.body.longitude) : null,
+      placeId: req.body.placeId || "",
       isDefault: makeDefault,
     });
 
     return res.status(201).json({
       success: true,
-      message: "Address created successfully",
+      message: "Address created successfully.",
       address,
     });
   } catch (error) {
+    console.error("CREATE ADDRESS ERROR:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to create address",
+      message: "Failed to create address.",
       error: error.message,
     });
   }
 };
 
+// ============================================================
 // GET ALL ADDRESSES
+// ============================================================
+
 const getAllAddresses = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
 
-    const addresses = await Address.find({ user: userId, isActive: true }).sort({
+    const addresses = await Address.find({
+      user: userId,
+      isActive: true,
+    }).sort({
       isDefault: -1,
       createdAt: -1,
     });
 
     return res.status(200).json({
       success: true,
-      message: "Addresses fetched successfully",
+      message: "Addresses fetched successfully.",
       count: addresses.length,
       addresses,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch addresses",
+      message: "Failed to fetch addresses.",
       error: error.message,
     });
   }
 };
 
+// ============================================================
 // GET SINGLE ADDRESS BY ID
+// ============================================================
+
 const getAddressById = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
     const { addressId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(addressId)) {
-      return res.status(400).json({ success: false, message: "Invalid address ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid address ID." });
     }
 
-    const address = await Address.findOne({ _id: addressId, user: userId, isActive: true });
+    const address = await Address.findOne({
+      _id: addressId,
+      user: userId,
+      isActive: true,
+    });
 
     if (!address) {
-      return res.status(404).json({ success: false, message: "Address not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found." });
     }
 
-    return res.status(200).json({ success: true, message: "Address fetched successfully", address });
+    return res.status(200).json({
+      success: true,
+      message: "Address fetched successfully.",
+      address,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to fetch address", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch address.",
+      error: error.message,
+    });
   }
 };
 
+// ============================================================
 // UPDATE ADDRESS
+// ============================================================
+
 const updateAddress = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
     const { addressId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(addressId)) {
-      return res.status(400).json({ success: false, message: "Invalid address ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid address ID." });
     }
 
-    const address = await Address.findOne({ _id: addressId, user: userId, isActive: true });
+    const address = await Address.findOne({
+      _id: addressId,
+      user: userId,
+      isActive: true,
+    });
 
     if (!address) {
-      return res.status(404).json({ success: false, message: "Address not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found." });
     }
 
-    const {
-      addressType,
-      fullName,
-      mobileNumber,
-      alternateMobileNumber,
-      houseNo,
-      street,
-      area,
-      landmark,
-      city,
-      district,
-      state,
-      country,
-      pincode,
-      latitude,
-      longitude,
-      placeId,
-      isDefault,
-    } = req.body;
+    const fullNameInput = req.body.fullName || req.body.name;
+    const mobileNumberInput = req.body.mobileNumber || req.body.phone;
+    const houseNoInput =
+      req.body.houseNo || req.body.addressLine1 || req.body.address;
+    const streetInput = req.body.street || req.body.addressLine2;
+    const pincodeInput = req.body.pincode || req.body.zipCode;
 
-    if (addressType !== undefined) address.addressType = addressType;
-    if (fullName !== undefined) address.fullName = fullName;
-    if (mobileNumber !== undefined) address.mobileNumber = mobileNumber;
-    if (alternateMobileNumber !== undefined) address.alternateMobileNumber = alternateMobileNumber;
-    if (houseNo !== undefined) address.houseNo = houseNo;
-    if (street !== undefined) address.street = street;
-    if (area !== undefined) address.area = area;
-    if (landmark !== undefined) address.landmark = landmark;
-    if (city !== undefined) address.city = city;
-    if (district !== undefined) address.district = district;
-    if (state !== undefined) address.state = state;
-    if (country !== undefined) address.country = country;
-    if (pincode !== undefined) address.pincode = pincode;
-    if (latitude !== undefined) address.latitude = latitude ? Number(latitude) : null;
-    if (longitude !== undefined) address.longitude = longitude ? Number(longitude) : null;
-    if (placeId !== undefined) address.placeId = placeId;
+    if (req.body.addressType !== undefined)
+      address.addressType = req.body.addressType;
+    if (fullNameInput !== undefined) address.fullName = fullNameInput;
+    if (mobileNumberInput !== undefined)
+      address.mobileNumber = mobileNumberInput;
+    if (req.body.alternateMobileNumber !== undefined)
+      address.alternateMobileNumber = req.body.alternateMobileNumber;
+    if (houseNoInput !== undefined) address.houseNo = houseNoInput;
+    if (streetInput !== undefined) address.street = streetInput;
+    if (req.body.area !== undefined) address.area = req.body.area;
+    if (req.body.landmark !== undefined) address.landmark = req.body.landmark;
+    if (req.body.city !== undefined) address.city = req.body.city;
+    if (req.body.district !== undefined) address.district = req.body.district;
+    if (req.body.state !== undefined) address.state = req.body.state;
+    if (req.body.country !== undefined) address.country = req.body.country;
+    if (pincodeInput !== undefined) address.pincode = pincodeInput;
+    if (req.body.latitude !== undefined)
+      address.latitude = req.body.latitude
+        ? Number(req.body.latitude)
+        : null;
+    if (req.body.longitude !== undefined)
+      address.longitude = req.body.longitude
+        ? Number(req.body.longitude)
+        : null;
+    if (req.body.placeId !== undefined) address.placeId = req.body.placeId;
 
-    if (isDefault === true) {
+    if (req.body.isDefault === true) {
       await Address.updateMany(
         { user: userId, _id: { $ne: addressId } },
         { $set: { isDefault: false } }
@@ -207,38 +259,55 @@ const updateAddress = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Address updated successfully",
+      message: "Address updated successfully.",
       address,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to update address", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update address.",
+      error: error.message,
+    });
   }
 };
 
+// ============================================================
 // DELETE ADDRESS
+// ============================================================
+
 const deleteAddress = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
     const { addressId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(addressId)) {
-      return res.status(400).json({ success: false, message: "Invalid address ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid address ID." });
     }
 
-    const address = await Address.findOne({ _id: addressId, user: userId, isActive: true });
+    const address = await Address.findOne({
+      _id: addressId,
+      user: userId,
+      isActive: true,
+    });
 
     if (!address) {
-      return res.status(404).json({ success: false, message: "Address not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found." });
     }
 
     const wasDefault = address.isDefault;
 
-    // Soft Delete
     address.isActive = false;
     await address.save();
 
     if (wasDefault) {
-      const nextAddress = await Address.findOne({ user: userId, isActive: true }).sort({ createdAt: -1 });
+      const nextAddress = await Address.findOne({
+        user: userId,
+        isActive: true,
+      }).sort({ createdAt: -1 });
 
       if (nextAddress) {
         nextAddress.isDefault = true;
@@ -248,27 +317,42 @@ const deleteAddress = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Address deleted successfully",
+      message: "Address deleted successfully.",
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to delete address", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete address.",
+      error: error.message,
+    });
   }
 };
 
+// ============================================================
 // SET DEFAULT ADDRESS
+// ============================================================
+
 const setDefaultAddress = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
     const { addressId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(addressId)) {
-      return res.status(400).json({ success: false, message: "Invalid address ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid address ID." });
     }
 
-    const address = await Address.findOne({ _id: addressId, user: userId, isActive: true });
+    const address = await Address.findOne({
+      _id: addressId,
+      user: userId,
+      isActive: true,
+    });
 
     if (!address) {
-      return res.status(404).json({ success: false, message: "Address not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found." });
     }
 
     await Address.updateMany({ user: userId }, { $set: { isDefault: false } });
@@ -278,28 +362,51 @@ const setDefaultAddress = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Default address updated successfully",
+      message: "Default address updated successfully.",
       address,
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to set default address", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to set default address.",
+      error: error.message,
+    });
   }
 };
 
+// ============================================================
 // GET DEFAULT ADDRESS
+// ============================================================
+
 const getDefaultAddress = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = getUserId(req);
 
-    const address = await Address.findOne({ user: userId, isDefault: true, isActive: true });
+    const address = await Address.findOne({
+      user: userId,
+      isDefault: true,
+      isActive: true,
+    });
 
     if (!address) {
-      return res.status(404).json({ success: false, message: "Default address not found", address: null });
+      return res.status(404).json({
+        success: false,
+        message: "Default address not found.",
+        address: null,
+      });
     }
 
-    return res.status(200).json({ success: true, message: "Default address fetched successfully", address });
+    return res.status(200).json({
+      success: true,
+      message: "Default address fetched successfully.",
+      address,
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to fetch default address", error: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch default address.",
+      error: error.message,
+    });
   }
 };
 
