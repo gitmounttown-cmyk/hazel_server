@@ -4382,3 +4382,1454 @@ Require stack:
 [2026-09-30T07:51:34.377Z] INFO: MongoDB Connected Successfully!!
 [2026-09-30T07:51:34.769Z] ERROR: (node:6108) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-05T09:46:14.362Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-10-05T09:46:14.365Z] INFO: ========================================
+[2026-10-05T09:46:14.366Z] INFO: Hazel application starting
+[2026-10-05T09:46:14.367Z] INFO: Node version: v24.16.0
+[2026-10-05T09:46:14.368Z] INFO: Environment: development
+[2026-10-05T09:46:14.368Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-05T09:46:14.369Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-05T09:46:14.369Z] INFO: PORT: 5004
+[2026-10-05T09:46:14.370Z] INFO: ========================================
+[2026-10-05T09:46:29.758Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-05T09:46:30.495Z] INFO: App loaded successfully
+[2026-10-05T09:46:30.495Z] INFO: Connecting to MongoDB...
+[2026-10-05T09:46:30.496Z] INFO: Environment: development
+[2026-10-05T09:46:30.497Z] INFO: MongoDB URI exists: true
+[2026-10-05T09:46:30.520Z] INFO: Server running on port 5004
+[2026-10-05T09:46:30.525Z] INFO: Hazel backend started successfully
+[2026-10-05T09:46:31.189Z] INFO: MongoDB Connected Successfully!!
+[2026-10-05T09:46:31.651Z] ERROR: (node:6696) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-05T10:12:03.227Z] ERROR: Error in getProductById: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Product"
+    at SchemaObjectId.cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\objectId.js:252:11)
+    at SchemaType.applySetters (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schemaType.js:1395:12)
+    at SchemaType.castForQuery (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schemaType.js:1815:17)
+    at cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\cast.js:386:32)
+    at Query.cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:5228:12)
+    at Query._castConditions (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2411:10)
+    at model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2758:8)
+    at maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:83)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async exports.getProductById (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\productController.js:73:21)
+[2026-10-05T10:12:03.268Z] ERROR: Error in getProductById: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Product"
+    at SchemaObjectId.cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\objectId.js:252:11)
+    at SchemaType.applySetters (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schemaType.js:1395:12)
+    at SchemaType.castForQuery (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schemaType.js:1815:17)
+    at cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\cast.js:386:32)
+    at Query.cast (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:5228:12)
+    at Query._castConditions (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2411:10)
+    at model.Query._findOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:2758:8)
+    at maybeTracedQueryExec (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\query.js:4796:83)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async exports.getProductById (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\productController.js:73:21)
+[2026-10-05T11:04:59.677Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:29.733Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:30.881Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:31.819Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:32.719Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:33.499Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:34.208Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:34.788Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:35.218Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:35.505Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:35.726Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:35.979Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:36.276Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:36.698Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:37.041Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T11:06:37.300Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:37.619Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:38.204Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-05T11:06:45.002Z] ERROR: REMOVE CART ERROR: ValidationError: Cart validation failed: items.0.selectedSize: Path `selectedSize` is required.
+    at Document.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:3538:32)
+    at Subdocument.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2912:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 0)
+    at async SchemaDocumentArray.doValidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 2)
+    at async model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2903:30)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+[2026-10-05T11:06:56.312Z] ERROR: REMOVE CART ERROR: ValidationError: Cart validation failed: items.0.selectedSize: Path `selectedSize` is required.
+    at Document.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:3538:32)
+    at Subdocument.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2912:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 0)
+    at async SchemaDocumentArray.doValidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 2)
+    at async model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2903:30)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+[2026-10-05T11:07:02.319Z] ERROR: REMOVE CART ERROR: ValidationError: Cart validation failed: items.0.selectedSize: Path `selectedSize` is required.
+    at Document.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:3538:32)
+    at Subdocument.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2912:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 0)
+    at async SchemaDocumentArray.doValidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 2)
+    at async model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2903:30)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+[2026-10-05T11:07:14.817Z] ERROR: REMOVE CART ERROR: ValidationError: Cart validation failed: items.0.selectedSize: Path `selectedSize` is required.
+    at Document.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:3538:32)
+    at Subdocument.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2912:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 0)
+    at async SchemaDocumentArray.doValidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 2)
+    at async model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2903:30)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+[2026-10-05T11:07:20.399Z] ERROR: REMOVE CART ERROR: ValidationError: Cart validation failed: items.0.selectedSize: Path `selectedSize` is required.
+    at Document.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:3538:32)
+    at Subdocument.invalidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2912:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 0)
+    at async SchemaDocumentArray.doValidate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 2)
+    at async model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2903:30)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+[2026-10-05T11:08:45.733Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-05T13:05:32.199Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-05T13:05:32.203Z] INFO: ========================================
+[2026-10-05T13:05:32.204Z] INFO: Hazel application starting
+[2026-10-05T13:05:32.205Z] INFO: Node version: v24.16.0
+[2026-10-05T13:05:32.206Z] INFO: Environment: development
+[2026-10-05T13:05:32.207Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-05T13:05:32.208Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-05T13:05:32.209Z] INFO: PORT: 5004
+[2026-10-05T13:05:32.210Z] INFO: ========================================
+[2026-10-05T13:05:34.571Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-10-06T04:01:50.912Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-06T04:01:50.918Z] INFO: ========================================
+[2026-10-06T04:01:50.925Z] INFO: Hazel application starting
+[2026-10-06T04:01:50.935Z] INFO: Node version: v24.16.0
+[2026-10-06T04:01:50.936Z] INFO: Environment: development
+[2026-10-06T04:01:50.937Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T04:01:50.938Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T04:01:50.939Z] INFO: PORT: 5004
+[2026-10-06T04:01:50.941Z] INFO: ========================================
+[2026-10-06T04:01:53.475Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-06T04:01:53.634Z] INFO: App loaded successfully
+[2026-10-06T04:01:53.639Z] INFO: Connecting to MongoDB...
+[2026-10-06T04:01:53.646Z] INFO: Environment: development
+[2026-10-06T04:01:53.649Z] INFO: MongoDB URI exists: true
+[2026-10-06T04:01:53.693Z] INFO: Server running on port 5004
+[2026-10-06T04:01:53.700Z] INFO: Hazel backend started successfully
+[2026-10-06T04:01:54.397Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T04:01:54.864Z] ERROR: (node:16696) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T04:04:18.829Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-10-06T04:04:18.834Z] INFO: ========================================
+[2026-10-06T04:04:18.837Z] INFO: Hazel application starting
+[2026-10-06T04:04:18.843Z] INFO: Node version: v24.16.0
+[2026-10-06T04:04:18.846Z] INFO: Environment: development
+[2026-10-06T04:04:18.847Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T04:04:18.850Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T04:04:18.852Z] INFO: PORT: 5004
+[2026-10-06T04:04:18.855Z] INFO: ========================================
+[2026-10-06T04:04:21.108Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-06T04:04:21.310Z] INFO: App loaded successfully
+[2026-10-06T04:04:21.330Z] INFO: Connecting to MongoDB...
+[2026-10-06T04:04:21.355Z] INFO: Environment: development
+[2026-10-06T04:04:21.368Z] INFO: MongoDB URI exists: true
+[2026-10-06T04:04:21.431Z] INFO: Server running on port 5004
+[2026-10-06T04:04:21.439Z] INFO: Hazel backend started successfully
+[2026-10-06T04:04:23.074Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T04:04:23.495Z] ERROR: (node:2196) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T05:46:26.733Z] ERROR: Error creating Razorpay order: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T05:49:50.890Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-10-06T05:49:50.893Z] INFO: ========================================
+[2026-10-06T05:49:50.895Z] INFO: Hazel application starting
+[2026-10-06T05:49:50.897Z] INFO: Node version: v24.16.0
+[2026-10-06T05:49:50.898Z] INFO: Environment: development
+[2026-10-06T05:49:50.901Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T05:49:50.903Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T05:49:50.904Z] INFO: PORT: 5004
+[2026-10-06T05:49:50.906Z] INFO: ========================================
+[2026-10-06T05:50:08.666Z] INFO: =================================
+[2026-10-06T05:50:08.667Z] INFO: RAZORPAY CONFIG
+[2026-10-06T05:50:08.668Z] INFO: =================================
+[2026-10-06T05:50:08.670Z] INFO: Razorpay Key ID: rzp_test_TiWJSnoTBfvPZu
+[2026-10-06T05:50:08.671Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T05:50:08.673Z] INFO: =================================
+[2026-10-06T05:50:08.795Z] INFO: App loaded successfully
+[2026-10-06T05:50:08.796Z] INFO: Connecting to MongoDB...
+[2026-10-06T05:50:08.799Z] INFO: Environment: development
+[2026-10-06T05:50:08.807Z] INFO: MongoDB URI exists: true
+[2026-10-06T05:50:08.855Z] INFO: Server running on port 5004
+[2026-10-06T05:50:08.860Z] INFO: Hazel backend started successfully
+[2026-10-06T05:50:09.442Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T05:50:09.855Z] ERROR: (node:24164) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T05:54:14.595Z] INFO: =================================
+[2026-10-06T05:54:14.600Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T05:54:14.601Z] INFO: =================================
+[2026-10-06T05:54:14.602Z] INFO: Amount in Rupees: 1504
+[2026-10-06T05:54:14.605Z] INFO: Amount in Paise: 150400
+[2026-10-06T05:54:14.607Z] INFO: Currency: INR
+[2026-10-06T05:54:14.609Z] INFO: Receipt: rcpt_1791266054595_19
+[2026-10-06T05:54:14.612Z] INFO: =================================
+[2026-10-06T05:54:14.836Z] ERROR: =================================
+[2026-10-06T05:54:14.837Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T05:54:14.837Z] ERROR: =================================
+[2026-10-06T05:54:14.838Z] ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T05:54:14.843Z] ERROR: =================================
+[2026-10-06T05:59:04.314Z] INFO: =================================
+[2026-10-06T05:59:04.316Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T05:59:04.317Z] INFO: =================================
+[2026-10-06T05:59:04.318Z] INFO: Amount in Rupees: 1504
+[2026-10-06T05:59:04.319Z] INFO: Amount in Paise: 150400
+[2026-10-06T05:59:04.321Z] INFO: Currency: INR
+[2026-10-06T05:59:04.323Z] INFO: Receipt: rcpt_1791266344314_226
+[2026-10-06T05:59:04.325Z] INFO: =================================
+[2026-10-06T05:59:04.470Z] ERROR: =================================
+[2026-10-06T05:59:04.472Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T05:59:04.474Z] ERROR: =================================
+[2026-10-06T05:59:04.476Z] ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T05:59:04.490Z] ERROR: =================================
+[2026-10-06T06:03:53.627Z] INFO: =================================
+[2026-10-06T06:03:53.630Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:03:53.631Z] INFO: =================================
+[2026-10-06T06:03:53.633Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:03:53.635Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:03:53.640Z] INFO: Currency: INR
+[2026-10-06T06:03:53.652Z] INFO: Receipt: rcpt_1791266633626_801
+[2026-10-06T06:03:53.673Z] INFO: =================================
+[2026-10-06T06:03:53.798Z] ERROR: =================================
+[2026-10-06T06:03:53.799Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:03:53.799Z] ERROR: =================================
+[2026-10-06T06:03:53.800Z] ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T06:03:53.802Z] ERROR: =================================
+[2026-10-06T06:03:56.976Z] INFO: =================================
+[2026-10-06T06:03:56.977Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:03:56.978Z] INFO: =================================
+[2026-10-06T06:03:56.978Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:03:56.979Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:03:56.980Z] INFO: Currency: INR
+[2026-10-06T06:03:56.981Z] INFO: Receipt: rcpt_1791266636976_58
+[2026-10-06T06:03:56.982Z] INFO: =================================
+[2026-10-06T06:03:57.021Z] ERROR: =================================
+[2026-10-06T06:03:57.025Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:03:57.026Z] ERROR: =================================
+[2026-10-06T06:03:57.027Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:03:57.028Z] ERROR: =================================
+[2026-10-06T06:06:29.297Z] INFO: 
+[2026-10-06T06:06:29.298Z] INFO: ====================================
+[2026-10-06T06:06:29.300Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-06T06:06:29.301Z] INFO: ====================================
+[2026-10-06T06:06:29.302Z] INFO: Mobile Number : 9150671005
+[2026-10-06T06:06:29.303Z] INFO: Purpose       : LOGIN
+[2026-10-06T06:06:29.308Z] INFO: OTP           : 207700
+[2026-10-06T06:06:29.309Z] INFO: Expires At    : "2026-10-06T06:11:29.174Z"
+[2026-10-06T06:06:29.312Z] INFO: ====================================
+[2026-10-06T06:06:29.317Z] INFO: 
+[2026-10-06T06:06:34.519Z] INFO: 
+[2026-10-06T06:06:34.519Z] INFO: ====================================
+[2026-10-06T06:06:34.520Z] INFO:         VERIFY OTP DEBUG
+[2026-10-06T06:06:34.521Z] INFO: ====================================
+[2026-10-06T06:06:34.522Z] INFO: Mobile Number : 9150671005
+[2026-10-06T06:06:34.522Z] INFO: Entered OTP   : 207700
+[2026-10-06T06:06:34.527Z] INFO: OTP ID        : "6ac48fe5358f0b09b9431b8b"
+[2026-10-06T06:06:34.531Z] INFO: Stored OTP    : 207700
+[2026-10-06T06:06:34.533Z] INFO: Purpose       : LOGIN
+[2026-10-06T06:06:34.533Z] INFO: Expires At    : "2026-10-06T06:11:29.174Z"
+[2026-10-06T06:06:34.535Z] INFO: Attempts      : 0
+[2026-10-06T06:06:34.535Z] INFO: Max Attempts  : 5
+[2026-10-06T06:06:34.537Z] INFO: Is Verified   : false
+[2026-10-06T06:06:34.538Z] INFO: ====================================
+[2026-10-06T06:06:34.542Z] INFO: 
+[2026-10-06T06:06:46.660Z] INFO: =================================
+[2026-10-06T06:06:46.661Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:06:46.662Z] INFO: =================================
+[2026-10-06T06:06:46.663Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:06:46.664Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:06:46.665Z] INFO: Currency: INR
+[2026-10-06T06:06:46.668Z] INFO: Receipt: rcpt_1791266806660_368
+[2026-10-06T06:06:46.669Z] INFO: =================================
+[2026-10-06T06:06:46.802Z] ERROR: =================================
+[2026-10-06T06:06:46.803Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:06:46.804Z] ERROR: =================================
+[2026-10-06T06:06:46.804Z] ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T06:06:46.805Z] ERROR: =================================
+[2026-10-06T06:08:27.861Z] INFO: =================================
+[2026-10-06T06:08:27.865Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:08:27.866Z] INFO: =================================
+[2026-10-06T06:08:27.867Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:08:27.868Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:08:27.869Z] INFO: Currency: INR
+[2026-10-06T06:08:27.870Z] INFO: Receipt: rcpt_1791266907861_629
+[2026-10-06T06:08:27.874Z] INFO: =================================
+[2026-10-06T06:08:28.074Z] ERROR: =================================
+[2026-10-06T06:08:28.075Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:08:28.076Z] ERROR: =================================
+[2026-10-06T06:08:28.077Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:08:28.078Z] ERROR: =================================
+[2026-10-06T06:09:16.319Z] INFO: =================================
+[2026-10-06T06:09:16.327Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:09:16.335Z] INFO: =================================
+[2026-10-06T06:09:16.337Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:09:16.345Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:09:16.399Z] INFO: Currency: INR
+[2026-10-06T06:09:16.435Z] INFO: Receipt: rcpt_1791266956319_176
+[2026-10-06T06:09:16.438Z] INFO: =================================
+[2026-10-06T06:09:16.561Z] ERROR: =================================
+[2026-10-06T06:09:16.563Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:09:16.564Z] ERROR: =================================
+[2026-10-06T06:09:16.565Z] ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T06:09:16.565Z] ERROR: =================================
+[2026-10-06T06:09:46.056Z] INFO: =================================
+[2026-10-06T06:09:46.057Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:09:46.058Z] INFO: =================================
+[2026-10-06T06:09:46.058Z] INFO: Amount in Rupees: 890
+[2026-10-06T06:09:46.059Z] INFO: Amount in Paise: 89000
+[2026-10-06T06:09:46.060Z] INFO: Currency: INR
+[2026-10-06T06:09:46.060Z] INFO: Receipt: rcpt_1791266986056_743
+[2026-10-06T06:09:46.062Z] INFO: =================================
+[2026-10-06T06:09:46.197Z] ERROR: =================================
+[2026-10-06T06:09:46.198Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:09:46.199Z] ERROR: =================================
+[2026-10-06T06:09:46.200Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:09:46.201Z] ERROR: =================================
+[2026-10-06T06:10:03.117Z] INFO: 
+[2026-10-06T06:10:03.118Z] INFO: ====================================
+[2026-10-06T06:10:03.118Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-06T06:10:03.119Z] INFO: ====================================
+[2026-10-06T06:10:03.119Z] INFO: Mobile Number : 9150671005
+[2026-10-06T06:10:03.120Z] INFO: Purpose       : LOGIN
+[2026-10-06T06:10:03.122Z] INFO: OTP           : 381476
+[2026-10-06T06:10:03.127Z] INFO: Expires At    : "2026-10-06T06:15:03.050Z"
+[2026-10-06T06:10:03.129Z] INFO: ====================================
+[2026-10-06T06:10:03.131Z] INFO: 
+[2026-10-06T06:10:17.106Z] INFO: 
+[2026-10-06T06:10:17.114Z] INFO: ====================================
+[2026-10-06T06:10:17.116Z] INFO:         VERIFY OTP DEBUG
+[2026-10-06T06:10:17.118Z] INFO: ====================================
+[2026-10-06T06:10:17.119Z] INFO: Mobile Number : 9150671005
+[2026-10-06T06:10:17.152Z] INFO: Entered OTP   : 381476
+[2026-10-06T06:10:17.162Z] INFO: OTP ID        : "6ac490bb358f0b09b9431e56"
+[2026-10-06T06:10:17.165Z] INFO: Stored OTP    : 381476
+[2026-10-06T06:10:17.166Z] INFO: Purpose       : LOGIN
+[2026-10-06T06:10:17.167Z] INFO: Expires At    : "2026-10-06T06:15:03.050Z"
+[2026-10-06T06:10:17.168Z] INFO: Attempts      : 0
+[2026-10-06T06:10:17.169Z] INFO: Max Attempts  : 5
+[2026-10-06T06:10:17.170Z] INFO: Is Verified   : false
+[2026-10-06T06:10:17.170Z] INFO: ====================================
+[2026-10-06T06:10:17.184Z] INFO: 
+[2026-10-06T06:10:36.995Z] INFO: =================================
+[2026-10-06T06:10:36.997Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:10:36.998Z] INFO: =================================
+[2026-10-06T06:10:37.000Z] INFO: Amount in Rupees: 890
+[2026-10-06T06:10:37.005Z] INFO: Amount in Paise: 89000
+[2026-10-06T06:10:37.019Z] INFO: Currency: INR
+[2026-10-06T06:10:37.022Z] INFO: Receipt: rcpt_1791267036995_781
+[2026-10-06T06:10:37.034Z] INFO: =================================
+[2026-10-06T06:10:37.193Z] ERROR: =================================
+[2026-10-06T06:10:37.196Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:10:37.197Z] ERROR: =================================
+[2026-10-06T06:10:37.197Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:10:37.198Z] ERROR: =================================
+[2026-10-06T06:11:08.741Z] INFO: =================================
+[2026-10-06T06:11:08.742Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:11:08.743Z] INFO: =================================
+[2026-10-06T06:11:08.744Z] INFO: Amount in Rupees: 890
+[2026-10-06T06:11:08.745Z] INFO: Amount in Paise: 89000
+[2026-10-06T06:11:08.745Z] INFO: Currency: INR
+[2026-10-06T06:11:08.746Z] INFO: Receipt: rcpt_1791267068741_882
+[2026-10-06T06:11:08.747Z] INFO: =================================
+[2026-10-06T06:11:08.900Z] ERROR: =================================
+[2026-10-06T06:11:08.901Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:11:08.902Z] ERROR: =================================
+[2026-10-06T06:11:08.908Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:11:08.912Z] ERROR: =================================
+[2026-10-06T06:11:21.309Z] INFO: =================================
+[2026-10-06T06:11:21.310Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:11:21.311Z] INFO: =================================
+[2026-10-06T06:11:21.311Z] INFO: Amount in Rupees: 890
+[2026-10-06T06:11:21.312Z] INFO: Amount in Paise: 89000
+[2026-10-06T06:11:21.315Z] INFO: Currency: INR
+[2026-10-06T06:11:21.320Z] INFO: Receipt: rcpt_1791267081309_49
+[2026-10-06T06:11:21.322Z] INFO: =================================
+[2026-10-06T06:11:21.443Z] ERROR: =================================
+[2026-10-06T06:11:21.444Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:11:21.444Z] ERROR: =================================
+[2026-10-06T06:11:21.445Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:11:21.446Z] ERROR: =================================
+[2026-10-06T06:49:02.062Z] INFO: =================================
+[2026-10-06T06:49:02.068Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T06:49:02.069Z] INFO: =================================
+[2026-10-06T06:49:02.072Z] INFO: Amount in Rupees: 1504
+[2026-10-06T06:49:02.073Z] INFO: Amount in Paise: 150400
+[2026-10-06T06:49:02.075Z] INFO: Currency: INR
+[2026-10-06T06:49:02.080Z] INFO: Receipt: rcpt_1791269342062_656
+[2026-10-06T06:49:02.083Z] INFO: =================================
+[2026-10-06T06:49:02.253Z] ERROR: =================================
+[2026-10-06T06:49:02.254Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T06:49:02.255Z] ERROR: =================================
+[2026-10-06T06:49:02.256Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T06:49:02.257Z] ERROR: =================================
+[2026-10-06T07:09:00.182Z] INFO: =================================
+[2026-10-06T07:09:00.188Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T07:09:00.191Z] INFO: =================================
+[2026-10-06T07:09:00.191Z] INFO: Amount in Rupees: 752
+[2026-10-06T07:09:00.193Z] INFO: Amount in Paise: 75200
+[2026-10-06T07:09:00.194Z] INFO: Currency: INR
+[2026-10-06T07:09:00.195Z] INFO: Receipt: rcpt_1791270540182_833
+[2026-10-06T07:09:00.199Z] INFO: =================================
+[2026-10-06T07:09:00.458Z] ERROR: =================================
+[2026-10-06T07:09:00.459Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T07:09:00.460Z] ERROR: =================================
+[2026-10-06T07:09:00.460Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T07:09:00.461Z] ERROR: =================================
+[2026-10-06T07:09:32.982Z] INFO: =================================
+[2026-10-06T07:09:32.983Z] INFO: CREATING RAZORPAY ORDER
+[2026-10-06T07:09:32.984Z] INFO: =================================
+[2026-10-06T07:09:32.985Z] INFO: Amount in Rupees: 752
+[2026-10-06T07:09:32.985Z] INFO: Amount in Paise: 75200
+[2026-10-06T07:09:32.986Z] INFO: Currency: INR
+[2026-10-06T07:09:32.987Z] INFO: Receipt: rcpt_1791270572982_470
+[2026-10-06T07:09:32.988Z] INFO: =================================
+[2026-10-06T07:09:33.117Z] ERROR: =================================
+[2026-10-06T07:09:33.120Z] ERROR: ERROR CREATING RAZORPAY ORDER
+[2026-10-06T07:09:33.123Z] ERROR: =================================
+[2026-10-06T07:09:33.126Z] ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T07:09:33.138Z] ERROR: =================================
+[2026-10-06T09:08:28.954Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-06T09:08:28.959Z] INFO: ========================================
+[2026-10-06T09:08:28.962Z] INFO: Hazel application starting
+[2026-10-06T09:08:28.965Z] INFO: Node version: v24.16.0
+[2026-10-06T09:08:28.967Z] INFO: Environment: development
+[2026-10-06T09:08:28.968Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T09:08:28.968Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T09:08:28.969Z] INFO: PORT: 5004
+[2026-10-06T09:08:28.970Z] INFO: ========================================
+[2026-10-06T09:08:45.757Z] INFO: =================================
+[2026-10-06T09:08:45.758Z] INFO: RAZORPAY CONFIG
+[2026-10-06T09:08:45.759Z] INFO: =================================
+[2026-10-06T09:08:45.759Z] INFO: Razorpay Key ID: rzp_test_TiWJSnoTBfvPZu
+[2026-10-06T09:08:45.760Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T09:08:45.761Z] INFO: =================================
+[2026-10-06T09:08:45.857Z] INFO: App loaded successfully
+[2026-10-06T09:08:45.858Z] INFO: Connecting to MongoDB...
+[2026-10-06T09:08:45.859Z] INFO: Environment: development
+[2026-10-06T09:08:45.860Z] INFO: MongoDB URI exists: true
+[2026-10-06T09:08:45.888Z] INFO: Server running on port 5004
+[2026-10-06T09:08:45.893Z] INFO: Hazel backend started successfully
+[2026-10-06T09:08:46.517Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T09:08:47.087Z] ERROR: (node:5668) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T09:09:40.231Z] INFO: 
+[2026-10-06T09:09:40.234Z] INFO: ====================================
+[2026-10-06T09:09:40.237Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-06T09:09:40.241Z] INFO: ====================================
+[2026-10-06T09:09:40.245Z] INFO: Mobile Number : 9150671005
+[2026-10-06T09:09:40.249Z] INFO: Purpose       : LOGIN
+[2026-10-06T09:09:40.252Z] INFO: OTP           : 853057
+[2026-10-06T09:09:40.256Z] INFO: Expires At    : "2026-10-06T09:14:40.077Z"
+[2026-10-06T09:09:40.259Z] INFO: ====================================
+[2026-10-06T09:09:40.262Z] INFO: 
+[2026-10-06T09:09:46.576Z] INFO: 
+[2026-10-06T09:09:46.579Z] INFO: ====================================
+[2026-10-06T09:09:46.581Z] INFO:         VERIFY OTP DEBUG
+[2026-10-06T09:09:46.581Z] INFO: ====================================
+[2026-10-06T09:09:46.582Z] INFO: Mobile Number : 9150671005
+[2026-10-06T09:09:46.584Z] INFO: Entered OTP   : 853057
+[2026-10-06T09:09:46.585Z] INFO: OTP ID        : "6ac4bad44e03851780172850"
+[2026-10-06T09:09:46.586Z] INFO: Stored OTP    : 853057
+[2026-10-06T09:09:46.588Z] INFO: Purpose       : LOGIN
+[2026-10-06T09:09:46.590Z] INFO: Expires At    : "2026-10-06T09:14:40.077Z"
+[2026-10-06T09:09:46.591Z] INFO: Attempts      : 0
+[2026-10-06T09:09:46.597Z] INFO: Max Attempts  : 5
+[2026-10-06T09:09:46.598Z] INFO: Is Verified   : false
+[2026-10-06T09:09:46.601Z] INFO: ====================================
+[2026-10-06T09:09:46.603Z] INFO: 
+[2026-10-06T09:11:01.860Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-06T09:11:01.862Z] INFO: ========================================
+[2026-10-06T09:11:01.864Z] INFO: Hazel application starting
+[2026-10-06T09:11:01.865Z] INFO: Node version: v24.16.0
+[2026-10-06T09:11:01.865Z] INFO: Environment: development
+[2026-10-06T09:11:01.866Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T09:11:01.867Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T09:11:01.868Z] INFO: PORT: 5004
+[2026-10-06T09:11:01.869Z] INFO: ========================================
+[2026-10-06T09:11:03.508Z] INFO: =================================
+[2026-10-06T09:11:03.516Z] INFO: RAZORPAY CONFIG
+[2026-10-06T09:11:03.521Z] INFO: =================================
+[2026-10-06T09:11:03.551Z] INFO: Razorpay Key ID: rzp_test_TiWJSnoTBfvPZu
+[2026-10-06T09:11:03.561Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T09:11:03.578Z] INFO: =================================
+[2026-10-06T09:11:03.718Z] INFO: App loaded successfully
+[2026-10-06T09:11:03.723Z] INFO: Connecting to MongoDB...
+[2026-10-06T09:11:03.726Z] INFO: Environment: development
+[2026-10-06T09:11:03.729Z] INFO: MongoDB URI exists: true
+[2026-10-06T09:11:03.779Z] INFO: Server running on port 5004
+[2026-10-06T09:11:03.805Z] INFO: Hazel backend started successfully
+[2026-10-06T09:11:04.391Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T09:11:04.820Z] ERROR: (node:22896) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T09:47:19.719Z] INFO: 
+[2026-10-06T09:47:19.728Z] INFO: ====================================
+[2026-10-06T09:47:19.728Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-06T09:47:19.729Z] INFO: ====================================
+[2026-10-06T09:47:19.730Z] INFO: Mobile Number : 9150671005
+[2026-10-06T09:47:19.733Z] INFO: Purpose       : LOGIN
+[2026-10-06T09:47:19.734Z] INFO: OTP           : 565360
+[2026-10-06T09:47:19.734Z] INFO: Expires At    : "2026-10-06T09:52:19.603Z"
+[2026-10-06T09:47:19.741Z] INFO: ====================================
+[2026-10-06T09:47:19.741Z] INFO: 
+[2026-10-06T09:47:24.979Z] INFO: 
+[2026-10-06T09:47:24.980Z] INFO: ====================================
+[2026-10-06T09:47:24.981Z] INFO:         VERIFY OTP DEBUG
+[2026-10-06T09:47:24.982Z] INFO: ====================================
+[2026-10-06T09:47:24.984Z] INFO: Mobile Number : 9150671005
+[2026-10-06T09:47:24.985Z] INFO: Entered OTP   : 565360
+[2026-10-06T09:47:24.989Z] INFO: OTP ID        : "6ac4c3a73982623d96153e6d"
+[2026-10-06T09:47:24.992Z] INFO: Stored OTP    : 565360
+[2026-10-06T09:47:24.995Z] INFO: Purpose       : LOGIN
+[2026-10-06T09:47:24.997Z] INFO: Expires At    : "2026-10-06T09:52:19.603Z"
+[2026-10-06T09:47:24.999Z] INFO: Attempts      : 0
+[2026-10-06T09:47:25.003Z] INFO: Max Attempts  : 5
+[2026-10-06T09:47:25.007Z] INFO: Is Verified   : false
+[2026-10-06T09:47:25.007Z] INFO: ====================================
+[2026-10-06T09:47:25.008Z] INFO: 
+[2026-10-06T10:06:38.149Z] ERROR: ADD TO CART ERROR: MongoServerError: E11000 duplicate key error collection: hazel_ecommerce.carts index: user_1 dup key: { user: null }
+    at InsertOneOperation.handleOk (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\insert.js:51:19)
+    at executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:194:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:435:16)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async exports.addToCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:401:7)
+[2026-10-06T10:07:14.070Z] ERROR: ADD TO CART ERROR: MongoServerError: E11000 duplicate key error collection: hazel_ecommerce.carts index: user_1 dup key: { user: null }
+    at InsertOneOperation.handleOk (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\insert.js:51:19)
+    at executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:194:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:435:16)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async exports.addToCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:401:7)
+[2026-10-06T10:07:29.525Z] ERROR: ADD TO CART ERROR: MongoServerError: E11000 duplicate key error collection: hazel_ecommerce.carts index: user_1 dup key: { user: null }
+    at InsertOneOperation.handleOk (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\insert.js:51:19)
+    at executeOperationWithRetries (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:194:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async executeOperation (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:435:16)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async exports.addToCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:401:7)
+[2026-10-06T11:02:40.056Z] ERROR: CREATE RAZORPAY ORDER ERROR: {"statusCode":401,"error":{"description":"Authentication failed","code":"BAD_REQUEST_ERROR"}}
+[2026-10-06T11:06:20.012Z] ERROR: CREATE RAZORPAY ORDER ERROR: {"statusCode":401,"error":{"code":"BAD_REQUEST_ERROR","description":"Authentication failed"}}
+[2026-10-06T11:11:38.912Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-10-06T11:11:38.925Z] INFO: ========================================
+[2026-10-06T11:11:38.926Z] INFO: Hazel application starting
+[2026-10-06T11:11:38.938Z] INFO: Node version: v24.16.0
+[2026-10-06T11:11:38.940Z] INFO: Environment: development
+[2026-10-06T11:11:38.942Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T11:11:38.943Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T11:11:38.944Z] INFO: PORT: 5004
+[2026-10-06T11:11:38.946Z] INFO: ========================================
+[2026-10-06T11:11:44.009Z] INFO: =================================
+[2026-10-06T11:11:44.022Z] INFO: RAZORPAY CONFIG
+[2026-10-06T11:11:44.024Z] INFO: =================================
+[2026-10-06T11:11:44.039Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-06T11:11:44.047Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T11:11:44.092Z] INFO: =================================
+[2026-10-06T11:11:45.133Z] INFO: App loaded successfully
+[2026-10-06T11:11:45.135Z] INFO: Connecting to MongoDB...
+[2026-10-06T11:11:45.139Z] INFO: Environment: development
+[2026-10-06T11:11:45.141Z] INFO: MongoDB URI exists: true
+[2026-10-06T11:11:45.199Z] INFO: Server running on port 5004
+[2026-10-06T11:11:45.202Z] INFO: Hazel backend started successfully
+[2026-10-06T11:11:45.999Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T11:11:46.395Z] ERROR: (node:24308) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T11:56:49.244Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-10-06T11:56:49.249Z] INFO: ========================================
+[2026-10-06T11:56:49.250Z] INFO: Hazel application starting
+[2026-10-06T11:56:49.253Z] INFO: Node version: v24.16.0
+[2026-10-06T11:56:49.255Z] INFO: Environment: development
+[2026-10-06T11:56:49.257Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T11:56:49.259Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T11:56:49.260Z] INFO: PORT: 5004
+[2026-10-06T11:56:49.265Z] INFO: ========================================
+[2026-10-06T11:56:50.898Z] INFO: =================================
+[2026-10-06T11:56:50.899Z] INFO: RAZORPAY CONFIG
+[2026-10-06T11:56:50.915Z] INFO: =================================
+[2026-10-06T11:56:50.921Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-06T11:56:50.932Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T11:56:50.934Z] INFO: =================================
+[2026-10-06T11:56:51.039Z] INFO: App loaded successfully
+[2026-10-06T11:56:51.039Z] INFO: Connecting to MongoDB...
+[2026-10-06T11:56:51.042Z] INFO: Environment: development
+[2026-10-06T11:56:51.042Z] INFO: MongoDB URI exists: true
+[2026-10-06T11:56:51.067Z] INFO: Server running on port 5004
+[2026-10-06T11:56:51.069Z] INFO: Hazel backend started successfully
+[2026-10-06T11:56:53.679Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T11:56:54.111Z] ERROR: (node:18780) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-06T12:44:24.974Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac4c90d3"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-06T12:44:29.009Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac4c90d3"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-06T13:05:32.075Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-06T13:05:32.090Z] INFO: ========================================
+[2026-10-06T13:05:32.092Z] INFO: Hazel application starting
+[2026-10-06T13:05:32.093Z] INFO: Node version: v24.16.0
+[2026-10-06T13:05:32.096Z] INFO: Environment: development
+[2026-10-06T13:05:32.097Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T13:05:32.098Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-06T13:05:32.099Z] INFO: PORT: 5004
+[2026-10-06T13:05:32.100Z] INFO: ========================================
+[2026-10-06T13:05:33.959Z] INFO: =================================
+[2026-10-06T13:05:33.960Z] INFO: RAZORPAY CONFIG
+[2026-10-06T13:05:33.961Z] INFO: =================================
+[2026-10-06T13:05:33.961Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-06T13:05:33.962Z] INFO: Razorpay Secret Loaded: true
+[2026-10-06T13:05:33.963Z] INFO: =================================
+[2026-10-06T13:05:34.120Z] INFO: App loaded successfully
+[2026-10-06T13:05:34.124Z] INFO: Connecting to MongoDB...
+[2026-10-06T13:05:34.127Z] INFO: Environment: development
+[2026-10-06T13:05:34.129Z] INFO: MongoDB URI exists: true
+[2026-10-06T13:05:34.246Z] INFO: Server running on port 5004
+[2026-10-06T13:05:34.248Z] INFO: Hazel backend started successfully
+[2026-10-06T13:05:34.819Z] INFO: MongoDB Connected Successfully!!
+[2026-10-06T13:05:35.232Z] ERROR: (node:11072) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T04:28:06.631Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-10-07T04:28:06.635Z] INFO: ========================================
+[2026-10-07T04:28:06.635Z] INFO: Hazel application starting
+[2026-10-07T04:28:06.637Z] INFO: Node version: v24.16.0
+[2026-10-07T04:28:06.638Z] INFO: Environment: development
+[2026-10-07T04:28:06.638Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T04:28:06.639Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T04:28:06.640Z] INFO: PORT: 5004
+[2026-10-07T04:28:06.642Z] INFO: ========================================
+[2026-10-07T04:28:54.791Z] INFO: =================================
+[2026-10-07T04:28:54.797Z] INFO: RAZORPAY CONFIG
+[2026-10-07T04:28:54.800Z] INFO: =================================
+[2026-10-07T04:28:54.805Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T04:28:54.819Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T04:28:54.822Z] INFO: =================================
+[2026-10-07T04:28:54.984Z] INFO: App loaded successfully
+[2026-10-07T04:28:54.986Z] INFO: Connecting to MongoDB...
+[2026-10-07T04:28:54.989Z] INFO: Environment: development
+[2026-10-07T04:28:54.990Z] INFO: MongoDB URI exists: true
+[2026-10-07T04:28:55.114Z] INFO: Server running on port 5004
+[2026-10-07T04:28:55.131Z] INFO: Hazel backend started successfully
+[2026-10-07T04:28:55.158Z] ERROR: MongoDB Connection Failed
+[2026-10-07T04:28:55.165Z] ERROR: Error name: Error
+[2026-10-07T04:28:55.172Z] ERROR: Error message: querySrv ECONNREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+[2026-10-07T04:28:55.190Z] ERROR: Full error: Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.oaaml4x.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+[2026-10-07T04:29:55.277Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-10-07T04:29:55.280Z] INFO: ========================================
+[2026-10-07T04:29:55.281Z] INFO: Hazel application starting
+[2026-10-07T04:29:55.282Z] INFO: Node version: v24.16.0
+[2026-10-07T04:29:55.282Z] INFO: Environment: development
+[2026-10-07T04:29:55.283Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T04:29:55.284Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T04:29:55.286Z] INFO: PORT: 5004
+[2026-10-07T04:29:55.290Z] INFO: ========================================
+[2026-10-07T04:29:56.555Z] INFO: =================================
+[2026-10-07T04:29:56.560Z] INFO: RAZORPAY CONFIG
+[2026-10-07T04:29:56.562Z] INFO: =================================
+[2026-10-07T04:29:56.563Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T04:29:56.565Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T04:29:56.567Z] INFO: =================================
+[2026-10-07T04:29:56.661Z] INFO: App loaded successfully
+[2026-10-07T04:29:56.662Z] INFO: Connecting to MongoDB...
+[2026-10-07T04:29:56.664Z] INFO: Environment: development
+[2026-10-07T04:29:56.665Z] INFO: MongoDB URI exists: true
+[2026-10-07T04:29:56.687Z] INFO: Server running on port 5004
+[2026-10-07T04:29:56.689Z] INFO: Hazel backend started successfully
+[2026-10-07T04:29:57.275Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T04:29:57.686Z] ERROR: (node:3488) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T04:51:36.288Z] INFO: 
+[2026-10-07T04:51:36.291Z] INFO: ====================================
+[2026-10-07T04:51:36.291Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-07T04:51:36.292Z] INFO: ====================================
+[2026-10-07T04:51:36.292Z] INFO: Mobile Number : 9150671005
+[2026-10-07T04:51:36.294Z] INFO: Purpose       : LOGIN
+[2026-10-07T04:51:36.295Z] INFO: OTP           : 784695
+[2026-10-07T04:51:36.295Z] INFO: Expires At    : "2026-10-07T04:56:36.156Z"
+[2026-10-07T04:51:36.297Z] INFO: ====================================
+[2026-10-07T04:51:36.298Z] INFO: 
+[2026-10-07T04:51:44.846Z] INFO: 
+[2026-10-07T04:51:44.847Z] INFO: ====================================
+[2026-10-07T04:51:44.850Z] INFO:         VERIFY OTP DEBUG
+[2026-10-07T04:51:44.853Z] INFO: ====================================
+[2026-10-07T04:51:44.856Z] INFO: Mobile Number : 9150671005
+[2026-10-07T04:51:44.858Z] INFO: Entered OTP   : 784695
+[2026-10-07T04:51:44.861Z] INFO: OTP ID        : "6ac5cfd8e2a0dce29ced8578"
+[2026-10-07T04:51:44.865Z] INFO: Stored OTP    : 784695
+[2026-10-07T04:51:44.876Z] INFO: Purpose       : LOGIN
+[2026-10-07T04:51:44.878Z] INFO: Expires At    : "2026-10-07T04:56:36.156Z"
+[2026-10-07T04:51:44.887Z] INFO: Attempts      : 0
+[2026-10-07T04:51:44.889Z] INFO: Max Attempts  : 5
+[2026-10-07T04:51:44.894Z] INFO: Is Verified   : false
+[2026-10-07T04:51:44.896Z] INFO: ====================================
+[2026-10-07T04:51:44.898Z] INFO: 
+[2026-10-07T05:28:11.051Z] INFO: 
+[2026-10-07T05:28:11.067Z] INFO: ====================================
+[2026-10-07T05:28:11.073Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-07T05:28:11.077Z] INFO: ====================================
+[2026-10-07T05:28:11.078Z] INFO: Mobile Number : 9150671005
+[2026-10-07T05:28:11.080Z] INFO: Purpose       : LOGIN
+[2026-10-07T05:28:11.082Z] INFO: OTP           : 509198
+[2026-10-07T05:28:11.083Z] INFO: Expires At    : "2026-10-07T05:33:10.913Z"
+[2026-10-07T05:28:11.087Z] INFO: ====================================
+[2026-10-07T05:28:11.089Z] INFO: 
+[2026-10-07T05:28:15.720Z] INFO: 
+[2026-10-07T05:28:15.722Z] INFO: ====================================
+[2026-10-07T05:28:15.723Z] INFO:         VERIFY OTP DEBUG
+[2026-10-07T05:28:15.724Z] INFO: ====================================
+[2026-10-07T05:28:15.725Z] INFO: Mobile Number : 9150671005
+[2026-10-07T05:28:15.726Z] INFO: Entered OTP   : 509198
+[2026-10-07T05:28:15.727Z] INFO: OTP ID        : "6ac5d86ae2a0dce29ced8c79"
+[2026-10-07T05:28:15.730Z] INFO: Stored OTP    : 509198
+[2026-10-07T05:28:15.732Z] INFO: Purpose       : LOGIN
+[2026-10-07T05:28:15.736Z] INFO: Expires At    : "2026-10-07T05:33:10.913Z"
+[2026-10-07T05:28:15.739Z] INFO: Attempts      : 0
+[2026-10-07T05:28:15.740Z] INFO: Max Attempts  : 5
+[2026-10-07T05:28:15.744Z] INFO: Is Verified   : false
+[2026-10-07T05:28:15.753Z] INFO: ====================================
+[2026-10-07T05:28:15.755Z] INFO: 
+[2026-10-07T06:59:39.099Z] INFO: 
+[2026-10-07T06:59:39.107Z] INFO: ====================================
+[2026-10-07T06:59:39.108Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-07T06:59:39.109Z] INFO: ====================================
+[2026-10-07T06:59:39.110Z] INFO: Mobile Number : 9150671005
+[2026-10-07T06:59:39.112Z] INFO: Purpose       : LOGIN
+[2026-10-07T06:59:39.112Z] INFO: OTP           : 147792
+[2026-10-07T06:59:39.113Z] INFO: Expires At    : "2026-10-07T07:04:38.972Z"
+[2026-10-07T06:59:39.115Z] INFO: ====================================
+[2026-10-07T06:59:39.115Z] INFO: 
+[2026-10-07T06:59:49.533Z] INFO: 
+[2026-10-07T06:59:49.534Z] INFO: ====================================
+[2026-10-07T06:59:49.535Z] INFO:         VERIFY OTP DEBUG
+[2026-10-07T06:59:49.535Z] INFO: ====================================
+[2026-10-07T06:59:49.536Z] INFO: Mobile Number : 9150671005
+[2026-10-07T06:59:49.539Z] INFO: Entered OTP   : 147792
+[2026-10-07T06:59:49.543Z] INFO: OTP ID        : "6ac5eddbe2a0dce29ced8eb2"
+[2026-10-07T06:59:49.545Z] INFO: Stored OTP    : 147792
+[2026-10-07T06:59:49.548Z] INFO: Purpose       : LOGIN
+[2026-10-07T06:59:49.549Z] INFO: Expires At    : "2026-10-07T07:04:38.972Z"
+[2026-10-07T06:59:49.550Z] INFO: Attempts      : 0
+[2026-10-07T06:59:49.551Z] INFO: Max Attempts  : 5
+[2026-10-07T06:59:49.555Z] INFO: Is Verified   : false
+[2026-10-07T06:59:49.569Z] INFO: ====================================
+[2026-10-07T06:59:49.573Z] INFO: 
+[2026-10-07T07:00:04.767Z] INFO: 
+[2026-10-07T07:00:04.768Z] INFO: ====================================
+[2026-10-07T07:00:04.769Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-07T07:00:04.770Z] INFO: ====================================
+[2026-10-07T07:00:04.770Z] INFO: Mobile Number : 9150671005
+[2026-10-07T07:00:04.771Z] INFO: Purpose       : LOGIN
+[2026-10-07T07:00:04.772Z] INFO: OTP           : 302436
+[2026-10-07T07:00:04.773Z] INFO: Expires At    : "2026-10-07T07:05:04.702Z"
+[2026-10-07T07:00:04.777Z] INFO: ====================================
+[2026-10-07T07:00:04.778Z] INFO: 
+[2026-10-07T07:13:18.769Z] INFO: 
+[2026-10-07T07:13:18.773Z] INFO: ====================================
+[2026-10-07T07:13:18.774Z] INFO:         HAZEL DEVELOPMENT OTP
+[2026-10-07T07:13:18.777Z] INFO: ====================================
+[2026-10-07T07:13:18.779Z] INFO: Mobile Number : 9150671005
+[2026-10-07T07:13:18.781Z] INFO: Purpose       : LOGIN
+[2026-10-07T07:13:18.782Z] INFO: OTP           : 946573
+[2026-10-07T07:13:18.785Z] INFO: Expires At    : "2026-10-07T07:18:18.653Z"
+[2026-10-07T07:13:18.787Z] INFO: ====================================
+[2026-10-07T07:13:18.788Z] INFO: 
+[2026-10-07T07:13:25.009Z] INFO: 
+[2026-10-07T07:13:25.009Z] INFO: ====================================
+[2026-10-07T07:13:25.010Z] INFO:         VERIFY OTP DEBUG
+[2026-10-07T07:13:25.011Z] INFO: ====================================
+[2026-10-07T07:13:25.011Z] INFO: Mobile Number : 9150671005
+[2026-10-07T07:13:25.012Z] INFO: Entered OTP   : 946573
+[2026-10-07T07:13:25.013Z] INFO: OTP ID        : "6ac5f10ee2a0dce29ced8f9e"
+[2026-10-07T07:13:25.014Z] INFO: Stored OTP    : 946573
+[2026-10-07T07:13:25.015Z] INFO: Purpose       : LOGIN
+[2026-10-07T07:13:25.017Z] INFO: Expires At    : "2026-10-07T07:18:18.653Z"
+[2026-10-07T07:13:25.018Z] INFO: Attempts      : 0
+[2026-10-07T07:13:25.020Z] INFO: Max Attempts  : 5
+[2026-10-07T07:13:25.021Z] INFO: Is Verified   : false
+[2026-10-07T07:13:25.023Z] INFO: ====================================
+[2026-10-07T07:13:25.025Z] INFO: 
+[2026-10-07T08:58:47.679Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-07T08:58:47.682Z] INFO: ========================================
+[2026-10-07T08:58:47.683Z] INFO: Hazel application starting
+[2026-10-07T08:58:47.684Z] INFO: Node version: v24.16.0
+[2026-10-07T08:58:47.684Z] INFO: Environment: development
+[2026-10-07T08:58:47.685Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T08:58:47.686Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T08:58:47.687Z] INFO: PORT: 5004
+[2026-10-07T08:58:47.688Z] INFO: ========================================
+[2026-10-07T08:59:00.293Z] INFO: =================================
+[2026-10-07T08:59:00.295Z] INFO: RAZORPAY CONFIG
+[2026-10-07T08:59:00.296Z] INFO: =================================
+[2026-10-07T08:59:00.296Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T08:59:00.297Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T08:59:00.298Z] INFO: =================================
+[2026-10-07T08:59:00.412Z] INFO: App loaded successfully
+[2026-10-07T08:59:00.413Z] INFO: Connecting to MongoDB...
+[2026-10-07T08:59:00.414Z] INFO: Environment: development
+[2026-10-07T08:59:00.415Z] INFO: MongoDB URI exists: true
+[2026-10-07T08:59:00.477Z] INFO: Server running on port 5004
+[2026-10-07T08:59:00.496Z] INFO: Hazel backend started successfully
+[2026-10-07T08:59:01.200Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T08:59:01.610Z] ERROR: (node:10672) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T08:59:22.003Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T08:59:25.516Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T08:59:26.727Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T08:59:30.585Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T08:59:33.887Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T08:59:54.837Z] ERROR: CREATE ORDER ERROR: Error: Size "undefined" not found for "Aira Maxi – Signature Ruched Sleeve Maxi Dress Off-White".
+    at exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:318:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T09:04:04.126Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-07T09:04:04.133Z] INFO: ========================================
+[2026-10-07T09:04:04.134Z] INFO: Hazel application starting
+[2026-10-07T09:04:04.134Z] INFO: Node version: v24.16.0
+[2026-10-07T09:04:04.135Z] INFO: Environment: development
+[2026-10-07T09:04:04.136Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T09:04:04.137Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T09:04:04.140Z] INFO: PORT: 5004
+[2026-10-07T09:04:04.141Z] INFO: ========================================
+[2026-10-07T09:04:05.581Z] INFO: =================================
+[2026-10-07T09:04:05.586Z] INFO: RAZORPAY CONFIG
+[2026-10-07T09:04:05.588Z] INFO: =================================
+[2026-10-07T09:04:05.590Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T09:04:05.594Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T09:04:05.598Z] INFO: =================================
+[2026-10-07T09:04:05.710Z] INFO: App loaded successfully
+[2026-10-07T09:04:05.711Z] INFO: Connecting to MongoDB...
+[2026-10-07T09:04:05.713Z] INFO: Environment: development
+[2026-10-07T09:04:05.714Z] INFO: MongoDB URI exists: true
+[2026-10-07T09:04:05.736Z] INFO: Server running on port 5004
+[2026-10-07T09:04:05.741Z] INFO: Hazel backend started successfully
+[2026-10-07T09:04:06.355Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T09:04:06.758Z] ERROR: (node:9736) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T09:04:23.257Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T09:04:55.839Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T09:13:13.280Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-10-07T09:13:13.283Z] INFO: ========================================
+[2026-10-07T09:13:13.284Z] INFO: Hazel application starting
+[2026-10-07T09:13:13.285Z] INFO: Node version: v24.16.0
+[2026-10-07T09:13:13.286Z] INFO: Environment: development
+[2026-10-07T09:13:13.287Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T09:13:13.288Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T09:13:13.289Z] INFO: PORT: 5004
+[2026-10-07T09:13:13.364Z] INFO: ========================================
+[2026-10-07T09:13:14.739Z] INFO: =================================
+[2026-10-07T09:13:14.741Z] INFO: RAZORPAY CONFIG
+[2026-10-07T09:13:14.742Z] INFO: =================================
+[2026-10-07T09:13:14.745Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T09:13:14.748Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T09:13:14.750Z] INFO: =================================
+[2026-10-07T09:13:14.859Z] INFO: App loaded successfully
+[2026-10-07T09:13:14.865Z] INFO: Connecting to MongoDB...
+[2026-10-07T09:13:14.866Z] INFO: Environment: development
+[2026-10-07T09:13:14.868Z] INFO: MongoDB URI exists: true
+[2026-10-07T09:13:14.891Z] INFO: Server running on port 5004
+[2026-10-07T09:13:14.901Z] INFO: Hazel backend started successfully
+[2026-10-07T09:13:15.502Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T09:13:15.892Z] ERROR: (node:20552) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T09:48:36.075Z] INFO: =================================
+[2026-10-07T09:48:36.081Z] INFO: CREATE REVIEW
+[2026-10-07T09:48:36.082Z] INFO: userId: 6aa506cf2e2291bf4b562df1
+[2026-10-07T09:48:36.086Z] INFO: productId: 6abdf0ee07263e9363fe324c
+[2026-10-07T09:48:36.086Z] INFO: orderId: undefined
+[2026-10-07T09:48:36.089Z] INFO: orderItemId: undefined
+[2026-10-07T09:48:36.091Z] INFO: =================================
+[2026-10-07T09:48:36.125Z] INFO: ORDER FOUND: null
+[2026-10-07T09:48:41.266Z] INFO: =================================
+[2026-10-07T09:48:41.267Z] INFO: CREATE REVIEW
+[2026-10-07T09:48:41.269Z] INFO: userId: 6aa506cf2e2291bf4b562df1
+[2026-10-07T09:48:41.270Z] INFO: productId: 6abdf0ee07263e9363fe324c
+[2026-10-07T09:48:41.271Z] INFO: orderId: undefined
+[2026-10-07T09:48:41.273Z] INFO: orderItemId: undefined
+[2026-10-07T09:48:41.275Z] INFO: =================================
+[2026-10-07T09:48:41.323Z] INFO: ORDER FOUND: null
+[2026-10-07T10:24:35.703Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:24:41.425Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:24:59.163Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:25:00.530Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:25:01.545Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:26:09.508Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac609ddb"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:27:16.198Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61e79d"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:30:11.843Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61e79d"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:30:13.269Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61e79d"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:30:56.275Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61f4dd"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:30:58.160Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61f4dd"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:40:19.143Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-07T10:40:19.146Z] INFO: ========================================
+[2026-10-07T10:40:19.147Z] INFO: Hazel application starting
+[2026-10-07T10:40:19.148Z] INFO: Node version: v24.16.0
+[2026-10-07T10:40:19.149Z] INFO: Environment: development
+[2026-10-07T10:40:19.150Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:40:19.150Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:40:19.153Z] INFO: PORT: 5004
+[2026-10-07T10:40:19.155Z] INFO: ========================================
+[2026-10-07T10:40:20.431Z] INFO: =================================
+[2026-10-07T10:40:20.433Z] INFO: RAZORPAY CONFIG
+[2026-10-07T10:40:20.435Z] INFO: =================================
+[2026-10-07T10:40:20.437Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T10:40:20.439Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T10:40:20.440Z] INFO: =================================
+[2026-10-07T10:40:20.550Z] INFO: App loaded successfully
+[2026-10-07T10:40:20.553Z] INFO: Connecting to MongoDB...
+[2026-10-07T10:40:20.555Z] INFO: Environment: development
+[2026-10-07T10:40:20.556Z] INFO: MongoDB URI exists: true
+[2026-10-07T10:40:20.584Z] INFO: Server running on port 5004
+[2026-10-07T10:40:20.586Z] INFO: Hazel backend started successfully
+[2026-10-07T10:40:21.239Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T10:40:21.688Z] ERROR: (node:17168) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T10:40:26.677Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61f4dd"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:40:33.315Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61f4dd"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T10:41:00.437Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-07T10:41:00.441Z] INFO: ========================================
+[2026-10-07T10:41:00.443Z] INFO: Hazel application starting
+[2026-10-07T10:41:00.445Z] INFO: Node version: v24.16.0
+[2026-10-07T10:41:00.448Z] INFO: Environment: development
+[2026-10-07T10:41:00.450Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:41:00.452Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:41:00.453Z] INFO: PORT: 5004
+[2026-10-07T10:41:00.454Z] INFO: ========================================
+[2026-10-07T10:41:01.439Z] INFO: =================================
+[2026-10-07T10:41:01.439Z] INFO: RAZORPAY CONFIG
+[2026-10-07T10:41:01.440Z] INFO: =================================
+[2026-10-07T10:41:01.441Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T10:41:01.441Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T10:41:01.442Z] INFO: =================================
+[2026-10-07T10:41:01.505Z] INFO: App loaded successfully
+[2026-10-07T10:41:01.506Z] INFO: Connecting to MongoDB...
+[2026-10-07T10:41:01.507Z] INFO: Environment: development
+[2026-10-07T10:41:01.507Z] INFO: MongoDB URI exists: true
+[2026-10-07T10:41:01.527Z] INFO: Server running on port 5004
+[2026-10-07T10:41:01.529Z] INFO: Hazel backend started successfully
+[2026-10-07T10:41:02.060Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T10:41:02.481Z] ERROR: (node:20148) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T10:42:28.831Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T10:43:14.897Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T10:51:20.277Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-10-07T10:51:20.286Z] INFO: ========================================
+[2026-10-07T10:51:20.288Z] INFO: Hazel application starting
+[2026-10-07T10:51:20.289Z] INFO: Node version: v24.16.0
+[2026-10-07T10:51:20.290Z] INFO: Environment: development
+[2026-10-07T10:51:20.292Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:51:20.294Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:51:20.295Z] INFO: PORT: 5004
+[2026-10-07T10:51:20.296Z] INFO: ========================================
+[2026-10-07T10:51:22.535Z] INFO: =================================
+[2026-10-07T10:51:22.579Z] INFO: RAZORPAY CONFIG
+[2026-10-07T10:51:22.639Z] INFO: =================================
+[2026-10-07T10:51:22.691Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T10:51:22.706Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T10:51:22.719Z] INFO: =================================
+[2026-10-07T10:51:22.826Z] INFO: App loaded successfully
+[2026-10-07T10:51:22.830Z] INFO: Connecting to MongoDB...
+[2026-10-07T10:51:22.833Z] INFO: Environment: development
+[2026-10-07T10:51:22.838Z] INFO: MongoDB URI exists: true
+[2026-10-07T10:51:22.907Z] INFO: Server running on port 5004
+[2026-10-07T10:51:22.913Z] INFO: Hazel backend started successfully
+[2026-10-07T10:51:23.490Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-10-07T10:51:23.513Z] INFO: ========================================
+[2026-10-07T10:51:23.535Z] INFO: Hazel application starting
+[2026-10-07T10:51:23.541Z] INFO: Node version: v24.16.0
+[2026-10-07T10:51:23.564Z] INFO: Environment: development
+[2026-10-07T10:51:23.590Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:51:23.653Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:51:23.670Z] INFO: PORT: 5004
+[2026-10-07T10:51:23.724Z] INFO: ========================================
+[2026-10-07T10:51:25.125Z] INFO: =================================
+[2026-10-07T10:51:25.129Z] INFO: RAZORPAY CONFIG
+[2026-10-07T10:51:25.131Z] INFO: =================================
+[2026-10-07T10:51:25.134Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T10:51:25.138Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T10:51:25.139Z] INFO: =================================
+[2026-10-07T10:51:25.231Z] INFO: App loaded successfully
+[2026-10-07T10:51:25.234Z] INFO: Connecting to MongoDB...
+[2026-10-07T10:51:25.237Z] INFO: Environment: development
+[2026-10-07T10:51:25.242Z] INFO: MongoDB URI exists: true
+[2026-10-07T10:51:25.276Z] INFO: Server running on port 5004
+[2026-10-07T10:51:25.279Z] INFO: Hazel backend started successfully
+[2026-10-07T10:51:25.734Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T10:51:26.176Z] ERROR: (node:22436) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T10:54:50.217Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-07T10:54:50.258Z] INFO: ========================================
+[2026-10-07T10:54:50.267Z] INFO: Hazel application starting
+[2026-10-07T10:54:50.276Z] INFO: Node version: v24.16.0
+[2026-10-07T10:54:50.289Z] INFO: Environment: development
+[2026-10-07T10:54:50.296Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:54:50.299Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T10:54:50.309Z] INFO: PORT: 5004
+[2026-10-07T10:54:50.400Z] INFO: ========================================
+[2026-10-07T10:54:52.448Z] INFO: =================================
+[2026-10-07T10:54:52.449Z] INFO: RAZORPAY CONFIG
+[2026-10-07T10:54:52.450Z] INFO: =================================
+[2026-10-07T10:54:52.453Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T10:54:52.455Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T10:54:52.457Z] INFO: =================================
+[2026-10-07T10:54:52.553Z] INFO: App loaded successfully
+[2026-10-07T10:54:52.554Z] INFO: Connecting to MongoDB...
+[2026-10-07T10:54:52.555Z] INFO: Environment: development
+[2026-10-07T10:54:52.555Z] INFO: MongoDB URI exists: true
+[2026-10-07T10:54:52.579Z] INFO: Server running on port 5004
+[2026-10-07T10:54:52.587Z] INFO: Hazel backend started successfully
+[2026-10-07T10:54:53.243Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T10:54:53.654Z] ERROR: (node:2948) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T10:54:57.781Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T10:55:20.041Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T10:56:33.464Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:03:16.371Z] ERROR: Global Error: SyntaxError: Unexpected token '"', ""6ac61f4dd"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:137:10)
+    at parse (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:509:28)
+    at endReadableNT (node:internal/streams/readable:1735:12)
+[2026-10-07T11:06:37.758Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:12:35.003Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:12:35.912Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:12:36.106Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:12:36.247Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:12:49.686Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:16:22.283Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:16:26.224Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:16:27.188Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:16:28.030Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:16:30.800Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:16:31.463Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:18:45.779Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:19:57.693Z] INFO: ◇ injected env (20) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-10-07T11:19:57.696Z] INFO: ========================================
+[2026-10-07T11:19:57.697Z] INFO: Hazel application starting
+[2026-10-07T11:19:57.698Z] INFO: Node version: v24.16.0
+[2026-10-07T11:19:57.698Z] INFO: Environment: development
+[2026-10-07T11:19:57.699Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T11:19:57.700Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T11:19:57.700Z] INFO: PORT: 5004
+[2026-10-07T11:19:57.701Z] INFO: ========================================
+[2026-10-07T11:19:59.468Z] INFO: =================================
+[2026-10-07T11:19:59.472Z] INFO: RAZORPAY CONFIG
+[2026-10-07T11:19:59.474Z] INFO: =================================
+[2026-10-07T11:19:59.482Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T11:19:59.486Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T11:19:59.491Z] INFO: =================================
+[2026-10-07T11:19:59.625Z] INFO: App loaded successfully
+[2026-10-07T11:19:59.628Z] INFO: Connecting to MongoDB...
+[2026-10-07T11:19:59.630Z] INFO: Environment: development
+[2026-10-07T11:19:59.632Z] INFO: MongoDB URI exists: true
+[2026-10-07T11:19:59.665Z] INFO: Server running on port 5004
+[2026-10-07T11:19:59.668Z] INFO: Hazel backend started successfully
+[2026-10-07T11:20:00.303Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T11:20:00.678Z] ERROR: (node:4764) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-07T11:33:21.762Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:33:27.360Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:33:30.942Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:33:47.945Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:35:55.699Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:36:04.075Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:36:12.061Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:36:48.021Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:38:37.029Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:38:45.302Z] ERROR: REMOVE CART ERROR: TypeError: Cannot read properties of undefined (reading 'toString')
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:460:49
+    at Array.filter (<anonymous>)
+    at methods.<computed> (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\types\array\methods\index.js:1091:24)
+    at exports.removeFromCart (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\cartController.js:457:29)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-10-07T11:53:24.252Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:56:33.703Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T11:56:53.426Z] ERROR: CREATE ORDER ERROR: ValidationError: Order validation failed: shippingAddress.addressLine1: Path `shippingAddress.addressLine1` is required.
+    at model.validate (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\document.js:2910:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:676:7)
+    at async C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2833:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\mongoose\lib\model.js:2818:11)
+    at async exports.createOrder (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\controllers\paymentController.js:279:21)
+[2026-10-07T12:03:19.626Z] INFO: ◇ injected env (20) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-10-07T12:03:19.628Z] INFO: ========================================
+[2026-10-07T12:03:19.629Z] INFO: Hazel application starting
+[2026-10-07T12:03:19.630Z] INFO: Node version: v24.16.0
+[2026-10-07T12:03:19.630Z] INFO: Environment: development
+[2026-10-07T12:03:19.631Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:03:19.632Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-07T12:03:19.632Z] INFO: PORT: 5004
+[2026-10-07T12:03:19.633Z] INFO: ========================================
+[2026-10-07T12:03:21.679Z] INFO: =================================
+[2026-10-07T12:03:21.688Z] INFO: RAZORPAY CONFIG
+[2026-10-07T12:03:21.693Z] INFO: =================================
+[2026-10-07T12:03:21.696Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-10-07T12:03:21.697Z] INFO: Razorpay Secret Loaded: true
+[2026-10-07T12:03:21.699Z] INFO: =================================
+[2026-10-07T12:03:21.930Z] INFO: App loaded successfully
+[2026-10-07T12:03:21.931Z] INFO: Connecting to MongoDB...
+[2026-10-07T12:03:21.933Z] INFO: Environment: development
+[2026-10-07T12:03:21.937Z] INFO: MongoDB URI exists: true
+[2026-10-07T12:03:21.985Z] INFO: Server running on port 5004
+[2026-10-07T12:03:21.988Z] INFO: Hazel backend started successfully
+[2026-10-07T12:03:22.507Z] INFO: MongoDB Connected Successfully!!
+[2026-10-07T12:03:22.899Z] ERROR: (node:9240) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)

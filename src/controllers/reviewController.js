@@ -2,6 +2,7 @@ const Review = require("../models/reviewModel");
 const Order = require("../models/orderModel");
 const OrderItem = require("../models/orderItemModel");
 const Product = require("../models/productModel");
+const mongoose = require("mongoose");
 
 const getUserId = (req) =>
   req.user?.id || req.user?._id || req.user?.userId;
@@ -59,7 +60,6 @@ exports.createReview = async (req, res) => {
       });
     }
 
-  
     // =========================================================
     // CHECK ORDER USER
     // =========================================================
@@ -192,8 +192,19 @@ exports.createReview = async (req, res) => {
 
 exports.getProductReviews = async (req, res) => {
   try {
+    const { productId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID format",
+      });
+    }
+
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+
     const reviews = await Review.find({
-      product: req.params.productId,
+      product: productObjectId,
       status: "APPROVED",
       isDeleted: false,
     })
@@ -203,9 +214,7 @@ exports.getProductReviews = async (req, res) => {
     const ratingSummary = await Review.aggregate([
       {
         $match: {
-          product: new (require("mongoose").Types.ObjectId)(
-            req.params.productId
-          ),
+          product: productObjectId,
           status: "APPROVED",
           isDeleted: false,
         },
@@ -232,6 +241,7 @@ exports.getProductReviews = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("GET PRODUCT REVIEWS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Failed to fetch reviews",
@@ -261,6 +271,7 @@ exports.getAllReviews = async (req, res) => {
       data: reviews,
     });
   } catch (error) {
+    console.error("GET ALL REVIEWS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Failed to fetch reviews",
@@ -313,6 +324,7 @@ exports.updateReviewStatus = async (req, res) => {
       data: review,
     });
   } catch (error) {
+    console.error("UPDATE REVIEW STATUS ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Failed to update review status",
@@ -351,6 +363,7 @@ exports.deleteReview = async (req, res) => {
       message: "Review deleted successfully",
     });
   } catch (error) {
+    console.error("DELETE REVIEW ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Failed to delete review",
