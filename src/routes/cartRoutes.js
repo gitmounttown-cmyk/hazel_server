@@ -9,19 +9,22 @@ const {
   clearCart,
 } = require("../controllers/cartController");
 
-const { verifyToken } = require("../middleware/authMiddleware");
+const { verifyToken, optionalAuth } = require("../middleware/authMiddleware");
 
 // Add item
-router.post("/add", verifyToken, addToCart);
+// router.post("/add", verifyToken, addToCart);
+router.post("/add", optionalAuth, addToCart);
 
 // Get cart
-router.get("/all", verifyToken, getCart);
+// router.get("/all", verifyToken, getCart);
+router.get("/all", optionalAuth, getCart);
 
 // Update item quantity
 router.put("/update", verifyToken, updateCartQuantity);
 
 // Remove single item
-router.delete("/remove", verifyToken, removeFromCart);
+// router.delete("/remove", verifyToken, removeFromCart);
+router.delete("/remove", optionalAuth, removeFromCart);
 
 // Clear entire cart
 router.delete("/clear", verifyToken, clearCart);

@@ -102,52 +102,140 @@ exports.createOrder = async (req, res) => {
 
   try {
     const userId = getUserId(req);
+    // Accept frontend amount directly
+    const { addressId, couponCode = "", customerNote = "", amount, deliveryAddress, products, guestId } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required.",
+        message: "Authentication required. Please login or continue as guest.",
       });
     }
 
-    // Accept frontend amount directly
-    const { addressId, couponCode = "", customerNote = "", amount } = req.body;
+    // ------------------------------------------------------
+// USER / GUEST DETAILS
+// ------------------------------------------------------
 
-    const user = await User.findById(userId);
+let user = null;
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
+if (userId) {
+  user = await User.findById(userId);
 
-    if (!addressId || !isValidObjectId(addressId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Valid addressId is required.",
-      });
-    }
-
-    const address = await Address.findOne({
-      _id: addressId,
-      user: userId,
-      isActive: true,
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
     });
+  }
+}
 
-    if (!address) {
-      return res.status(404).json({
-        success: false,
-        message: "Address not found or inactive.",
-      });
-    }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    }).populate({
-      path: "items.product",
+    // const user = await User.findById(userId);
+
+    // if (!user) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "User not found.",
+    //   });
+    // }
+
+
+
+    // if (!addressId || !isValidObjectId(addressId)) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Valid addressId is required.",
+    //   });
+    // }
+
+    // const address = await Address.findOne({
+    //   _id: addressId,
+    //   user: userId,
+    //   isActive: true,
+    // });
+
+    // if (!address) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Address not found or inactive.",
+    //   });
+    // }
+
+    // ------------------------------------------------------
+// ADDRESS
+// ------------------------------------------------------
+
+let address = null;
+
+if (userId) {
+  // Logged-in user → address must come from Address collection
+
+  if (!addressId || !isValidObjectId(addressId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Valid addressId is required.",
     });
+  }
+
+  address = await Address.findOne({
+    _id: addressId,
+    user: userId,
+    isActive: true,
+  });
+
+  if (!address) {
+    return res.status(404).json({
+      success: false,
+      message: "Address not found or inactive.",
+    });
+  }
+} else {
+  // Guest → address comes directly from checkout form
+
+  if (!deliveryAddress) {
+    return res.status(400).json({
+      success: false,
+      message: "Delivery address is required.",
+    });
+  }
+
+  if (
+    !deliveryAddress.fullName ||
+    !deliveryAddress.mobileNumber ||
+    !deliveryAddress.addressLine1 ||
+    !deliveryAddress.city ||
+    !deliveryAddress.state ||
+    !deliveryAddress.pincode
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide complete delivery address.",
+    });
+  }
+
+  address = deliveryAddress;
+}
+
+const cartQuery = {
+  status: "active",
+};
+
+if (userId) {
+  cartQuery.userId = userId;
+} else {
+  cartQuery.guestId = guestId;
+}
+
+const cart = await Cart.findOne(cartQuery).populate({
+  path: "items.product",
+});
+
+    // const cart = await Cart.findOne({
+    //   userId,
+    //   status: "active",
+    // }).populate({
+    //   path: "items.product",
+    // });
 
     if (!cart || !cart.items || cart.items.length === 0) {
       return res.status(400).json({

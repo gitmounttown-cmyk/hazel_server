@@ -19,21 +19,23 @@ const {
 // *AUTH MIDDLEWARE*
 // *==========================================================*
 
-const { verifyToken } = require("../middleware/authMiddleware");
+const { verifyToken, optionalAuth } = require("../middleware/authMiddleware");
 
 // *==========================================================*
 // *ADD PRODUCT TO WISHLIST*
 // *POST /api/wishlist/add
 // *==========================================================*
 
-router.post("/add", verifyToken, addToWishlist);
+// router.post("/add", verifyToken, addToWishlist);
+router.post("/add", optionalAuth, addToWishlist);
 
 // *==========================================================*
 // *GET USER WISHLIST*
 // *GET /api/wishlist/all
 // *==========================================================*
 
-router.get("/all", verifyToken, getWishlist);
+// router.get("/all", verifyToken, getWishlist);
+router.get("/all", optionalAuth, getWishlist);
 
 // *==========================================================*
 // *GET WISHLIST COUNT*
@@ -47,14 +49,16 @@ router.get("/count", verifyToken, getWishlistCount);
 // *GET /api/wishlist/check/:productId
 // *==========================================================*
 
-router.get("/check/:productId", verifyToken, checkWishlist);
+// router.get("/check/:productId", verifyToken, checkWishlist);
+router.get("/check/:productId", optionalAuth, checkWishlist);
 
 // *==========================================================*
 // *REMOVE PRODUCT FROM WISHLIST*
 // *DELETE /api/wishlist/remove/:productId
 // *==========================================================*
 
-router.delete("/remove/:productId", verifyToken, removeFromWishlist);
+// router.delete("/remove/:productId", verifyToken, removeFromWishlist);
+router.delete("/remove/:productId", optionalAuth, removeFromWishlist);
 
 // *==========================================================*
 // *CLEAR WISHLIST*

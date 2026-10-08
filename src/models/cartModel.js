@@ -66,8 +66,18 @@ const cartSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
+      default: null,
       unique: true,
+      index: true,
+    },
+
+    // ------------------------------------------------------
+    // GUEST
+    // ------------------------------------------------------
+    guestId: {
+      type: String,
+      default: null,
       index: true,
     },
 

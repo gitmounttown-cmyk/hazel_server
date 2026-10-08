@@ -59,15 +59,16 @@ const calculateCartTotals = (items) => {
 exports.addToCart = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const { productId, variantId, quantity, size, guestId } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized. Please login.",
+        message: "Unauthorized. Please login or continue as guest.",
       });
     }
 
-    const { productId, variantId, quantity, size } = req.body;
+    
 
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
@@ -137,11 +138,18 @@ exports.addToCart = async (req, res) => {
         message: "Selected variant does not have a valid price.",
       });
     }
-
-    let cart = await Cart.findOne({
-      userId,
-      status: "active",
-    });
+    let cart;
+    if (userId) {
+      cart = await Cart.findOne({
+        userId,
+        status: "active",
+      });
+    } else if (guestId) {
+      cart = await Cart.findOne({
+        guestId,
+        status: "active",
+      });
+    }
 
     if (!cart) {
       const effectivePrice =
@@ -149,6 +157,7 @@ exports.addToCart = async (req, res) => {
 
       cart = new Cart({
         userId,
+        guestId,
         items: [
           {
             product: productId,
@@ -231,21 +240,34 @@ exports.addToCart = async (req, res) => {
 exports.getCart = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const { guestId } = req.query;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized. Please login.",
+        message: "Unauthorized. Please login or continue as guest.",
       });
     }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    }).populate({
-      path: "items.product",
-      select: "name availability variants categoryId brandId",
-    });
+    let cart;
+
+    if (userId) {
+      cart = await Cart.findOne({
+        userId,
+        status: "active",
+      }).populate({
+        path: "items.product",
+        select: "name availability variants categoryId brandId",
+      });
+    } else if (guestId) {
+      cart = await Cart.findOne({
+        guestId,
+        status: "active",
+      }).populate({
+        path: "items.product",
+        select: "name availability variants categoryId brandId",
+      });
+    }
 
     if (!cart) {
       return res.status(200).json({
@@ -432,19 +454,28 @@ exports.updateCartQuantity = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
   try {
     const userId = getUserId(req);
-    const { productId, variantId } = req.body;
+    const { productId, variantId, guestId } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized. Please login.",
+        message: "Unauthorized. Please login or continue as guest.",
       });
     }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    });
+    let cart;
+
+    if (userId) {
+      cart = await Cart.findOne({
+        userId,
+        status: "active",
+      });
+    } else if (guestId) {
+      cart = await Cart.findOne({
+        guestId,
+        status: "active",
+      });
+    }
 
     if (!cart) {
       return res.status(404).json({
