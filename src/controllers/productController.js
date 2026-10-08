@@ -5,13 +5,13 @@ const Brand = require("../models/brandModel");
 const formatMediaPath = (file) => `/uploads/products/${file.filename}`;
 
 // GET ALL PRODUCTS
+
 exports.getAllProducts = async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);
     const limit = Math.max(1, parseInt(req.query.limit, 10) || 20);
     const skip = (page - 1) * limit;
 
-    // --- OLD FILTERS (Keep as is) ---
     const filter = {};
     if (req.query.categoryId) filter.categoryId = req.query.categoryId;
     if (req.query.subCategoryId) filter.subCategoryId = req.query.subCategoryId;
@@ -23,14 +23,11 @@ exports.getAllProducts = async (req, res) => {
       filter.name = { $regex: req.query.search, $options: "i" };
     }
 
-    // --- NEW FILTERS (Fixed for flexible subdocument matching) ---
+    // --- SIZE FILTER FIX ---
     if (req.query.size) {
       const sizesArray = req.query.size.split(",").map((s) => s.trim());
-      // Matches both variants.sizes.size (if objects) or variants.sizes (if strings)
-      filter.$or = [
-        { "variants.sizes.size": { $in: sizesArray } },
-        { "variants.sizes": { $in: sizesArray } },
-      ];
+      // Target the subdocument property directly to prevent schema type collisions
+      filter["variants.sizes.size"] = { $in: sizesArray };
     }
 
     if (req.query.fabric) {
