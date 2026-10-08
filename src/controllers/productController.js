@@ -23,11 +23,14 @@ exports.getAllProducts = async (req, res) => {
       filter.name = { $regex: req.query.search, $options: "i" };
     }
 
-    // --- NEW FILTERS (Added without breaking old ones) ---
-    // Handles comma-separated values (e.g., ?size=M,XL or ?fabric=Pure Cotton)
+    // --- NEW FILTERS (Fixed for flexible subdocument matching) ---
     if (req.query.size) {
       const sizesArray = req.query.size.split(",").map((s) => s.trim());
-      filter["variants.sizes.size"] = { $in: sizesArray };
+      // Matches both variants.sizes.size (if objects) or variants.sizes (if strings)
+      filter.$or = [
+        { "variants.sizes.size": { $in: sizesArray } },
+        { "variants.sizes": { $in: sizesArray } },
+      ];
     }
 
     if (req.query.fabric) {
@@ -40,6 +43,20 @@ exports.getAllProducts = async (req, res) => {
       filter["variants.sleeveStyle"] = { $in: sleevesArray };
     }
 
+    // --- SORTING LOGIC ---
+    let sortCriteria = { createdAt: -1 };
+    const sortBy = req.query.sort;
+
+    if (sortBy === "price_low") {
+      sortCriteria = { "variants.price": 1 };
+    } else if (sortBy === "price_high") {
+      sortCriteria = { "variants.price": -1 };
+    } else if (sortBy === "rating") {
+      sortCriteria = { rating: -1 };
+    } else if (sortBy === "newest") {
+      sortCriteria = { createdAt: -1 };
+    }
+
     const total = await Product.countDocuments(filter);
 
     const products = await Product.find(filter)
@@ -47,7 +64,7 @@ exports.getAllProducts = async (req, res) => {
       .populate("brandId", "name")
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 })
+      .sort(sortCriteria)
       .lean();
 
     return res.status(200).json({
@@ -66,6 +83,7 @@ exports.getAllProducts = async (req, res) => {
     });
   }
 };
+
 // GET PRODUCT BY ID
 exports.getProductById = async (req, res) => {
   try {
