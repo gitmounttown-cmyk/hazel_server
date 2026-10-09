@@ -525,21 +525,71 @@ exports.removeFromCart = async (req, res) => {
 // CLEAR CART
 // ============================================================
 
+// exports.clearCart = async (req, res) => {
+//   try {
+//     const userId = getUserId(req);
+//     const { guestId } = req.body;
+
+//     if (!userId && !guestId) {
+//       return res.status(401).json({
+//         success: false,
+//         message: "Unauthorized. Please login.",
+//       });
+//     }
+
+    
+
+//     const cart = await Cart.findOne({
+//       userId,
+//       status: "active",
+//     });
+
+//     if (!cart) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Cart not found.",
+//       });
+//     }
+
+//     cart.items = [];
+//     cart.totalItems = 0;
+//     cart.totalAmount = 0;
+
+//     await cart.save();
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Cart cleared successfully.",
+//       cart,
+//     });
+//   } catch (error) {
+//     console.error("CLEAR CART ERROR:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message || "Failed to clear cart.",
+//     });
+//   }
+// };
+
 exports.clearCart = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const { guestId } = req.body;
 
-    if (!userId) {
-      return res.status(401).json({
+    // Validate user or guest
+    if (!userId && !guestId) {
+      return res.status(400).json({
         success: false,
-        message: "Unauthorized. Please login.",
+        message: "User ID or Guest ID is required.",
       });
     }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    });
+    // Find the correct active cart
+    const cartQuery = userId
+      ? { userId, status: "active" }
+      : { guestId, status: "active" };
+
+    const cart = await Cart.findOne(cartQuery);
 
     if (!cart) {
       return res.status(404).json({
@@ -548,6 +598,7 @@ exports.clearCart = async (req, res) => {
       });
     }
 
+    // Clear cart items and totals
     cart.items = [];
     cart.totalItems = 0;
     cart.totalAmount = 0;

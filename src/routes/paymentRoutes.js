@@ -27,9 +27,15 @@ router.post("/create-order",  optionalAuth,  createOrder);
 // VERIFY RAZORPAY PAYMENT
 // =============================================================
 
+// router.post(
+//   "/verify",
+//   verifyToken,
+//   verifyPayment
+// );
+
 router.post(
   "/verify",
-  verifyToken,
+  optionalAuth,
   verifyPayment
 );
 

@@ -27,6 +27,7 @@ router.put("/update", verifyToken, updateCartQuantity);
 router.delete("/remove", optionalAuth, removeFromCart);
 
 // Clear entire cart
-router.delete("/clear", verifyToken, clearCart);
+// router.delete("/clear", verifyToken, clearCart);
+router.delete("/clear", optionalAuth, clearCart);
 
 module.exports = router;

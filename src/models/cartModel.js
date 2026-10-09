@@ -107,5 +107,27 @@ const cartSchema = new mongoose.Schema(
   }
 );
 
+
+cartSchema.index(
+  { userId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      userId: { $type: "objectId" },
+    },
+  }
+);
+
+cartSchema.index(
+  { guestId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      guestId: { $type: "string" },
+    },
+  }
+);
+
+
 module.exports = mongoose.model("Cart", cartSchema);
 
