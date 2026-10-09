@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 // VERIFY TOKEN
 // ============================================================
 
-exports.verifyToken = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
     // ----------------------------------------------------------
     // 1. Get Authorization Header
@@ -133,7 +133,7 @@ exports.verifyToken = async (req, res, next) => {
 // ALLOW ROLES
 // ============================================================
 
-exports.allowRoles = (...roles) => {
+const allowRoles = (...roles) => {
   return (req, res, next) => {
     try {
       // --------------------------------------------------------
@@ -172,4 +172,50 @@ exports.allowRoles = (...roles) => {
       });
     }
   };
+};
+
+const optionalAuth = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    // -----------------------------------------
+    // No token → Guest
+    // -----------------------------------------
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      req.user = null;
+      return next();
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // -----------------------------------------
+    // Verify token
+    // -----------------------------------------
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const user = await User.findById(decoded.id);
+
+    if (user) {
+      req.user = user;
+    } else {
+      req.user = null;
+    }
+
+    next();
+  } catch (error) {
+    // Invalid/expired token → treat as guest
+    req.user = null;
+    next();
+  }
+};
+
+module.exports = {
+  verifyToken,
+  optionalAuth,
+  allowRoles,
 };

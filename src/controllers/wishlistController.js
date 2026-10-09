@@ -10,8 +10,32 @@ const Product = require("../models/productModel");
 
 const addToWishlist = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
-    const { productId } = req.body;
+    const userId = req.user?._id || req.user?.id;
+    const { productId, guestId } = req.body;
+
+    // ------------------------------------------------------
+    // VALIDATE OWNER
+    // ------------------------------------------------------
+
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or Guest ID is required",
+      });
+    }
+
+    // ------------------------------------------------------
+    // VALIDATE GUEST ID
+    // ------------------------------------------------------
+
+    if (!userId && guestId) {
+      if (typeof guestId !== "string" || !guestId.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid Guest ID",
+        });
+      }
+    }
 
     // ------------------------------------------------------
     // VALIDATE PRODUCT ID
@@ -47,10 +71,17 @@ const addToWishlist = async (req, res) => {
     // ------------------------------------------------------
     // FIND USER WISHLIST
     // ------------------------------------------------------
+    let wishlist;
 
-    let wishlist = await Wishlist.findOne({
-      user: userId,
-    });
+    if (userId) {
+      wishlist = await Wishlist.findOne({
+        user: userId,
+      });
+    } else if (guestId) {
+      wishlist = await Wishlist.findOne({
+        guestId: guestId,
+      });
+    }
 
     // ------------------------------------------------------
     // CREATE WISHLIST IF NOT EXISTS
@@ -58,7 +89,8 @@ const addToWishlist = async (req, res) => {
 
     if (!wishlist) {
       wishlist = new Wishlist({
-        user: userId,
+        user: userId || null,
+        guestId: userId ? null : guestId,
         items: [],
         status: "active",
       });
@@ -103,7 +135,7 @@ const addToWishlist = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Product added to wishlist successfully",
+      message: userId ? "Product added to wishlist successfully" : "Product added to guest wishlist successfully",
       wishlist,
     });
   } catch (error) {
@@ -124,17 +156,37 @@ const addToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
+    const userId = req.user?._id || req.user?.id;
+    const { guestId } = req.query;
+
+    // ------------------------------------------------------
+    // VALIDATE OWNER
+    // ------------------------------------------------------
+
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or Guest ID is required",
+      });
+    }
 
     // ------------------------------------------------------
     // FIND WISHLIST AND POPULATE PRODUCT
     // ------------------------------------------------------
-
-    const wishlist = await Wishlist.findOne({
-      user: userId,
-    }).populate({
-      path: "items.product",
-    });
+    let wishlist;
+    if (userId) {
+      wishlist = await Wishlist.findOne({
+        user: userId,
+      }).populate({
+        path: "items.product",
+      });
+    } else if (guestId) {
+      wishlist = await Wishlist.findOne({
+        guestId: guestId,
+      }).populate({
+        path: "items.product",
+      });
+    }
 
     // ------------------------------------------------------
     // WISHLIST NOT FOUND
@@ -145,7 +197,8 @@ const getWishlist = async (req, res) => {
         success: true,
         message: "Wishlist is empty",
         wishlist: {
-          user: userId,
+          user: userId || null,
+          guestId: userId ? null : guestId,
           items: [],
           status: "active",
         },
@@ -187,8 +240,20 @@ const getWishlist = async (req, res) => {
 
 const removeFromWishlist = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
+    const userId = req.user?._id || req.user?.id;
     const { productId } = req.params;
+    const { guestId } = req.query;
+
+    // ------------------------------------------------------
+    // VALIDATE OWNER
+    // ------------------------------------------------------
+
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or Guest ID is required",
+      });
+    }
 
     // ------------------------------------------------------
     // VALIDATE PRODUCT ID
@@ -205,9 +270,17 @@ const removeFromWishlist = async (req, res) => {
     // FIND WISHLIST
     // ------------------------------------------------------
 
-    const wishlist = await Wishlist.findOne({
-      user: userId,
-    });
+    let wishlist;
+
+    if (userId) {
+      wishlist = await Wishlist.findOne({
+        user: userId,
+      });
+    } else if (guestId) {
+      wishlist = await Wishlist.findOne({
+        guestId: guestId,
+      });
+    }
 
     if (!wishlist) {
       return res.status(404).json({
@@ -277,8 +350,9 @@ const removeFromWishlist = async (req, res) => {
 
 const checkWishlist = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
+    const userId = req.user?._id || req.user?.id;
     const { productId } = req.params;
+    const { guestId } = req.query;
 
     // ------------------------------------------------------
     // VALIDATE PRODUCT ID
@@ -294,10 +368,17 @@ const checkWishlist = async (req, res) => {
     // ------------------------------------------------------
     // FIND WISHLIST
     // ------------------------------------------------------
+    let wishlist;
+    if(userId) {
+      wishlist = await Wishlist.findOne({
+        user: userId,
+      }).select("items");
+    } else if(guestId) {
+      wishlist = await Wishlist.findOne({
+        guestId: guestId,
+      }).select("items");
+    }
 
-    const wishlist = await Wishlist.findOne({
-      user: userId,
-    }).select("items");
 
     // ------------------------------------------------------
     // WISHLIST NOT FOUND

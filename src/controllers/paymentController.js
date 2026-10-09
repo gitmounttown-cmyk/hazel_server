@@ -102,59 +102,148 @@ exports.createOrder = async (req, res) => {
 
   try {
     const userId = getUserId(req);
+    // Accept frontend amount directly
+    const { addressId, couponCode = "", customerNote = "", amount, deliveryAddress, products, guestId } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required.",
+        message: "Authentication required. Please login or continue as guest.",
       });
     }
 
-    // Accept frontend amount directly
-    const { addressId, couponCode = "", customerNote = "", amount } = req.body;
+    // ------------------------------------------------------
+// USER / GUEST DETAILS
+// ------------------------------------------------------
 
-    const user = await User.findById(userId);
+let user = null;
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
+if (userId) {
+  user = await User.findById(userId);
 
-    if (!addressId || !isValidObjectId(addressId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Valid addressId is required.",
-      });
-    }
-
-    const address = await Address.findOne({
-      _id: addressId,
-      user: userId,
-      isActive: true,
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
     });
+  }
+}
 
-    if (!address) {
-      return res.status(404).json({
-        success: false,
-        message: "Address not found or inactive.",
-      });
-    }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    }).populate({
-      path: "items.product",
+    // const user = await User.findById(userId);
+
+    // if (!user) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "User not found.",
+    //   });
+    // }
+
+
+
+    // if (!addressId || !isValidObjectId(addressId)) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Valid addressId is required.",
+    //   });
+    // }
+
+    // const address = await Address.findOne({
+    //   _id: addressId,
+    //   user: userId,
+    //   isActive: true,
+    // });
+
+    // if (!address) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Address not found or inactive.",
+    //   });
+    // }
+
+    // ------------------------------------------------------
+// ADDRESS
+// ------------------------------------------------------
+
+let address = null;
+
+if (userId) {
+  // Logged-in user → address must come from Address collection
+
+  if (!addressId || !isValidObjectId(addressId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Valid addressId is required.",
     });
+  }
 
-    if (!cart || !cart.items || cart.items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Your cart is empty.",
-      });
-    }
+  address = await Address.findOne({
+    _id: addressId,
+    user: userId,
+    isActive: true,
+  });
+
+  if (!address) {
+    return res.status(404).json({
+      success: false,
+      message: "Address not found or inactive.",
+    });
+  }
+} else {
+  // Guest → address comes directly from checkout form
+
+  if (!deliveryAddress) {
+    return res.status(400).json({
+      success: false,
+      message: "Delivery address is required.",
+    });
+  }
+
+  if (
+    !deliveryAddress.fullName ||
+    !deliveryAddress.mobileNumber ||
+    !deliveryAddress.addressLine1 ||
+    !deliveryAddress.city ||
+    !deliveryAddress.state ||
+    !deliveryAddress.pincode
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide complete delivery address.",
+    });
+  }
+
+  address = deliveryAddress;
+}
+
+const cartQuery = {
+  status: "active",
+};
+
+if (userId) {
+  cartQuery.userId = userId;
+} else {
+  if (!guestId || typeof guestId !== "string") {
+    return res.status(400).json({
+      success: false,
+      message: "Valid guestId is required.",
+    });
+  }
+
+  cartQuery.guestId = guestId;
+}
+
+const cart = await Cart.findOne(cartQuery).populate({
+  path: "items.product",
+});
+
+if (!cart || !cart.items || cart.items.length === 0) {
+  return res.status(400).json({
+    success: false,
+    message: "Your cart is empty.",
+  });
+}
+
 
     const orderItemsData = [];
     let subtotal = 0;
@@ -288,12 +377,13 @@ exports.createOrder = async (req, res) => {
     const [order] = await Order.create(
       [
         {
-          user: userId,
+          user: userId || null,
+          guestId: userId ? null : guestId || null,
           orderNumber,
           items: [],
           shippingAddress: {
-            name: address.fullName || address.name || user.name || "",
-            mobileNumber: address.mobileNumber || address.phone || user.mobileNumber || "",
+            name: address.fullName || address.name || user?.name || "",
+            mobileNumber: address.mobileNumber || address.phone || user?.mobileNumber || "",
             addressLine1:
               address.addressLine1 ||
               [address.houseNo, address.street].filter(Boolean).join(", ") ||
@@ -343,7 +433,8 @@ exports.createOrder = async (req, res) => {
       currency: "INR",
       receipt,
       notes: {
-        userId: String(userId),
+        userId: userId ? String(userId) : "",
+        guestId: guestId ? String(guestId) : "",
         orderId: String(order._id),
         orderNumber: order.orderNumber,
       },
@@ -359,7 +450,8 @@ exports.createOrder = async (req, res) => {
     const [payment] = await Payment.create(
       [
         {
-          userId,
+          userId : userId || null,
+          guestId: userId ? null : guestId,
           ecommerceOrder: order._id,
           razorpayOrderId: razorpayOrder.id,
           razorpayPaymentId: "",
@@ -423,19 +515,20 @@ exports.verifyPayment = async (req, res) => {
 
   try {
     const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required.",
-      });
-    }
-
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
+      guestId
     } = req.body;
+
+    if (!userId && !guestId) {
+  return res.status(401).json({
+    success: false,
+    message: "Login or a valid guest checkout session is required.",
+  });
+}
+
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
@@ -445,15 +538,35 @@ exports.verifyPayment = async (req, res) => {
       });
     }
 
-    const payment = await Payment.findOne({
+    // const payment = await Payment.findOne({
+    //   razorpayOrderId: razorpay_order_id,
+    //   userId,
+    // });
+
+    // if (!payment) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Payment record not found.",
+    //   });
+    // }
+
+    
+    const paymentQuery = {
       razorpayOrderId: razorpay_order_id,
-      userId,
-    });
+    };
+
+    if (userId) {
+      paymentQuery.userId = userId;
+    } else {
+      paymentQuery.guestId = guestId;
+    }
+
+    const payment = await Payment.findOne(paymentQuery);
 
     if (!payment) {
       return res.status(404).json({
         success: false,
-        message: "Payment record not found.",
+        message: "Payment record not found for this checkout.",
       });
     }
 
@@ -512,11 +625,25 @@ exports.verifyPayment = async (req, res) => {
     session = await mongoose.startSession();
     session.startTransaction();
 
-    const order = await Order.findOne({
+    // const order = await Order.findOne({
+    //   _id: payment.ecommerceOrder,
+    //   user: userId,
+    //   isDeleted: { $ne: true },
+    // }).session(session);
+    
+    const orderQuery = {
       _id: payment.ecommerceOrder,
-      user: userId,
       isDeleted: { $ne: true },
-    }).session(session);
+    };
+
+    if (userId) {
+      orderQuery.user = userId;
+    } else {
+      orderQuery.guestId = guestId;
+    }
+
+    const order = await Order.findOne(orderQuery).session(session);
+
 
     if (!order) {
       throw new Error("Order not found.");
@@ -567,14 +694,38 @@ exports.verifyPayment = async (req, res) => {
       );
     }
 
+    // await Cart.findOneAndUpdate(
+    //   { userId, status: "active" },
+    //   {
+    //     $set: {
+    //       items: [],
+    //       totalItems: 0,
+    //       totalAmount: 0,
+    //       status: "active",
+    //     },
+    //   },
+    //   { session, new: true }
+    // );
+
+    
+    const cartQuery = {
+      status: "active",
+    };
+
+    if (userId) {
+      cartQuery.userId = userId;
+    } else {
+      cartQuery.guestId = guestId;
+    }
+
     await Cart.findOneAndUpdate(
-      { userId, status: "active" },
+      cartQuery,
       {
         $set: {
           items: [],
           totalItems: 0,
           totalAmount: 0,
-          status: "active",
+          status: "ordered",
         },
       },
       { session, new: true }
@@ -585,14 +736,33 @@ exports.verifyPayment = async (req, res) => {
     session = null;
 
     try {
-      await Notification.create({
-        userId,
-        title: "Order Confirmed",
-        message: `Your order ${order.orderNumber} has been confirmed successfully.`,
-        type: "ORDER",
-        orderId: order._id,
-        isRead: false,
-      });
+      // await Notification.create({
+      //   userId,
+      //   title: "Order Confirmed",
+      //   message: `Your order ${order.orderNumber} has been confirmed successfully.`,
+      //   type: "ORDER",
+      //   orderId: order._id,
+      //   isRead: false,
+      // });
+      
+      if (userId) {
+        try {
+          await Notification.create({
+            userId,
+            title: "Order Confirmed",
+            message: `Your order ${order.orderNumber} has been confirmed successfully.`,
+            type: "ORDER",
+            orderId: order._id,
+            isRead: false,
+          });
+        } catch (notificationError) {
+          console.error(
+            "Notification creation failed:",
+            notificationError
+          );
+        }
+      }
+
     } catch (notificationError) {
       console.error("Notification creation failed:", notificationError);
     }

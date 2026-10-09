@@ -4,7 +4,7 @@ const router =
   express.Router();
 
 const {
-  verifyToken,
+  verifyToken, optionalAuth
 } = require("../middleware/authMiddleware");
 
 const {
@@ -16,19 +16,26 @@ const {
 // CREATE RAZORPAY ORDER
 // =============================================================
 
-router.post(
-  "/create-order",
-  verifyToken,
-  createOrder
-);
+// router.post(
+//   "/create-order",
+//   verifyToken,
+//   createOrder
+// );
+router.post("/create-order",  optionalAuth,  createOrder);
 
 // =============================================================
 // VERIFY RAZORPAY PAYMENT
 // =============================================================
 
+// router.post(
+//   "/verify",
+//   verifyToken,
+//   verifyPayment
+// );
+
 router.post(
   "/verify",
-  verifyToken,
+  optionalAuth,
   verifyPayment
 );
 
