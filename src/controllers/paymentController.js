@@ -80,7 +80,6 @@ const triggerVelocityManifest = async (order, shippingAddress, items, user) => {
       token = `Bearer ${token}`;
     }
 
-    // Format Order Items safely handling null/missing SKU
     let formattedItems = (items || []).map((item) => {
       const pName = item.productName || item.name || "Admire Maxi";
       const generatedSku =
@@ -208,46 +207,68 @@ const triggerVelocityManifest = async (order, shippingAddress, items, user) => {
 exports.createOrder = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const {
+      addressId,
+      couponCode = "",
+      customerNote = "",
+      amount,
+      deliveryAddress,
+      guestId,
+    } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required.",
+        message: "Authentication required. Please login or continue as guest.",
       });
     }
 
-    const { addressId, deliveryAddress, couponCode = "", customerNote = "", amount } = req.body;
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
-
-    let shippingAddr = deliveryAddress || null;
-
-    if (!shippingAddr && addressId && isValidObjectId(addressId)) {
-      const addressDoc = await Address.findOne({
-        _id: addressId,
-        user: userId,
-        isActive: true,
-      });
-
-      if (addressDoc) {
-        shippingAddr = {
-          name: addressDoc.fullName || addressDoc.name || user.name || "",
-          mobileNumber: addressDoc.mobileNumber || addressDoc.phone || user.mobileNumber || "",
-          addressLine1: addressDoc.addressLine1 || addressDoc.houseNo || "",
-          addressLine2: addressDoc.addressLine2 || "",
-          district: addressDoc.district || "",
-          city: addressDoc.city || "",
-          state: addressDoc.state || "",
-          pincode: addressDoc.pincode || "",
-          country: addressDoc.country || "India",
-        };
+    let user = null;
+    if (userId) {
+      user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found.",
+        });
       }
+    }
+
+    // Resolve Delivery Address
+    let shippingAddr = null;
+
+    if (userId) {
+      if (deliveryAddress) {
+        shippingAddr = deliveryAddress;
+      } else if (addressId && isValidObjectId(addressId)) {
+        const addressDoc = await Address.findOne({
+          _id: addressId,
+          user: userId,
+          isActive: true,
+        });
+
+        if (addressDoc) {
+          shippingAddr = {
+            name: addressDoc.fullName || addressDoc.name || user?.name || "",
+            mobileNumber: addressDoc.mobileNumber || addressDoc.phone || user?.mobileNumber || "",
+            addressLine1: addressDoc.addressLine1 || addressDoc.houseNo || "",
+            addressLine2: addressDoc.addressLine2 || "",
+            district: addressDoc.district || "",
+            city: addressDoc.city || "",
+            state: addressDoc.state || "",
+            pincode: addressDoc.pincode || "",
+            country: addressDoc.country || "India",
+          };
+        }
+      }
+    } else {
+      if (!deliveryAddress) {
+        return res.status(400).json({
+          success: false,
+          message: "Delivery address is required.",
+        });
+      }
+      shippingAddr = deliveryAddress;
     }
 
     if (!shippingAddr) {
@@ -257,10 +278,20 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    }).populate({
+    const cartQuery = { status: "active" };
+    if (userId) {
+      cartQuery.userId = userId;
+    } else {
+      if (!guestId || typeof guestId !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: "Valid guestId is required.",
+        });
+      }
+      cartQuery.guestId = guestId;
+    }
+
+    const cart = await Cart.findOne(cartQuery).populate({
       path: "items.product",
     });
 
@@ -277,9 +308,11 @@ exports.createOrder = async (req, res) => {
     for (const cartItem of cart.items) {
       const product = cartItem.product;
 
-      if (!product) continue;
+      if (!product || product.isDeleted === true || product.isActive === false) continue;
 
       const variant = getVariant(product, cartItem.variantId);
+      if (!variant || variant.isActive === false) continue;
+
       const quantity = Number(cartItem.quantity || cartItem.qty || 1);
       const priceInfo = getVariantPrice(variant) || {
         mrp: Number(cartItem.price || 0),
@@ -321,13 +354,14 @@ exports.createOrder = async (req, res) => {
     const orderNumber = generateOrderNumber();
 
     const order = await Order.create({
-      user: userId,
+      user: userId || null,
+      guestId: userId ? null : guestId || null,
       orderNumber,
       items: [],
       shippingAddress: {
-        name: shippingAddr.fullName || shippingAddr.name || user.name || "Customer",
+        name: shippingAddr.fullName || shippingAddr.name || user?.name || "Customer",
         mobileNumber: shippingAddr.mobileNumber || shippingAddr.phone || "9999999999",
-        addressLine1: shippingAddr.addressLine1 || "Address Line 1",
+        addressLine1: shippingAddr.addressLine1 || shippingAddr.houseNo || "Address Line 1",
         addressLine2: shippingAddr.addressLine2 || "",
         district: shippingAddr.district || "",
         city: shippingAddr.city || "Coimbatore",
@@ -367,7 +401,8 @@ exports.createOrder = async (req, res) => {
         currency: "INR",
         receipt,
         notes: {
-          userId: String(userId),
+          userId: userId ? String(userId) : "",
+          guestId: guestId ? String(guestId) : "",
           orderId: String(order._id),
           orderNumber: order.orderNumber,
         },
@@ -393,7 +428,8 @@ exports.createOrder = async (req, res) => {
     await order.save();
 
     const payment = await Payment.create({
-      userId,
+      userId: userId || null,
+      guestId: userId ? null : guestId || null,
       ecommerceOrder: order._id,
       razorpayOrderId: razorpayOrder.id,
       razorpayPaymentId: "",
@@ -434,15 +470,19 @@ exports.createOrder = async (req, res) => {
 exports.verifyPayment = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      guestId,
+    } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required.",
+        message: "Login or a valid guest checkout session is required.",
       });
     }
-
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
@@ -451,15 +491,19 @@ exports.verifyPayment = async (req, res) => {
       });
     }
 
-    const payment = await Payment.findOne({
-      razorpayOrderId: razorpay_order_id,
-      userId,
-    });
+    const paymentQuery = { razorpayOrderId: razorpay_order_id };
+    if (userId) {
+      paymentQuery.userId = userId;
+    } else {
+      paymentQuery.guestId = guestId;
+    }
+
+    const payment = await Payment.findOne(paymentQuery);
 
     if (!payment) {
       return res.status(404).json({
         success: false,
-        message: "Payment record not found.",
+        message: "Payment record not found for this checkout.",
       });
     }
 
@@ -502,11 +546,18 @@ exports.verifyPayment = async (req, res) => {
       });
     }
 
-    const order = await Order.findOne({
+    const orderQuery = {
       _id: payment.ecommerceOrder,
-      user: userId,
       isDeleted: { $ne: true },
-    });
+    };
+
+    if (userId) {
+      orderQuery.user = userId;
+    } else {
+      orderQuery.guestId = guestId;
+    }
+
+    const order = await Order.findOne(orderQuery);
 
     if (!order) {
       throw new Error("Order not found.");
@@ -539,31 +590,48 @@ exports.verifyPayment = async (req, res) => {
       { $set: { itemStatus: "CONFIRMED" } }
     );
 
-    // Clear cart
+    // Clear active cart
+    const cartQuery = { status: "active" };
+    if (userId) {
+      cartQuery.userId = userId;
+    } else {
+      cartQuery.guestId = guestId;
+    }
+
     await Cart.findOneAndUpdate(
-      { userId, status: "active" },
-      { $set: { items: [], totalItems: 0, totalAmount: 0, status: "active" } },
+      cartQuery,
+      {
+        $set: {
+          items: [],
+          totalItems: 0,
+          totalAmount: 0,
+          status: "ordered",
+        },
+      },
       { new: true }
     );
 
     // Non-blocking Notification creation
-    try {
-      await Notification.create({
-        user: userId,
-        userId: userId,
-        title: "Order Confirmed",
-        message: `Your order ${order.orderNumber} has been confirmed successfully.`,
-        type: "ORDER",
-        order: order._id,
-        orderId: order._id,
-        isRead: false,
-      });
-    } catch (notificationError) {
-      console.error("⚠️ Notification creation skipped:", notificationError.message);
+    if (userId) {
+      try {
+        await Notification.create({
+          user: userId,
+          userId: userId,
+          title: "Order Confirmed",
+          message: `Your order ${order.orderNumber} has been confirmed successfully.`,
+          type: "ORDER",
+          order: order._id,
+          orderId: order._id,
+          isRead: false,
+        });
+      } catch (notificationError) {
+        console.error("⚠️ Notification creation skipped:", notificationError.message);
+      }
     }
 
     // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION (Immediate Redirect)
-    User.findById(userId)
+    const userLookup = userId ? User.findById(userId) : Promise.resolve(null);
+    userLookup
       .then((userObj) => {
         triggerVelocityManifest(order, order.shippingAddress, orderItems, userObj)
           .then((velocityRes) => {

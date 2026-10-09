@@ -5881,3 +5881,233 @@ Require stack:
 [2026-10-07T12:55:03.622Z] INFO: MongoDB Connected Successfully!!
 [2026-10-07T12:55:03.988Z] ERROR: (node:1112) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
 (Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-09T10:45:09.313Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-10-09T10:45:09.316Z] INFO: ========================================
+[2026-10-09T10:45:09.318Z] INFO: Hazel application starting
+[2026-10-09T10:45:09.319Z] INFO: Node version: v24.16.0
+[2026-10-09T10:45:09.321Z] INFO: Environment: development
+[2026-10-09T10:45:09.323Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:45:09.327Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:45:09.329Z] INFO: PORT: 5004
+[2026-10-09T10:45:09.334Z] INFO: ========================================
+[2026-10-09T10:45:10.694Z] INFO: App loaded successfully
+[2026-10-09T10:45:10.697Z] INFO: Connecting to MongoDB...
+[2026-10-09T10:45:10.698Z] INFO: Environment: development
+[2026-10-09T10:45:10.701Z] INFO: MongoDB URI exists: true
+[2026-10-09T10:45:10.736Z] INFO: Server running on port 5004
+[2026-10-09T10:45:10.745Z] INFO: Hazel backend started successfully
+[2026-10-09T10:45:11.255Z] INFO: MongoDB Connected Successfully!!
+[2026-10-09T10:45:11.655Z] ERROR: (node:15404) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-09T10:48:30.531Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-09T10:48:30.535Z] INFO: ========================================
+[2026-10-09T10:48:30.537Z] INFO: Hazel application starting
+[2026-10-09T10:48:30.539Z] INFO: Node version: v24.16.0
+[2026-10-09T10:48:30.540Z] INFO: Environment: development
+[2026-10-09T10:48:30.543Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:48:30.544Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:48:30.545Z] INFO: PORT: 5004
+[2026-10-09T10:48:30.546Z] INFO: ========================================
+[2026-10-09T10:48:31.522Z] INFO: App loaded successfully
+[2026-10-09T10:48:31.525Z] INFO: Connecting to MongoDB...
+[2026-10-09T10:48:31.527Z] INFO: Environment: development
+[2026-10-09T10:48:31.528Z] INFO: MongoDB URI exists: true
+[2026-10-09T10:48:31.546Z] INFO: Server running on port 5004
+[2026-10-09T10:48:31.547Z] INFO: Hazel backend started successfully
+[2026-10-09T10:48:32.116Z] INFO: MongoDB Connected Successfully!!
+[2026-10-09T10:48:32.505Z] ERROR: (node:15424) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-09T10:51:10.265Z] INFO: ◇ injected env (18) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-10-09T10:51:10.269Z] INFO: ========================================
+[2026-10-09T10:51:10.270Z] INFO: Hazel application starting
+[2026-10-09T10:51:10.271Z] INFO: Node version: v24.16.0
+[2026-10-09T10:51:10.272Z] INFO: Environment: development
+[2026-10-09T10:51:10.273Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:10.274Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:10.275Z] INFO: PORT: 5004
+[2026-10-09T10:51:10.277Z] INFO: ========================================
+[2026-10-09T10:51:12.001Z] INFO: App loaded successfully
+[2026-10-09T10:51:12.011Z] INFO: Connecting to MongoDB...
+[2026-10-09T10:51:12.028Z] INFO: Environment: development
+[2026-10-09T10:51:12.074Z] INFO: MongoDB URI exists: true
+[2026-10-09T10:51:12.168Z] INFO: Server running on port 5004
+[2026-10-09T10:51:12.180Z] INFO: Hazel backend started successfully
+[2026-10-09T10:51:12.378Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-10-09T10:51:12.382Z] INFO: ========================================
+[2026-10-09T10:51:12.385Z] INFO: Hazel application starting
+[2026-10-09T10:51:12.387Z] INFO: Node version: v24.16.0
+[2026-10-09T10:51:12.393Z] INFO: Environment: development
+[2026-10-09T10:51:12.396Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:12.399Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:12.403Z] INFO: PORT: 5004
+[2026-10-09T10:51:12.413Z] INFO: ========================================
+[2026-10-09T10:51:14.063Z] INFO: App loaded successfully
+[2026-10-09T10:51:14.190Z] INFO: Connecting to MongoDB...
+[2026-10-09T10:51:14.322Z] INFO: Environment: development
+[2026-10-09T10:51:14.438Z] INFO: MongoDB URI exists: true
+[2026-10-09T10:51:14.688Z] INFO: Server running on port 5004
+[2026-10-09T10:51:14.766Z] INFO: Hazel backend started successfully
+[2026-10-09T10:51:15.354Z] INFO: MongoDB Connected Successfully!!
+[2026-10-09T10:51:15.803Z] ERROR: (node:19368) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-09T10:51:17.612Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-09T10:51:17.616Z] INFO: ========================================
+[2026-10-09T10:51:17.625Z] INFO: Hazel application starting
+[2026-10-09T10:51:17.630Z] INFO: Node version: v24.16.0
+[2026-10-09T10:51:17.635Z] INFO: Environment: development
+[2026-10-09T10:51:17.640Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:17.645Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T10:51:17.654Z] INFO: PORT: 5004
+[2026-10-09T10:51:17.672Z] INFO: ========================================
+[2026-10-09T10:51:18.912Z] ERROR: APPLICATION STARTUP FAILED
+[2026-10-09T10:51:18.920Z] ERROR: TypeError: argument handler must be a function
+    at Route.<computed> [as post] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\router\lib\route.js:228:15)
+    at Router.<computed> [as post] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\router\index.js:448:19)
+    at Object.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\routes\paymentRoutes.js:81:8)
+    at Module._compile (node:internal/modules/cjs/loader:1854:14)
+    at Object..js (node:internal/modules/cjs/loader:1985:10)
+    at Module.load (node:internal/modules/cjs/loader:1577:32)
+    at Module._load (node:internal/modules/cjs/loader:1379:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1600:12)
+    at require (node:internal/modules/helpers:153:16)
+[2026-10-09T11:15:23.416Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-10-09T11:15:23.419Z] INFO: ========================================
+[2026-10-09T11:15:23.420Z] INFO: Hazel application starting
+[2026-10-09T11:15:23.422Z] INFO: Node version: v24.16.0
+[2026-10-09T11:15:23.423Z] INFO: Environment: development
+[2026-10-09T11:15:23.424Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:15:23.425Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:15:23.428Z] INFO: PORT: 5004
+[2026-10-09T11:15:23.432Z] INFO: ========================================
+[2026-10-09T11:15:24.672Z] ERROR: APPLICATION STARTUP FAILED
+[2026-10-09T11:15:24.677Z] ERROR: TypeError: argument handler must be a function
+    at Route.<computed> [as post] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\router\lib\route.js:228:15)
+    at Router.<computed> [as post] (C:\Users\User13\Desktop\Hazel_website\hazel_server\node_modules\router\index.js:448:19)
+    at Object.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\routes\paymentRoutes.js:81:8)
+    at Module._compile (node:internal/modules/cjs/loader:1854:14)
+    at Object..js (node:internal/modules/cjs/loader:1985:10)
+    at Module.load (node:internal/modules/cjs/loader:1577:32)
+    at Module._load (node:internal/modules/cjs/loader:1379:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1600:12)
+    at require (node:internal/modules/helpers:153:16)
+[2026-10-09T11:17:54.953Z] INFO: ◇ injected env (18) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-10-09T11:17:54.963Z] INFO: ========================================
+[2026-10-09T11:17:54.972Z] INFO: Hazel application starting
+[2026-10-09T11:17:54.979Z] INFO: Node version: v24.16.0
+[2026-10-09T11:17:54.984Z] INFO: Environment: development
+[2026-10-09T11:17:54.988Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:17:54.997Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:17:55.003Z] INFO: PORT: 5004
+[2026-10-09T11:17:55.008Z] INFO: ========================================
+[2026-10-09T11:17:56.494Z] ERROR: APPLICATION STARTUP FAILED
+[2026-10-09T11:17:56.502Z] ERROR: Error: [Route Error] Handler 'optionalAuth' is undefined or not a valid function. Check your exports/imports.
+    at C:\Users\User13\Desktop\Hazel_website\hazel_server\src\routes\paymentRoutes.js:87:11
+    at Array.forEach (<anonymous>)
+    at Object.<anonymous> (C:\Users\User13\Desktop\Hazel_website\hazel_server\src\routes\paymentRoutes.js:85:3)
+    at Module._compile (node:internal/modules/cjs/loader:1854:14)
+    at Object..js (node:internal/modules/cjs/loader:1985:10)
+    at Module.load (node:internal/modules/cjs/loader:1577:32)
+    at Module._load (node:internal/modules/cjs/loader:1379:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1600:12)
+    at require (node:internal/modules/helpers:153:16)
+[2026-10-09T11:20:49.389Z] INFO: ◇ injected env (18) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-10-09T11:20:49.392Z] INFO: ========================================
+[2026-10-09T11:20:49.394Z] INFO: Hazel application starting
+[2026-10-09T11:20:49.395Z] INFO: Node version: v24.16.0
+[2026-10-09T11:20:49.396Z] INFO: Environment: development
+[2026-10-09T11:20:49.397Z] INFO: Working directory: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:20:49.399Z] INFO: __dirname: C:\Users\User13\Desktop\Hazel_website\hazel_server
+[2026-10-09T11:20:49.399Z] INFO: PORT: 5004
+[2026-10-09T11:20:49.400Z] INFO: ========================================
+[2026-10-09T11:20:50.871Z] INFO: App loaded successfully
+[2026-10-09T11:20:50.879Z] INFO: Connecting to MongoDB...
+[2026-10-09T11:20:50.910Z] INFO: Environment: development
+[2026-10-09T11:20:50.927Z] INFO: MongoDB URI exists: true
+[2026-10-09T11:20:50.985Z] INFO: Server running on port 5004
+[2026-10-09T11:20:50.987Z] INFO: Hazel backend started successfully
+[2026-10-09T11:20:51.597Z] INFO: MongoDB Connected Successfully!!
+[2026-10-09T11:20:52.011Z] ERROR: (node:10876) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-10-09T11:21:52.064Z] ERROR: ⚠️ Stock error (non-fatal): MongoDB transaction session is required
+[2026-10-09T11:21:52.220Z] ERROR: (node:10876) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+[2026-10-09T11:21:52.261Z] ERROR: ⚠️ Notification creation skipped: Inventory validation failed: productId: Path `productId` is required.
+[2026-10-09T11:21:52.300Z] INFO: 🚀 [VELOCITY MANIFEST PAYLOAD]: {
+  "order_id": "HZORD-1791544881777-9982",
+  "order_date": "2026-10-09 11:21",
+  "carrier_id": "",
+  "warehouse_id": "WHZUCD",
+  "pickup_location": "SBS TEXTILES",
+  "billing_customer_name": "RK",
+  "billing_last_name": "",
+  "billing_address": "2013",
+  "billing_city": "Coimbatore",
+  "billing_pincode": "641301",
+  "billing_state": "Tamilnadu",
+  "billing_country": "India",
+  "billing_email": "reenark@gmail.com",
+  "billing_phone": "9150671005",
+  "shipping_is_billing": true,
+  "print_label": true,
+  "order_items": [
+    {
+      "name": "Admire Maxi – Navy Blue",
+      "sku": "SKU-ADMIR-STD",
+      "units": 1,
+      "selling_price": 890,
+      "discount": 0,
+      "tax": 0
+    }
+  ],
+  "payment_method": "PREPAID",
+  "sub_total": 890,
+  "cod_collectible": 0,
+  "length": 10,
+  "breadth": 10,
+  "height": 10,
+  "weight": 0.5
+}
+[2026-10-09T11:21:56.901Z] INFO: ✅ [VELOCITY MANIFEST RESPONSE]: {
+  "status": 1,
+  "payload": {
+    "pickup_location_added": 1,
+    "order_created": 1,
+    "awb_generated": 1,
+    "label_generated": 1,
+    "pickup_generated": 1,
+    "manifest_generated": 0,
+    "pickup_scheduled_date": null,
+    "pickup_booked_date": null,
+    "order_id": "ORD5VP470Q0YC",
+    "shipment_id": "SHINBJ82XGIKM",
+    "awb_code": "374182481125",
+    "courier_company_id": "CARPGK29DN9ZW",
+    "courier_name": "Amazon Transportation",
+    "assigned_date_time": {
+      "date": "2026-10-09T16:51:56.669+05:30",
+      "timezone_type": 3,
+      "timezone": "Asia/Kolkata"
+    },
+    "applied_weight": 0.5,
+    "cod": 0,
+    "label_url": "https://velocity-shazam-prod.s3.ap-south-1.amazonaws.com/labels/amazon/2026-10-09/374182481125.pdf?response-content-disposition=inline%3B%20filename%3D%22374182481125_label.pdf%22%3B%20filename%2A%3DUTF-8%27%27374182481125_label.pdf&response-content-type=application%2Fpdf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAU4T4YDSMFTZL3A3Y%2F20261009%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T112156Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=c56bb3f83ee714e0b69a23b33334d91327abcf3400e78c347ce5449ae6ca9da3",
+    "manifest_url": null,
+    "routing_code": null,
+    "rto_routing_code": null,
+    "pickup_token_number": null,
+    "charges": {
+      "frwd_charges": {
+        "obd": "0.00",
+        "shipping_charges": "27.00",
+        "cod_charges": "0.00",
+        "dead_weight_billing": false
+      },
+      "rto_charges": {
+        "rto_charges": "22.00"
+      },
+      "platform_fee": 0
+    }
+  }
+}
