@@ -5,9 +5,16 @@ const addressSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
+      default: null,
       index: true,
     },
+
+    guestId: {
+  type: String,
+  default: null,
+  index: true,
+},
     addressType: {
       type: String,
       enum: ["Home", "Work", "Other"],

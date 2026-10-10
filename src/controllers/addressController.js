@@ -14,39 +14,188 @@ const getUserId = (req) => {
 // CREATE ADDRESS
 // ============================================================
 
+// const createAddress = async (req, res) => {
+//   try {
+//     const userId = getUserId(req);
+
+//     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid or missing user ID.",
+//       });
+//     }
+
+//     // Map properties with fallbacks for both frontend key standards
+//     const fullNameInput =
+//       req.body.fullName || req.body.name || req.body.nameCustomer;
+//     const mobileNumberInput =
+//       req.body.mobileNumber || req.body.phone || req.body.phoneNumber;
+//     const houseNoInput =
+//       req.body.houseNo ||
+//       req.body.addressLine1 ||
+//       req.body.address ||
+//       req.body.street;
+//     const streetInput = req.body.street || req.body.addressLine2 || "";
+//     const cityInput = req.body.city;
+//     const stateInput = req.body.state;
+//     const pincodeInput =
+//       req.body.pincode || req.body.zipCode || req.body.postalCode;
+
+//     // Fallback to logged-in user details if name/mobile are missing
+//     const user = await User.findById(userId);
+//     const finalFullName = fullNameInput || user?.name || "Customer";
+//     const finalMobile = mobileNumberInput || user?.mobileNumber;
+
+//     // Validate required fields
+//     if (
+//       !finalFullName ||
+//       !finalMobile ||
+//       !houseNoInput ||
+//       !cityInput ||
+//       !stateInput ||
+//       !pincodeInput
+//     ) {
+//       return res.status(400).json({
+//         success: false,
+//         message:
+//           "fullName, mobileNumber, houseNo (or addressLine1), city, state, and pincode are required.",
+//       });
+//     }
+
+//     const existingAddresses = await Address.find({
+//       user: userId,
+//       isActive: true,
+//     });
+//     let makeDefault = Boolean(req.body.isDefault);
+
+//     if (existingAddresses.length === 0) {
+//       makeDefault = true;
+//     }
+
+//     if (makeDefault) {
+//       await Address.updateMany(
+//         { user: userId },
+//         { $set: { isDefault: false } }
+//       );
+//     }
+
+//     const address = await Address.create({
+//       user: userId,
+//       addressType: req.body.addressType || "Home",
+//       fullName: finalFullName,
+//       mobileNumber: finalMobile,
+//       alternateMobileNumber: req.body.alternateMobileNumber || "",
+//       houseNo: houseNoInput,
+//       street: streetInput,
+//       area: req.body.area || "",
+//       landmark: req.body.landmark || "",
+//       city: cityInput,
+//       district: req.body.district || cityInput || "",
+//       state: stateInput,
+//       country: req.body.country || "India",
+//       pincode: pincodeInput,
+//       latitude: req.body.latitude ? Number(req.body.latitude) : null,
+//       longitude: req.body.longitude ? Number(req.body.longitude) : null,
+//       placeId: req.body.placeId || "",
+//       isDefault: makeDefault,
+//     });
+
+//     return res.status(201).json({
+//       success: true,
+//       message: "Address created successfully.",
+//       address,
+//     });
+//   } catch (error) {
+//     console.error("CREATE ADDRESS ERROR:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to create address.",
+//       error: error.message,
+//     });
+//   }
+// };
+
 const createAddress = async (req, res) => {
   try {
+    // ==========================================
+    // IDENTIFY USER OR GUEST
+    // ==========================================
     const userId = getUserId(req);
+    const guestId = !userId
+      ? String(req.body.guestId || "").trim()
+      : null;
 
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (userId && !mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid or missing user ID.",
+        message: "Invalid user ID.",
       });
     }
 
-    // Map properties with fallbacks for both frontend key standards
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "Guest ID is required for guest checkout.",
+      });
+    }
+
+    // ==========================================
+    // MAP FRONTEND FIELDS
+    // ==========================================
     const fullNameInput =
-      req.body.fullName || req.body.name || req.body.nameCustomer;
+      req.body.fullName ||
+      req.body.name ||
+      req.body.nameCustomer;
+
     const mobileNumberInput =
-      req.body.mobileNumber || req.body.phone || req.body.phoneNumber;
+      req.body.mobileNumber ||
+      req.body.phone ||
+      req.body.phoneNumber;
+
     const houseNoInput =
       req.body.houseNo ||
       req.body.addressLine1 ||
       req.body.address ||
       req.body.street;
-    const streetInput = req.body.street || req.body.addressLine2 || "";
+
+    const streetInput =
+      req.body.addressLine2 ||
+      req.body.street ||
+      "";
+
     const cityInput = req.body.city;
     const stateInput = req.body.state;
+
     const pincodeInput =
-      req.body.pincode || req.body.zipCode || req.body.postalCode;
+      req.body.pincode ||
+      req.body.zipCode ||
+      req.body.postalCode;
 
-    // Fallback to logged-in user details if name/mobile are missing
-    const user = await User.findById(userId);
-    const finalFullName = fullNameInput || user?.name || "Customer";
-    const finalMobile = mobileNumberInput || user?.mobileNumber;
+    // ==========================================
+    // USER DETAILS (LOGGED-IN USERS ONLY)
+    // ==========================================
+    let user = null;
 
-    // Validate required fields
+    if (userId) {
+      user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found.",
+        });
+      }
+    }
+
+    const finalFullName =
+      fullNameInput || user?.name || "Customer";
+
+    const finalMobile =
+      mobileNumberInput || user?.mobileNumber;
+
+    // ==========================================
+    // VALIDATE REQUIRED FIELDS
+    // ==========================================
     if (
       !finalFullName ||
       !finalMobile ||
@@ -58,48 +207,84 @@ const createAddress = async (req, res) => {
       return res.status(400).json({
         success: false,
         message:
-          "fullName, mobileNumber, houseNo (or addressLine1), city, state, and pincode are required.",
+          "Full name, mobile number, house number, city, state, and pincode are required.",
       });
     }
 
+    // ==========================================
+    // ADDRESS OWNER FILTER
+    // ==========================================
+    const ownerFilter = userId
+      ? { user: userId }
+      : { guestId };
+
     const existingAddresses = await Address.find({
-      user: userId,
+      ...ownerFilter,
       isActive: true,
     });
-    let makeDefault = Boolean(req.body.isDefault);
 
+    let makeDefault = req.body.isDefault === true ||
+      req.body.isDefault === "true";
+
+    // First active address becomes default
     if (existingAddresses.length === 0) {
       makeDefault = true;
     }
 
+    // ==========================================
+    // UPDATE DEFAULT ADDRESS
+    // Only affect this user's or guest's addresses
+    // ==========================================
     if (makeDefault) {
       await Address.updateMany(
-        { user: userId },
+        ownerFilter,
         { $set: { isDefault: false } }
       );
     }
 
+    // ==========================================
+    // CREATE ADDRESS IN MONGODB
+    // ==========================================
     const address = await Address.create({
-      user: userId,
+      user: userId || null,
+      guestId: userId ? null : guestId,
+
       addressType: req.body.addressType || "Home",
       fullName: finalFullName,
       mobileNumber: finalMobile,
-      alternateMobileNumber: req.body.alternateMobileNumber || "",
+      alternateMobileNumber:
+        req.body.alternateMobileNumber || "",
+
       houseNo: houseNoInput,
       street: streetInput,
       area: req.body.area || "",
       landmark: req.body.landmark || "",
+
       city: cityInput,
-      district: req.body.district || cityInput || "",
+      district: req.body.district || cityInput,
       state: stateInput,
       country: req.body.country || "India",
-      pincode: pincodeInput,
-      latitude: req.body.latitude ? Number(req.body.latitude) : null,
-      longitude: req.body.longitude ? Number(req.body.longitude) : null,
+      pincode: String(pincodeInput).trim(),
+
+      latitude:
+        req.body.latitude != null &&
+        req.body.latitude !== ""
+          ? Number(req.body.latitude)
+          : null,
+
+      longitude:
+        req.body.longitude != null &&
+        req.body.longitude !== ""
+          ? Number(req.body.longitude)
+          : null,
+
       placeId: req.body.placeId || "",
       isDefault: makeDefault,
     });
 
+    // ==========================================
+    // RESPONSE
+    // ==========================================
     return res.status(201).json({
       success: true,
       message: "Address created successfully.",
@@ -107,6 +292,7 @@ const createAddress = async (req, res) => {
     });
   } catch (error) {
     console.error("CREATE ADDRESS ERROR:", error);
+
     return res.status(500).json({
       success: false,
       message: "Failed to create address.",

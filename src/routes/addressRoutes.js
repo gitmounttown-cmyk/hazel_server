@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { verifyToken } = require("../middleware/authMiddleware");
+const { verifyToken, optionalAuth } = require("../middleware/authMiddleware");
 const {
   createAddress,
   getAllAddresses,
@@ -12,7 +12,8 @@ const {
   getDefaultAddress,
 } = require("../controllers/addressController");
 
-router.post("/create", verifyToken, createAddress);
+// router.post("/create", verifyToken, createAddress);
+router.post("/create", optionalAuth, createAddress);
 router.get("/all", verifyToken, getAllAddresses);
 router.get("/default", verifyToken, getDefaultAddress);
 router.put("/default/:addressId", verifyToken, setDefaultAddress);
