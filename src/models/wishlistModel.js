@@ -34,8 +34,18 @@ const wishlistSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserModel",
-      required: true,
+      required: false,
+      default: null,
       unique: true,
+      index: true,
+    },
+
+    // ------------------------------------------------------
+    // GUEST
+    // ------------------------------------------------------
+    guestId: {
+      type: String,
+      default: null,
       index: true,
     },
 

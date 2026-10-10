@@ -2,20 +2,12 @@ const axios = require("axios");
 const VelocityShipment = require("../models/velocityShipmentModel");
 
 const VELOCITY_BASE_URL = "https://shazam.velocity.in";
+const VELOCITY_AUTH_TOKEN = process.env.VELOCITY_AUTH_TOKEN;
 
-const getHeaders = () => {
-  let token = process.env.VELOCITY_AUTH_TOKEN || "";
-  
-  // Automatically prepends Bearer if not present
-  if (token && !token.startsWith("Bearer ")) {
-    token = `Bearer ${token}`;
-  }
-
-  return {
-    "Content-Type": "application/json",
-    Authorization: token,
-  };
-};
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: VELOCITY_AUTH_TOKEN,
+});
 
 // ==========================================================
 // 1. CHECK SERVICEABILITY
@@ -85,6 +77,7 @@ exports.manifestForwardOrder = async (req, res) => {
       });
     }
 
+    // Prepare Velocity payload directly from request body
     const payload = {
       order_id: String(orderNumber),
       order_date: new Date().toISOString().slice(0, 16).replace("T", " "),
@@ -115,7 +108,7 @@ exports.manifestForwardOrder = async (req, res) => {
       breadth: Number(packageDimensions?.breadth || 10),
       height: Number(packageDimensions?.height || 10),
       weight: Number(packageDimensions?.weight || 0.5),
-      pickup_location: pickupLocation || process.env.VELOCITY_PICKUP_LOCATION || "Primary Warehouse",
+      pickup_location: pickupLocation || "Primary Warehouse",
       warehouse_id: warehouseId,
     };
 
@@ -130,6 +123,7 @@ exports.manifestForwardOrder = async (req, res) => {
     if (result.status === 1 && result.payload) {
       const p = result.payload;
 
+      // Save standalone shipment record
       const shipment = await VelocityShipment.create({
         orderNumber: String(orderNumber),
         velocityOrderId: p.order_id,
@@ -178,7 +172,7 @@ exports.manifestForwardOrder = async (req, res) => {
 };
 
 // ==========================================================
-// 3. TRACK SHIPMENT BY AWB CODE
+// 3. TRACK SHIPMENT
 // GET /api/velocity/track/:awbCode
 // ==========================================================
 exports.trackShipment = async (req, res) => {
@@ -223,52 +217,7 @@ exports.trackShipment = async (req, res) => {
 };
 
 // ==========================================================
-// 4. TRACK SHIPMENT BY ORDER NUMBER
-// GET /api/velocity/track-by-order/:orderNumber
-// ==========================================================
-// GET /api/velocity/track-by-order/:orderNumber
-exports.trackByOrderNumber = async (req, res) => {
-  try {
-    const { orderNumber } = req.params;
-
-    // Find shipment by Order Number
-    const shipment = await VelocityShipment.findOne({ orderNumber });
-
-    // Return 200 with success: false if no shipment or AWB is created yet
-    if (!shipment || !shipment.awbCode) {
-      return res.status(200).json({
-        success: false,
-        message: "Shipment details will be available once packed and dispatched.",
-      });
-    }
-
-    // Fetch tracking details from Velocity API using AWB Code
-    const response = await axios.post(
-      `${VELOCITY_BASE_URL}/custom/api/v1/order-tracking`,
-      { awbs: [shipment.awbCode] },
-      { headers: getHeaders() }
-    );
-
-    const trackingInfo = response.data?.result?.[shipment.awbCode];
-
-    return res.status(200).json({
-      success: true,
-      awbCode: shipment.awbCode,
-      courierName: shipment.courierName,
-      status: trackingInfo?.tracking_data?.shipment_status || shipment.status,
-      activities: trackingInfo?.shipment_track_activities || [],
-    });
-  } catch (error) {
-    console.error("Tracking Error:", error.response?.data || error.message);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch live tracking details",
-    });
-  }
-};
-
-// ==========================================================
-// 5. CANCEL SHIPMENT
+// 4. CANCEL SHIPMENT
 // POST /api/velocity/cancel
 // ==========================================================
 exports.cancelShipment = async (req, res) => {

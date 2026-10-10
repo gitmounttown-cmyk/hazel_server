@@ -10,64 +10,17 @@ const Notification = require("../models/notificationModel");
 const User = require("../models/userModel");
 const Wishlist = require("../models/wishlistModel");
 
+// =============================================================
+// GET USER ID
+// =============================================================
+
 const getUserId = (req) => {
-  return req.user?.id || req.user?._id || req.user?.userId || null;
-};
-
-// =============================================================
-// GET MY ORDERS
-// =============================================================
-
-exports.getMyOrders = async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required.",
-      });
-    }
-
-    // Retrieve ALL user orders sorted newest first
-    const orders = await Order.find({
-      user: userId,
-      isDeleted: false,
-      $or: [
-        { paymentMethod: "COD" },
-        { paymentStatus: "PAID" },
-        {
-          orderStatus: {
-            $in: [
-              "CONFIRMED",
-              "PACKED",
-              "PROCESSING",
-              "SHIPPED",
-              "OUT_FOR_DELIVERY",
-              "DELIVERED",
-              "CANCELLED",
-              "RETURNED",
-            ],
-          },
-        },
-      ],
-    })
-      .populate("items")
-      .populate("coupon", "code discountType discountValue")
-      .sort({ createdAt: -1 });
-
-    return res.json({
-      success: true,
-      count: orders.length,
-      data: orders,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders.",
-      error: error.message,
-    });
-  }
+  return (
+    req.user?.id ||
+    req.user?._id ||
+    req.user?.userId ||
+    null
+  );
 };
 
 // =============================================================
@@ -967,41 +920,42 @@ exports.getUserOverview = async (
 // GET MY ORDERS
 // =============================================================
 
-exports.getMyOrders = async (req, res) => {
+exports.getMyOrders = async (
+  req,
+  res
+) => {
   try {
-    const userId = getUserId(req);
+    const userId =
+      getUserId(req);
 
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required.",
-      });
-    }
-
-    // Only return COD orders or successfully PAID online orders
-    const orders = await Order.find({
-      user: userId,
-      isDeleted: false,
-      $or: [
-        { paymentMethod: "COD" },
-        { paymentStatus: "PAID" },
-        { orderStatus: { $in: ["CONFIRMED", "PACKED", "SHIPPED", "DELIVERED"] } }
-      ]
-    })
-      .populate("items")
-      .populate("coupon", "code discountType discountValue")
-      .sort({ createdAt: -1 });
+    const orders =
+      await Order.find({
+        user: userId,
+        isDeleted: false,
+      })
+        .populate("items")
+        .populate(
+          "coupon",
+          "code discountType discountValue"
+        )
+        .sort({
+          createdAt: -1,
+        });
 
     return res.json({
       success: true,
-      count: orders.length,
-      data: orders,
+      count:
+        orders.length,
+      data:
+        orders,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch orders.",
-      error: error.message,
+      message:
+        "Failed to fetch orders.",
+      error:
+        error.message,
     });
   }
 };
