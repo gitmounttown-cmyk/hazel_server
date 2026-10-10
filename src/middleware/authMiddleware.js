@@ -174,6 +174,10 @@ const allowRoles = (...roles) => {
   };
 };
 
+// ============================================================
+// OPTIONAL AUTH
+// ============================================================
+
 const optionalAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;

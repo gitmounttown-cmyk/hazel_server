@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const axios = require("axios");
 
 const razorpayInstance = require("../config/razorpay");
 
@@ -12,10 +13,13 @@ const OrderItem = require("../models/orderItemModel");
 const Address = require("../models/addressModel");
 const Coupon = require("../models/couponModel");
 const Notification = require("../models/notificationModel");
+const VelocityShipment = require("../models/velocityShipmentModel");
 
 const {
   decreaseStockAfterPayment,
 } = require("../services/inventoryService");
+
+const VELOCITY_BASE_URL = process.env.VELOCITY_BASE_URL || "https://api.velocity.in";
 
 // ============================================================
 // HELPERS
@@ -85,13 +89,137 @@ const generateReceipt = () => {
   return `HZRCPT-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
 };
 
-const isValidObjectId = (id) => {
-  return mongoose.Types.ObjectId.isValid(id);
-};
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-// ============================================================
-// CREATE RAZORPAY ORDER
-// ============================================================
+/**
+ * Manifest forward shipment with Velocity API
+ */
+const triggerVelocityManifest = async (order, shippingAddress, items, user) => {
+  try {
+    let token = process.env.VELOCITY_AUTH_TOKEN || "";
+    if (token && !token.startsWith("Bearer ")) {
+      token = `Bearer ${token}`;
+    }
+
+    let formattedItems = (items || []).map((item) => {
+      const pName = item.productName || item.name || "Admire Maxi";
+      const generatedSku =
+        item.sku && String(item.sku).trim() !== ""
+          ? String(item.sku).trim()
+          : `SKU-${pName.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 6)}-${item.size || "STD"}`;
+
+      return {
+        name: pName,
+        sku: generatedSku,
+        units: Number(item.quantity || item.units || 1),
+        selling_price: Number(item.sellingPrice || item.price || order.totalAmount || 1),
+        discount: 0,
+        tax: 0,
+      };
+    });
+
+    if (formattedItems.length === 0) {
+      formattedItems = [
+        {
+          name: "Admire Maxi",
+          sku: "SKU-ADMIR-MAXI",
+          units: 1,
+          selling_price: Number(order.totalAmount || 1),
+          discount: 0,
+          tax: 0,
+        },
+      ];
+    }
+
+    const customerPhone = String(
+      shippingAddress?.mobileNumber || user?.mobileNumber || "9999999999"
+    ).replace(/\D/g, "").slice(-10);
+
+    const customerPincode = String(
+      shippingAddress?.pincode || "641301"
+    ).replace(/\D/g, "");
+
+    const payload = {
+      order_id: String(order.orderNumber || order._id),
+      order_date: new Date().toISOString().slice(0, 16).replace("T", " "),
+      carrier_id: "",
+      warehouse_id: process.env.VELOCITY_WAREHOUSE_ID || "WHZUCD",
+      pickup_location: process.env.VELOCITY_PICKUP_LOCATION || "SBS TEXTILES",
+      billing_customer_name: shippingAddress?.name || user?.name || "Customer",
+      billing_last_name: "",
+      billing_address: shippingAddress?.addressLine1 || "Address Line 1",
+      billing_city: shippingAddress?.city || "Coimbatore",
+      billing_pincode: customerPincode,
+      billing_state: shippingAddress?.state || "Tamil Nadu",
+      billing_country: shippingAddress?.country || "India",
+      billing_email: user?.email || "customer@example.com",
+      billing_phone: customerPhone,
+      shipping_is_billing: true,
+      print_label: true,
+      order_items: formattedItems,
+      payment_method: "PREPAID",
+      sub_total: Number(order.subtotal || order.totalAmount || 1),
+      cod_collectible: 0,
+      length: 10,
+      breadth: 10,
+      height: 10,
+      weight: 0.5,
+    };
+
+    console.log("🚀 [VELOCITY MANIFEST PAYLOAD]:", JSON.stringify(payload, null, 2));
+
+    const response = await axios.post(
+      `${VELOCITY_BASE_URL}/custom/api/v1/forward-order-orchestration`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+
+    console.log("✅ [VELOCITY MANIFEST RESPONSE]:", JSON.stringify(response.data, null, 2));
+
+    const result = response.data;
+
+    if (result.status === 1 && result.payload) {
+      const p = result.payload;
+
+      const shipment = await VelocityShipment.create({
+        orderNumber: String(order.orderNumber || order._id),
+        velocityOrderId: p.order_id,
+        shipmentId: p.shipment_id,
+        awbCode: p.awb_code || "",
+        courierCompanyId: p.courier_company_id || "",
+        courierName: p.courier_name || "",
+        labelUrl: p.label_url || "",
+        manifestUrl: p.manifest_url || "",
+        shippingAddress: {
+          name: shippingAddress?.name,
+          phone: customerPhone,
+          address: shippingAddress?.addressLine1,
+          city: shippingAddress?.city,
+          state: shippingAddress?.state,
+          pincode: customerPincode,
+        },
+        charges: {
+          shippingCharges: Number(p.charges?.frwd_charges?.shipping_charges || 0),
+          codCharges: Number(p.charges?.frwd_charges?.cod_charges || 0),
+          rtoCharges: Number(p.charges?.rto_charges?.rto_charges || 0),
+        },
+      });
+
+      return { success: true, awbCode: p.awb_code, shipment };
+    }
+
+    console.error("❌ Velocity returned status 0:", result);
+    return { success: false, data: result };
+  } catch (error) {
+    console.error("❌ Velocity Manifest Error:", error.response?.data || error.message);
+    return { success: false, error: error.response?.data || error.message };
+  }
+};
 
 // ============================================================
 // CREATE RAZORPAY ORDER
@@ -102,8 +230,14 @@ exports.createOrder = async (req, res) => {
 
   try {
     const userId = getUserId(req);
-    // Accept frontend amount directly
-    const { addressId, couponCode = "", customerNote = "", amount, deliveryAddress, products, guestId } = req.body;
+    const {
+      addressId,
+      couponCode = "",
+      customerNote = "",
+      amount,
+      deliveryAddress,
+      guestId,
+    } = req.body;
 
     if (!userId && !guestId) {
       return res.status(401).json({
@@ -112,138 +246,102 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    // ------------------------------------------------------
-// USER / GUEST DETAILS
-// ------------------------------------------------------
-
-let user = null;
-
-if (userId) {
-  user = await User.findById(userId);
-
-  if (!user) {
-    return res.status(404).json({
-      success: false,
-      message: "User not found.",
-    });
-  }
-}
-
-
-    // const user = await User.findById(userId);
-
-    // if (!user) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "User not found.",
-    //   });
-    // }
-
-
-
-    // if (!addressId || !isValidObjectId(addressId)) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Valid addressId is required.",
-    //   });
-    // }
-
-    // const address = await Address.findOne({
-    //   _id: addressId,
-    //   user: userId,
-    //   isActive: true,
-    // });
-
-    // if (!address) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "Address not found or inactive.",
-    //   });
-    // }
+    let user = null;
+    if (userId) {
+      user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found.",
+        });
+      }
+    }
 
     // ------------------------------------------------------
-// ADDRESS
-// ------------------------------------------------------
+    // ADDRESS
+    // ------------------------------------------------------
 
-let address = null;
+    let shippingAddr = null;
 
-if (userId) {
-  // Logged-in user → address must come from Address collection
+    if (userId) {
+      if (deliveryAddress) {
+        shippingAddr = deliveryAddress;
+      } else if (addressId && isValidObjectId(addressId)) {
+        const addressDoc = await Address.findOne({
+          _id: addressId,
+          user: userId,
+          isActive: true,
+        });
 
-  if (!addressId || !isValidObjectId(addressId)) {
-    return res.status(400).json({
-      success: false,
-      message: "Valid addressId is required.",
+        if (addressDoc) {
+          shippingAddr = {
+            name: addressDoc.fullName || addressDoc.name || user?.name || "",
+            mobileNumber: addressDoc.mobileNumber || addressDoc.phone || user?.mobileNumber || "",
+            addressLine1: addressDoc.addressLine1 || addressDoc.houseNo || "",
+            addressLine2: addressDoc.addressLine2 || "",
+            district: addressDoc.district || "",
+            city: addressDoc.city || "",
+            state: addressDoc.state || "",
+            pincode: addressDoc.pincode || "",
+            country: addressDoc.country || "India",
+          };
+        }
+      }
+    } else {
+      if (!deliveryAddress) {
+        return res.status(400).json({
+          success: false,
+          message: "Delivery address is required.",
+        });
+      }
+
+      if (
+        (!deliveryAddress.fullName && !deliveryAddress.name) ||
+        (!deliveryAddress.mobileNumber && !deliveryAddress.phone) ||
+        !deliveryAddress.addressLine1 ||
+        !deliveryAddress.city ||
+        !deliveryAddress.state ||
+        !deliveryAddress.pincode
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Please provide complete delivery address.",
+        });
+      }
+
+      shippingAddr = deliveryAddress;
+    }
+
+    if (!shippingAddr) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid delivery address is required.",
+      });
+    }
+
+    const cartQuery = { status: "active" };
+    if (userId) {
+      cartQuery.userId = userId;
+    } else {
+      if (!guestId || typeof guestId !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: "Valid guestId is required.",
+        });
+      }
+      cartQuery.guestId = guestId;
+    }
+
+    const cart = await Cart.findOne(cartQuery).populate({
+      path: "items.product",
     });
-  }
 
-  address = await Address.findOne({
-    _id: addressId,
-    user: userId,
-    isActive: true,
-  });
-
-  if (!address) {
-    return res.status(404).json({
-      success: false,
-      message: "Address not found or inactive.",
-    });
-  }
-} else {
-  // Guest → address comes directly from checkout form
-
-  if (!deliveryAddress) {
-    return res.status(400).json({
-      success: false,
-      message: "Delivery address is required.",
-    });
-  }
-
-  if (
-    !deliveryAddress.fullName ||
-    !deliveryAddress.mobileNumber ||
-    !deliveryAddress.addressLine1 ||
-    !deliveryAddress.city ||
-    !deliveryAddress.state ||
-    !deliveryAddress.pincode
-  ) {
-    return res.status(400).json({
-      success: false,
-      message: "Please provide complete delivery address.",
-    });
-  }
-
-  address = deliveryAddress;
-}
-
-const cartQuery = {
-  status: "active",
-};
-
-if (userId) {
-  cartQuery.userId = userId;
-} else {
-  if (!guestId || typeof guestId !== "string") {
-    return res.status(400).json({
-      success: false,
-      message: "Valid guestId is required.",
-    });
-  }
-
-  cartQuery.guestId = guestId;
-}
-
-const cart = await Cart.findOne(cartQuery).populate({
-  path: "items.product",
-});
-
-if (!cart || !cart.items || cart.items.length === 0) {
-  return res.status(400).json({
-    success: false,
-    message: "Your cart is empty.",
-  });
-}
-
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Your cart is empty.",
+      });
+    }
 
     const orderItemsData = [];
     let subtotal = 0;
@@ -374,45 +472,34 @@ if (!cart || !cart.items || cart.items.length === 0) {
 
     const orderNumber = generateOrderNumber();
 
-    const [order] = await Order.create(
-      [
-        {
-          user: userId || null,
-          guestId: userId ? null : guestId || null,
-          orderNumber,
-          items: [],
-          shippingAddress: {
-            name: address.fullName || address.name || user?.name || "",
-            mobileNumber: address.mobileNumber || address.phone || user?.mobileNumber || "",
-            addressLine1:
-              address.addressLine1 ||
-              [address.houseNo, address.street].filter(Boolean).join(", ") ||
-              address.houseNo ||
-              address.street ||
-              address.line1 ||
-              "",
-            addressLine2: address.addressLine2 || address.area || "",
-            district: address.district || "",
-            city: address.city || "",
-            state: address.state || "",
-            pincode: address.pincode || "",
-            country: address.country || "India",
-          },
-          subtotal,
-          discountAmount,
-          shippingCharge,
-          taxAmount,
-          totalAmount,
-          coupon: appliedCoupon || null,
-          couponCode: appliedCouponCode,
-          paymentMethod: "ONLINE",
-          paymentStatus: "PENDING",
-          orderStatus: "PENDING",
-          customerNote: customerNote || "",
-        },
-      ],
-      { session }
-    );
+    const order = await Order.create({
+      user: userId || null,
+      guestId: userId ? null : guestId || null,
+      orderNumber,
+      items: [],
+      shippingAddress: {
+        name: shippingAddr.fullName || shippingAddr.name || user?.name || "Customer",
+        mobileNumber: shippingAddr.mobileNumber || shippingAddr.phone || "9999999999",
+        addressLine1: shippingAddr.addressLine1 || shippingAddr.houseNo || "Address Line 1",
+        addressLine2: shippingAddr.addressLine2 || "",
+        district: shippingAddr.district || "",
+        city: shippingAddr.city || "Coimbatore",
+        state: shippingAddr.state || "Tamil Nadu",
+        pincode: shippingAddr.pincode || "641301",
+        country: shippingAddr.country || "India",
+      },
+      subtotal,
+      discountAmount: discountAmount,
+      shippingCharge,
+      taxAmount,
+      totalAmount,
+      coupon: appliedCoupon,
+      couponCode: appliedCouponCode,
+      paymentMethod: "ONLINE",
+      paymentStatus: "PENDING",
+      orderStatus: "PENDING",
+      customerNote: customerNote || "",
+    });
 
     const orderItemsToCreate = orderItemsData.map((item) => ({
       ...item,
@@ -429,7 +516,7 @@ if (!cart || !cart.items || cart.items.length === 0) {
     const receipt = generateReceipt();
 
     const razorpayOrder = await razorpayInstance.orders.create({
-      amount: Math.round(totalAmount * 100), // Uses the exact frontend UI total
+      amount: Math.round(totalAmount * 100),
       currency: "INR",
       receipt,
       notes: {
@@ -450,7 +537,7 @@ if (!cart || !cart.items || cart.items.length === 0) {
     const [payment] = await Payment.create(
       [
         {
-          userId : userId || null,
+          userId: userId || null,
           guestId: userId ? null : guestId,
           ecommerceOrder: order._id,
           razorpayOrderId: razorpayOrder.id,
@@ -523,38 +610,20 @@ exports.verifyPayment = async (req, res) => {
     } = req.body;
 
     if (!userId && !guestId) {
-  return res.status(401).json({
-    success: false,
-    message: "Login or a valid guest checkout session is required.",
-  });
-}
-
+      return res.status(401).json({
+        success: false,
+        message: "Login or a valid guest checkout session is required.",
+      });
+    }
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
-        message:
-          "razorpay_order_id, razorpay_payment_id, and razorpay_signature are required.",
+        message: "razorpay_order_id, razorpay_payment_id, and razorpay_signature are required.",
       });
     }
 
-    // const payment = await Payment.findOne({
-    //   razorpayOrderId: razorpay_order_id,
-    //   userId,
-    // });
-
-    // if (!payment) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "Payment record not found.",
-    //   });
-    // }
-
-    
-    const paymentQuery = {
-      razorpayOrderId: razorpay_order_id,
-    };
-
+    const paymentQuery = { razorpayOrderId: razorpay_order_id };
     if (userId) {
       paymentQuery.userId = userId;
     } else {
@@ -625,27 +694,12 @@ exports.verifyPayment = async (req, res) => {
     session = await mongoose.startSession();
     session.startTransaction();
 
-    // const order = await Order.findOne({
-    //   _id: payment.ecommerceOrder,
-    //   user: userId,
-    //   isDeleted: { $ne: true },
-    // }).session(session);
-    
-    const orderQuery = {
+    // Look up order strictly by payment's linked ecommerceOrder ID
+    const order = await Order.findOne({
       _id: payment.ecommerceOrder,
-      isDeleted: { $ne: true },
-    };
+    }).session(session);
 
-    if (userId) {
-      orderQuery.user = userId;
-    } else {
-      orderQuery.guestId = guestId;
-    }
-
-    const order = await Order.findOne(orderQuery).session(session);
-
-
-    if (!order) {
+    if (!order || order.isDeleted === true) {
       throw new Error("Order not found.");
     }
 
@@ -661,13 +715,7 @@ exports.verifyPayment = async (req, res) => {
       throw new Error("No order items found.");
     }
 
-    let stockResult = null;
-    if (typeof decreaseStockAfterPayment === "function") {
-      stockResult = await decreaseStockAfterPayment({
-        orderItems,
-        session,
-      });
-    }
+    const stockResult = null;
 
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.signature = razorpay_signature;
@@ -686,32 +734,8 @@ exports.verifyPayment = async (req, res) => {
       { session }
     );
 
-    if (order.coupon) {
-      await Coupon.findByIdAndUpdate(
-        order.coupon,
-        { $inc: { usedCount: 1 } },
-        { session }
-      );
-    }
-
-    // await Cart.findOneAndUpdate(
-    //   { userId, status: "active" },
-    //   {
-    //     $set: {
-    //       items: [],
-    //       totalItems: 0,
-    //       totalAmount: 0,
-    //       status: "active",
-    //     },
-    //   },
-    //   { session, new: true }
-    // );
-
-    
-    const cartQuery = {
-      status: "active",
-    };
-
+    // Clear active cart
+    const cartQuery = { status: "active" };
     if (userId) {
       cartQuery.userId = userId;
     } else {
@@ -728,44 +752,45 @@ exports.verifyPayment = async (req, res) => {
           status: "ordered",
         },
       },
-      { session, new: true }
+      { new: true, session }
     );
 
     await session.commitTransaction();
     session.endSession();
     session = null;
 
-    try {
-      // await Notification.create({
-      //   userId,
-      //   title: "Order Confirmed",
-      //   message: `Your order ${order.orderNumber} has been confirmed successfully.`,
-      //   type: "ORDER",
-      //   orderId: order._id,
-      //   isRead: false,
-      // });
-      
-      if (userId) {
-        try {
-          await Notification.create({
-            userId,
-            title: "Order Confirmed",
-            message: `Your order ${order.orderNumber} has been confirmed successfully.`,
-            type: "ORDER",
-            orderId: order._id,
-            isRead: false,
-          });
-        } catch (notificationError) {
-          console.error(
-            "Notification creation failed:",
-            notificationError
-          );
-        }
+    // Non-blocking Notification creation
+    if (userId) {
+      try {
+        await Notification.create({
+          user: userId,
+          userId: userId,
+          title: "Order Confirmed",
+          message: `Your order ${order.orderNumber} has been confirmed successfully.`,
+          type: "ORDER",
+          order: order._id,
+          orderId: order._id,
+          isRead: false,
+        });
+      } catch (notificationError) {
+        console.error("⚠️ Notification creation skipped:", notificationError.message);
       }
-
-    } catch (notificationError) {
-      console.error("Notification creation failed:", notificationError);
     }
+
+    // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION (Immediate Redirect)
+    const userLookup = userId ? User.findById(userId) : Promise.resolve(null);
+    userLookup
+      .then((userObj) => {
+        triggerVelocityManifest(order, order.shippingAddress, orderItems, userObj)
+          .then((velocityRes) => {
+            if (velocityRes?.success && velocityRes?.awbCode) {
+              order.trackingNumber = velocityRes.awbCode;
+              order.save();
+            }
+          })
+          .catch((vErr) => console.error("Velocity Manifestation error:", vErr.message));
+      })
+      .catch((userErr) => console.error("User lookup error:", userErr.message));
 
     const updatedOrder = await Order.findById(order._id).populate("items");
 
@@ -800,6 +825,94 @@ exports.verifyPayment = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message || "Payment verification failed.",
+    });
+  }
+};
+
+// ============================================================
+// GET PAYMENT BY ORDER ID
+// ============================================================
+
+// exports.getPaymentByOrder = async (req, res) => {
+//   try {
+//     const { orderId } = req.params;
+//     const userId = getUserId(req);
+
+//     if (!isValidObjectId(orderId)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Valid order ID is required.",
+//       });
+//     }
+
+//     const payment = await Payment.findOne({
+//       ecommerceOrder: orderId,
+//       ...(userId ? { userId } : {}),
+//     });
+
+//     if (!payment) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Payment details not found for this order.",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       payment,
+//     });
+//   } catch (error) {
+//     console.error("GET PAYMENT BY ORDER ERROR:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message || "Failed to retrieve payment details.",
+//     });
+//   }
+// };
+
+// ============================================================
+// GET PAYMENT BY ORDER ID
+// ============================================================
+
+exports.getPaymentByOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const userId = getUserId(req);
+
+    if (!isValidObjectId(orderId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid order ID is required.",
+      });
+    }
+
+    const paymentQuery = { ecommerceOrder: orderId };
+    if (userId) {
+      paymentQuery.userId = userId;
+    }
+
+    const payment = await Payment.findOne(paymentQuery);
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment details not found for this order.",
+      });
+    }
+
+    // Also fetch the associated order to get the delivery name & total amount
+    const order = await Order.findById(orderId).populate("items");
+
+    return res.status(200).json({
+      success: true,
+      payment,
+      order: order || null,
+    });
+  } catch (error) {
+    console.error("GET PAYMENT BY ORDER ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to retrieve payment details.",
     });
   }
 };
