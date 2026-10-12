@@ -16,10 +16,13 @@ const getVariant = (product, variantId) => {
     return null;
   }
 
-  return product.variants.find(
-    (variant) =>
-      variant._id &&
-      variant._id.toString() === variantId.toString()
+  return (
+    product.variants.find(
+      (variant) =>
+        variant._id &&
+        variantId &&
+        variant._id.toString() === variantId.toString()
+    ) || product.variants[0] // Fallback to first variant if ID is mismatched or stale
   );
 };
 
@@ -67,8 +70,6 @@ exports.addToCart = async (req, res) => {
         message: "Unauthorized. Please login or continue as guest.",
       });
     }
-
-    
 
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
@@ -138,6 +139,7 @@ exports.addToCart = async (req, res) => {
         message: "Selected variant does not have a valid price.",
       });
     }
+
     let cart;
     if (userId) {
       cart = await Cart.findOne({
@@ -294,9 +296,11 @@ exports.getCart = async (req, res) => {
         });
       }
 
-      const variant = item.product.variants.find(
-        (v) => v._id.toString() === item.variantId.toString()
-      );
+      // Safe fallback lookup to prevent 400 errors for logged-in users with legacy variant references
+      const variant =
+        item.product.variants.find(
+          (v) => item.variantId && v._id && v._id.toString() === item.variantId.toString()
+        ) || item.product.variants[0];
 
       if (!variant) {
         return res.status(400).json({
@@ -361,10 +365,10 @@ exports.updateCartQuantity = async (req, res) => {
       });
     }
 
-    if (!mongoose.Types.ObjectId.isValid(productId) || !mongoose.Types.ObjectId.isValid(variantId)) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid productId or variantId.",
+        message: "Invalid productId.",
       });
     }
 
@@ -392,7 +396,7 @@ exports.updateCartQuantity = async (req, res) => {
     const item = cart.items.find(
       (cartItem) =>
         cartItem.product.toString() === productId.toString() &&
-        cartItem.variantId.toString() === variantId.toString()
+        (cartItem.variantId?.toString() === variantId?.toString() || !cartItem.variantId)
     );
 
     if (!item) {
@@ -490,7 +494,7 @@ exports.removeFromCart = async (req, res) => {
       (item) =>
         !(
           item.product.toString() === productId.toString() &&
-          item.variantId.toString() === variantId.toString()
+          (item.variantId?.toString() === variantId?.toString() || !item.variantId)
         )
     );
 
@@ -525,58 +529,11 @@ exports.removeFromCart = async (req, res) => {
 // CLEAR CART
 // ============================================================
 
-// exports.clearCart = async (req, res) => {
-//   try {
-//     const userId = getUserId(req);
-//     const { guestId } = req.body;
-
-//     if (!userId && !guestId) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Unauthorized. Please login.",
-//       });
-//     }
-
-    
-
-//     const cart = await Cart.findOne({
-//       userId,
-//       status: "active",
-//     });
-
-//     if (!cart) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Cart not found.",
-//       });
-//     }
-
-//     cart.items = [];
-//     cart.totalItems = 0;
-//     cart.totalAmount = 0;
-
-//     await cart.save();
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Cart cleared successfully.",
-//       cart,
-//     });
-//   } catch (error) {
-//     console.error("CLEAR CART ERROR:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message || "Failed to clear cart.",
-//     });
-//   }
-// };
-
 exports.clearCart = async (req, res) => {
   try {
     const userId = getUserId(req);
     const { guestId } = req.body;
 
-    // Validate user or guest
     if (!userId && !guestId) {
       return res.status(400).json({
         success: false,
@@ -584,7 +541,6 @@ exports.clearCart = async (req, res) => {
       });
     }
 
-    // Find the correct active cart
     const cartQuery = userId
       ? { userId, status: "active" }
       : { guestId, status: "active" };
@@ -598,7 +554,6 @@ exports.clearCart = async (req, res) => {
       });
     }
 
-    // Clear cart items and totals
     cart.items = [];
     cart.totalItems = 0;
     cart.totalAmount = 0;

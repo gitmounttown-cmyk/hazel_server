@@ -19,7 +19,7 @@ const {
   decreaseStockAfterPayment,
 } = require("../services/inventoryService");
 
-const VELOCITY_BASE_URL = process.env.VELOCITY_BASE_URL || "https://api.velocity.in";
+const VELOCITY_BASE_URL = process.env.VELOCITY_BASE_URL || "https://shazam.velocity.in";
 
 // ============================================================
 // HELPERS
@@ -72,11 +72,6 @@ const getVariantImage = (variant) => {
   return (
     variant.media.find((media) => media.type === "image")?.imageURL || ""
   );
-};
-
-// SHIPPING ALWAYS 0
-const calculateShipping = () => {
-  return 0;
 };
 
 const generateOrderNumber = () => {
@@ -257,10 +252,6 @@ exports.createOrder = async (req, res) => {
       }
     }
 
-    // ------------------------------------------------------
-    // ADDRESS
-    // ------------------------------------------------------
-
     let shippingAddr = null;
 
     if (userId) {
@@ -292,20 +283,6 @@ exports.createOrder = async (req, res) => {
         return res.status(400).json({
           success: false,
           message: "Delivery address is required.",
-        });
-      }
-
-      if (
-        (!deliveryAddress.fullName && !deliveryAddress.name) ||
-        (!deliveryAddress.mobileNumber && !deliveryAddress.phone) ||
-        !deliveryAddress.addressLine1 ||
-        !deliveryAddress.city ||
-        !deliveryAddress.state ||
-        !deliveryAddress.pincode
-      ) {
-        return res.status(400).json({
-          success: false,
-          message: "Please provide complete delivery address.",
         });
       }
 
@@ -396,7 +373,6 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    // Coupon calculation
     let discountAmount = 0;
     let appliedCoupon = null;
     let appliedCouponCode = "";
@@ -460,7 +436,6 @@ exports.createOrder = async (req, res) => {
     const shippingCharge = 0;
     const taxAmount = Math.round(amountAfterDiscount * 0.09);
 
-    // USE FRONTEND UI TOTAL IF PROVIDED, OTHERWISE FALLBACK TO BACKEND CALCULATION
     const totalAmount = amount && Number(amount) > 0 ? Number(amount) : (amountAfterDiscount + shippingCharge + taxAmount);
 
     if (totalAmount <= 0) {
@@ -694,7 +669,6 @@ exports.verifyPayment = async (req, res) => {
     session = await mongoose.startSession();
     session.startTransaction();
 
-    // Look up order strictly by payment's linked ecommerceOrder ID
     const order = await Order.findOne({
       _id: payment.ecommerceOrder,
     }).session(session);
@@ -734,7 +708,6 @@ exports.verifyPayment = async (req, res) => {
       { session }
     );
 
-    // Clear active cart
     const cartQuery = { status: "active" };
     if (userId) {
       cartQuery.userId = userId;
@@ -759,7 +732,6 @@ exports.verifyPayment = async (req, res) => {
     session.endSession();
     session = null;
 
-    // Non-blocking Notification creation
     if (userId) {
       try {
         await Notification.create({
@@ -777,7 +749,6 @@ exports.verifyPayment = async (req, res) => {
       }
     }
 
-    // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION (Immediate Redirect)
     const userLookup = userId ? User.findById(userId) : Promise.resolve(null);
     userLookup
       .then((userObj) => {
@@ -833,47 +804,6 @@ exports.verifyPayment = async (req, res) => {
 // GET PAYMENT BY ORDER ID
 // ============================================================
 
-// exports.getPaymentByOrder = async (req, res) => {
-//   try {
-//     const { orderId } = req.params;
-//     const userId = getUserId(req);
-
-//     if (!isValidObjectId(orderId)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Valid order ID is required.",
-//       });
-//     }
-
-//     const payment = await Payment.findOne({
-//       ecommerceOrder: orderId,
-//       ...(userId ? { userId } : {}),
-//     });
-
-//     if (!payment) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Payment details not found for this order.",
-//       });
-//     }
-
-//     return res.status(200).json({
-//       success: true,
-//       payment,
-//     });
-//   } catch (error) {
-//     console.error("GET PAYMENT BY ORDER ERROR:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message || "Failed to retrieve payment details.",
-//     });
-//   }
-// };
-
-// ============================================================
-// GET PAYMENT BY ORDER ID
-// ============================================================
-
 exports.getPaymentByOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -900,7 +830,6 @@ exports.getPaymentByOrder = async (req, res) => {
       });
     }
 
-    // Also fetch the associated order to get the delivery name & total amount
     const order = await Order.findById(orderId).populate("items");
 
     return res.status(200).json({
