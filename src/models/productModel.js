@@ -131,6 +131,11 @@ const VariantSchema = new mongoose.Schema(
       },
     },
 
+    thumbnailId: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+    },
+
     fabric: {
       type: String,
       trim: true,
