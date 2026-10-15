@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const Category = require("../models/categoryModel");
+const Product = require("../models/productModel");
 
 // ==========================================================
 // HELPER: GET IMAGE URL
@@ -410,6 +411,43 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+// GET PRODUCTS BY CATEGORY ID
+exports.getProductsByCategory = async (req, res) => {
+try {
+    const { categoryId } = req.params;
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit, 10) || 20);
+    const skip = (page - 1) * limit;
+
+    const filter = { categoryId, isDeleted: false, isActive: true };
+
+    const total = await Product.countDocuments(filter);
+
+    const products = await Product.find(filter)
+      .populate("categoryId", "name")
+      .populate("brandId", "name")
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      count: products.length,
+      total,
+      page,
+      pages: Math.ceil(total / limit) || 1,
+      data: products,
+    });
+  } catch (error) {
+    console.error("Error in getProductsByCategory:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to retrieve products by category",
+    });
+  }
+};
+
 // ==========================================================
 // EXPORT
 // ==========================================================
@@ -420,4 +458,5 @@ module.exports = {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  getProductsByCategory,
 };
