@@ -4,7 +4,7 @@ const path = require("path");
 
 // =====================================================
 // CREATE VIDEO
-// FormData fields: video (file), title (text), price (text)
+// FormData fields: video (file), title (text), price (text), categoryId (text)
 // =====================================================
 exports.createVideo = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ exports.createVideo = async (req, res) => {
       });
     }
 
-    const { title, price } = req.body;
+    const { title, price, categoryId } = req.body;
 
     if (!title || !price) {
       return res.status(400).json({
@@ -30,6 +30,7 @@ exports.createVideo = async (req, res) => {
       videoUrl,
       title,
       price,
+      categoryId,
     });
 
     return res.status(201).json({
@@ -53,7 +54,7 @@ exports.createVideo = async (req, res) => {
 // =====================================================
 exports.getVideos = async (req, res) => {
   try {
-    const videos = await Video.find().select("_id title price videoUrl").sort({ createdAt: -1 });
+    const videos = await Video.find().select("_id title price videoUrl categoryId").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -114,11 +115,12 @@ exports.updateVideo = async (req, res) => {
       });
     }
 
-    const { title, price } = req.body;
+    const { title, price, categoryId } = req.body;
 
     // Update fields if provided in req.body
     if (title) video.title = title;
     if (price) video.price = price;
+    if (categoryId) video.categoryId = categoryId;
 
     // If a new video file is provided, handle file replacement
     if (req.file) {
