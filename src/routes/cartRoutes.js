@@ -20,7 +20,8 @@ router.post("/add", optionalAuth, addToCart);
 router.get("/all", optionalAuth, getCart);
 
 // Update item quantity
-router.put("/update", verifyToken, updateCartQuantity);
+// router.put("/update", verifyToken, updateCartQuantity);
+router.put("/update", optionalAuth, updateCartQuantity);
 
 // Remove single item
 // router.delete("/remove", verifyToken, removeFromCart);

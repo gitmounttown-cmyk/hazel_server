@@ -356,12 +356,12 @@ exports.getCart = async (req, res) => {
 exports.updateCartQuantity = async (req, res) => {
   try {
     const userId = getUserId(req);
-    const { productId, variantId, quantity } = req.body;
+    const { productId, variantId, quantity, guestId } = req.body;
 
-    if (!userId) {
+    if (!userId && !guestId) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized. Please login.",
+        message: "Unauthorized. Please login or continue as guest.",
       });
     }
 
@@ -381,10 +381,19 @@ exports.updateCartQuantity = async (req, res) => {
       });
     }
 
-    const cart = await Cart.findOne({
-      userId,
-      status: "active",
-    });
+    let cart;
+
+    if (userId) {
+      cart = await Cart.findOne({
+        userId,
+        status: "active",
+      });
+    } else if (guestId) {
+      cart = await Cart.findOne({
+        guestId,
+        status: "active",
+      });
+    }
 
     if (!cart) {
       return res.status(404).json({
