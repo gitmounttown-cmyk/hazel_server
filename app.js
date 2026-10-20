@@ -143,6 +143,7 @@ app.use ('/api/videos', require ('./src/routes/videoRoutes'));
 app.use("/api/reports",require("./src/routes/reportRoutes"));
 app.use("/api/users",require("./src/routes/userRoutes"));
 app.use("/api/velocity",require("./src/routes/velocityRoutes"));
+app.use("/api/visitors",require("./src/routes/visitorsRoutes"));
 // ==========================================================
 // 404 HANDLER
 // ==========================================================
