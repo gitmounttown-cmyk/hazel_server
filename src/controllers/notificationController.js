@@ -35,20 +35,41 @@ exports.createNotification = async (req, res) => {
 exports.getMyNotifications = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const { guestId } = req.query;
+    let notifications;
 
-    const notifications = await Notification.find({
-      user: userId,
-      isDeleted: false,
-    })
-      .populate("order", "orderNumber orderStatus")
-      .populate("product", "name")
-      .sort({ createdAt: -1 });
+    if (userId) {
+      notifications = await Notification.find({
+        userId,
+        isDeleted: false,
+      })
+        .populate("order", "orderNumber orderStatus")
+        .populate("product", "name")
+        .sort({ createdAt: -1 });
+    } else if (guestId) {
+      notifications = await Notification.find({
+        guestId,
+        isDeleted: false,
+      })
+        .populate("order", "orderNumber orderStatus")
+        .populate("product", "name")
+        .sort({ createdAt: -1 });
+    }
 
-    const unreadCount = await Notification.countDocuments({
-      user: userId,
-      isDeleted: false,
-      isRead: false,
-    });
+    let unreadCount = 0;
+    if (userId) {
+      unreadCount = await Notification.countDocuments({
+        userId,
+        isDeleted: false,
+        isRead: false,
+      });
+    } else if (guestId) {
+      unreadCount = await Notification.countDocuments({
+        guestId,
+        isDeleted: false,
+        isRead: false,
+      });
+    }
 
     return res.json({
       success: true,
@@ -73,12 +94,28 @@ exports.getMyNotifications = async (req, res) => {
 exports.markAsRead = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const guestId = req.body.guestId || req.query.guestId;
 
-    const notification =
-      await Notification.findOneAndUpdate(
+    let notification;
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or Guest ID is required",
+      });
+    }
+
+    if (!req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: "Notification ID is required",
+      });
+    }
+
+    if (userId) {
+      notification = await Notification.findOneAndUpdate(
         {
           _id: req.params.id,
-          user: userId,
+          userId,
           isDeleted: false,
         },
         {
@@ -89,6 +126,22 @@ exports.markAsRead = async (req, res) => {
           new: true,
         }
       );
+    } else if (guestId) {
+      notification = await Notification.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          guestId,
+          isDeleted: false,
+        },
+        {
+          isRead: true,
+          readAt: new Date(),
+        },
+        {
+          new: true,
+        }
+      );
+    }
 
     if (!notification) {
       return res.status(404).json({
@@ -119,18 +172,40 @@ exports.markAsRead = async (req, res) => {
 exports.markAllAsRead = async (req, res) => {
   try {
     const userId = getUserId(req);
+    const guestId = req.body.guestId || req.query.guestId;
+    
+    if (!userId && !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or Guest ID is required",
+      });
+    }
+    if (guestId) {
+      await Notification.updateMany(
+        {
+          guestId,
+          isDeleted: false,
+          isRead: false,
+        },
+        {
+          isRead: true,
+          readAt: new Date(),
+        }
+      );
+    } else {
+      await Notification.updateMany(
+        {
+          userId,
+          isDeleted: false,
+          isRead: false,
+        },
+        {
+          isRead: true,
+          readAt: new Date(),
+        }
+      );
+    }
 
-    await Notification.updateMany(
-      {
-        user: userId,
-        isDeleted: false,
-        isRead: false,
-      },
-      {
-        isRead: true,
-        readAt: new Date(),
-      }
-    );
 
     return res.json({
       success: true,
@@ -158,10 +233,13 @@ exports.deleteNotification = async (req, res) => {
       await Notification.findOneAndUpdate(
         {
           _id: req.params.id,
-          user: userId,
+          userId,
+          guestId,
+          isDeleted: false,
         },
         {
           isDeleted: true,
+          deletedAt: new Date(),
         },
         {
           new: true,
@@ -228,6 +306,26 @@ exports.sendNotificationToUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to send notification",
+      error: error.message,
+    });
+  }
+};
+
+// =============================================================
+// Get All Notifications - Admin
+// GET /api/notifications/all
+// =============================================================
+exports.getAllNotifications = async (req, res) => {
+  try {
+    const notifications = await Notification.find({});
+    return res.json({
+      success: true,
+      data: notifications,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch notifications",
       error: error.message,
     });
   }

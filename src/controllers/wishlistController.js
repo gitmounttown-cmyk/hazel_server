@@ -129,6 +129,9 @@ const addToWishlist = async (req, res) => {
       path: "items.product",
     });
 
+    // Total wishlist products for this user or guest
+    const wishlistCount = wishlist.items.length;
+
     // ------------------------------------------------------
     // RESPONSE
     // ------------------------------------------------------
@@ -137,6 +140,7 @@ const addToWishlist = async (req, res) => {
       success: true,
       message: userId ? "Product added to wishlist successfully" : "Product added to guest wishlist successfully",
       wishlist,
+      wishlistCount
     });
   } catch (error) {
     console.error("ADD TO WISHLIST ERROR:", error);
@@ -322,6 +326,9 @@ const removeFromWishlist = async (req, res) => {
       path: "items.product",
     });
 
+    // Total wishlist products for this user or guest
+    const wishlistCount = wishlist.items.length;
+
     // ------------------------------------------------------
     // RESPONSE
     // ------------------------------------------------------
@@ -330,7 +337,7 @@ const removeFromWishlist = async (req, res) => {
       success: true,
       message: "Product removed from wishlist successfully",
       wishlist,
-      count: wishlist.items.length,
+      wishlistCount
     });
   } catch (error) {
     console.error("REMOVE FROM WISHLIST ERROR:", error);
@@ -399,6 +406,9 @@ const checkWishlist = async (req, res) => {
       (item) => item.product.toString() === productId.toString(),
     );
 
+    // Total wishlist products for this user or guest
+    const wishlistCount = wishlist.items.length;
+
     // ------------------------------------------------------
     // RESPONSE
     // ------------------------------------------------------
@@ -406,6 +416,7 @@ const checkWishlist = async (req, res) => {
     return res.status(200).json({
       success: true,
       isWishlisted,
+      wishlistCount
     });
   } catch (error) {
     console.error("CHECK WISHLIST ERROR:", error);
