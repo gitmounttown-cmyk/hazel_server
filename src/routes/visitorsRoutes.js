@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { trackVisit, getVisitors } = require("../controllers/visitorsController");
-// const authMiddleware = require("../middlewares/authMiddleware"); // Optional if you use token verification
+const visitorsController = require("../controllers/visitorsController"); // Adjust path if needed
 
-// Public route to log page visits (passes token in headers if logged in)
-router.post("/track", trackVisit);
+// 1. Track live page visit (Public / Client-side route)
+router.post("/track", visitorsController.trackVisit);
 
-// Admin route to fetch visitor analytics and logs
-router.get("/all", getVisitors);
+// 2. Get paginated visitor analytics logs for Admin Dashboard
+router.get("/all", visitorsController.getVisitors);
+
+// 3. Export visitor/session report as CSV based on date filters
+router.get("/export", visitorsController.exportVisitorsCSV);
 
 module.exports = router;
