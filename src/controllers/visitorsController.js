@@ -36,7 +36,6 @@ exports.trackVisit = async (req, res) => {
     const uniqueVisitors = await Visitor.distinct("ipAddress").then((ips) => ips.length);
     const uniqueGuests = await Visitor.distinct("guestId").then((guests) => guests.filter(Boolean).length);
 
-    // FIX: Changed from 500 to 200 so successful tracking returns proper status
     return res.status(200).json({
       success: true,
       totalVisits,
@@ -52,17 +51,26 @@ exports.trackVisit = async (req, res) => {
   }
 };
 
-// Fetch all logs for Admin Dashboard
+// Fetch logs for Admin Dashboard with Pagination support
 exports.getVisitors = async (req, res) => {
   try {
+    // Read query parameters for pagination (defaults to page 1, limit 20)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
     const totalVisits = await Visitor.countDocuments();
     const uniqueVisitors = await Visitor.distinct("ipAddress").then((ips) => ips.length);
     const uniqueGuests = await Visitor.distinct("guestId").then((guests) => guests.filter(Boolean).length);
 
+    const totalLogs = await Visitor.countDocuments();
+    
+    // Fetch paginated visitor records
     const visitors = await Visitor.find()
       .populate("userId", "name mobileNumber email") // Populate user details for friendly name display
       .sort({ createdAt: -1 })
-      .limit(50);
+      .skip(skip)
+      .limit(limit);
 
     return res.status(200).json({
       success: true,
@@ -70,6 +78,12 @@ exports.getVisitors = async (req, res) => {
         totalVisits,
         uniqueVisitors,
         uniqueGuests,
+      },
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalLogs / limit),
+        totalLogs,
+        limit,
       },
       visitors,
     });
