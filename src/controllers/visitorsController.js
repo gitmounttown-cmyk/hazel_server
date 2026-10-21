@@ -36,7 +36,8 @@ exports.trackVisit = async (req, res) => {
     const uniqueVisitors = await Visitor.distinct("ipAddress").then((ips) => ips.length);
     const uniqueGuests = await Visitor.distinct("guestId").then((guests) => guests.filter(Boolean).length);
 
-    return res.status(500).json({ // wait, make sure to keep 200 success status
+    // FIX: Changed from 500 to 200 so successful tracking returns proper status
+    return res.status(200).json({
       success: true,
       totalVisits,
       uniqueVisitors,
