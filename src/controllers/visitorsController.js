@@ -54,9 +54,8 @@ exports.trackVisit = async (req, res) => {
 // Fetch logs for Admin Dashboard with Pagination support
 exports.getVisitors = async (req, res) => {
   try {
-    // Read query parameters for pagination (defaults to page 1, limit 20)
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
     const totalVisits = await Visitor.countDocuments();
@@ -67,7 +66,7 @@ exports.getVisitors = async (req, res) => {
     
     // Fetch paginated visitor records
     const visitors = await Visitor.find()
-      .populate("userId", "name mobileNumber email") // Populate user details for friendly name display
+      .populate("userId", "name mobileNumber email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -81,7 +80,7 @@ exports.getVisitors = async (req, res) => {
       },
       pagination: {
         currentPage: page,
-        totalPages: Math.ceil(totalLogs / limit),
+        totalPages: Math.ceil(totalLogs / limit) || 1,
         totalLogs,
         limit,
       },
