@@ -8,32 +8,39 @@ const {
   markAsRead,
   markAllAsRead,
   deleteNotification,
-  sendNotificationToUser
+  sendNotificationToUser,
+  getAllNotifications,
 } = require("../controllers/notificationController");
 
-const { verifyToken } = require("../middleware/authMiddleware");
+const { verifyToken, optionalAuth } = require("../middleware/authMiddleware");
 
 // =============================================================
 // CUSTOMER
 // =============================================================
 
-router.get(
-  "/my",
-  verifyToken,
-  getMyNotifications
-);
+// router.get(
+//   "/my",
+//   verifyToken,
+//   getMyNotifications
+// );
 
-router.patch(
-  "/read-all",
-  verifyToken,
-  markAllAsRead
-);
+router.get("/my", optionalAuth, getMyNotifications);
 
-router.patch(
-  "/read/:id",
-  verifyToken,
-  markAsRead
-);
+// router.patch(
+//   "/read-all",
+//   verifyToken,
+//   markAllAsRead
+// );
+
+router.patch("/read-all", optionalAuth, markAllAsRead);
+
+// router.patch(
+//   "/read/:id",
+//   verifyToken,
+//   markAsRead
+// );
+
+router.patch("/read/:id", optionalAuth, markAsRead);
 
 router.delete(
   "/delete/:id",
@@ -56,5 +63,7 @@ router.post(
   verifyToken,
   sendNotificationToUser
 );
+
+router.get("/all", optionalAuth, getAllNotifications);
 
 module.exports = router;

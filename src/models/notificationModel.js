@@ -1,7 +1,24 @@
 const mongoose = require("mongoose");
 
-const InventorySchema = new mongoose.Schema(
+const NotificationSchema = new mongoose.Schema(
   {
+    userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: false,
+          default: null,
+          unique: true,
+          index: true,
+        },
+    
+        // ------------------------------------------------------
+        // GUEST
+        // ------------------------------------------------------
+        guestId: {
+          type: String,
+          default: null,
+          index: true,
+        },
     // ============================================================
     // PRODUCT
     // ============================================================
@@ -116,6 +133,10 @@ const InventorySchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -126,20 +147,20 @@ const InventorySchema = new mongoose.Schema(
 // INDEXES
 // ============================================================
 
-InventorySchema.index({
+NotificationSchema.index({
   stockStatus: 1,
   isDeleted: 1,
 });
 
-InventorySchema.index({
+NotificationSchema.index({
   availableQuantity: 1,
 });
 
-InventorySchema.index({
+NotificationSchema.index({
   createdAt: -1,
 });
 
 module.exports = mongoose.model(
-  "Inventory",
-  InventorySchema
+  "Notification",
+  NotificationSchema
 );
