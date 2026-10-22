@@ -1,13 +1,14 @@
 const Visitor = require("../models/visitorModel");
 const jwt = require("jsonwebtoken");
 
-// Track or update session visit
+// Track or update session visit with full funnel & search metrics
 exports.trackVisit = async (req, res) => {
   try {
     const { 
       sessionId, guestId, path, trafficSource, trafficMedium, 
-      campaignName, adName, utmSource, utmMedium, utmCampaign,
-      device, os, browser, productViews, addToCart, checkoutStarted, purchase, whatsappClick 
+      campaignName, utmSource, utmMedium, utmCampaign,
+      device, os, browser, searchQuery, productViews, productName, 
+      addToCart, checkoutStarted, purchase, whatsappClick, pagesViewed, sessionDuration 
     } = req.body;
     
     let userId = null;
@@ -25,9 +26,16 @@ exports.trackVisit = async (req, res) => {
     const ipAddress = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "";
     const userAgent = req.headers["user-agent"] || "";
 
-    // Check if visitor session already exists to determine returning status
     const existingSession = await Visitor.findOne({ sessionId: sessionId || guestId });
     const isReturning = !!existingSession;
+
+    // Determine Customer Journey Stage based on interactions
+    let journeyStage = "Discovery";
+    if (searchQuery) journeyStage = "Search";
+    else if (productViews > 0 || productName) journeyStage = "Product Consideration";
+    else if (addToCart === "Yes") journeyStage = "Add to Cart";
+    else if (checkoutStarted === "Yes") journeyStage = "Checkout Started";
+    else if (purchase === "Yes") journeyStage = "Purchased";
 
     const newLog = await Visitor.create({
       sessionId: sessionId || guestId || "SES_DEFAULT",
@@ -41,18 +49,22 @@ exports.trackVisit = async (req, res) => {
       trafficSource: trafficSource || "Direct",
       trafficMedium: trafficMedium || "None",
       campaignName: campaignName || "",
-      adName: adName || "",
       utmSource: utmSource || "",
       utmMedium: utmMedium || "",
       utmCampaign: utmCampaign || "",
       device: device || "Mobile",
       os: os || "Android",
       browser: browser || "Chrome",
+      searchQuery: searchQuery || "",
       productViews: productViews || 0,
+      productName: productName || "",
       addToCart: addToCart || "No",
       checkoutStarted: checkoutStarted || "No",
       purchase: purchase || "No",
       whatsappClick: whatsappClick || "No",
+      pagesViewed: pagesViewed || 1,
+      sessionDuration: sessionDuration || "00:00",
+      customerJourneyStage: journeyStage,
     });
 
     return res.status(200).json({ success: true, log: newLog });
@@ -72,14 +84,15 @@ exports.getVisitors = async (req, res) => {
 
     let query = {};
     if (startDate && endDate) {
-      query.createdAt = {
-        $gte: new Date(startDate),$lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
-      };
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      query.createdAt = { $gte: start,$lte: end };
     }
 
     const totalVisits = await Visitor.countDocuments(query);
     const uniqueVisitors = await Visitor.distinct("guestId", query).then((guests) => guests.filter(Boolean).length);
-    const uniqueGuests = uniqueVisitors;
 
     const visitors = await Visitor.find(query)
       .populate("userId", "name mobileNumber email")
@@ -89,7 +102,7 @@ exports.getVisitors = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      stats: { totalVisits, uniqueVisitors, uniqueGuests },
+      stats: { totalVisits, uniqueVisitors, uniqueGuests: uniqueVisitors },
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalVisits / limit) || 1,
@@ -104,8 +117,7 @@ exports.getVisitors = async (req, res) => {
   }
 };
 
-// Export Visitor Report as CSV/Excel data format
-// Export Visitor Report as CSV
+// Export Full Comprehensive CSV Report including Journey, Search, Products, Purchases, and Duration
 exports.exportVisitorsCSV = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -114,10 +126,8 @@ exports.exportVisitorsCSV = async (req, res) => {
     if (startDate && endDate) {
       const start = new Date(startDate);
       start.setHours(0, 0, 0, 0);
-
       const end = new Date(endDate);
       end.setHours(23, 59, 59, 999);
-
       query.createdAt = { $gte: start,$lte: end };
     }
 
@@ -126,18 +136,16 @@ exports.exportVisitorsCSV = async (req, res) => {
       .sort({ createdAt: -1 });
 
     let csvRows = [];
-    // CSV Header row
     csvRows.push([
       "Date", "Time", "Session ID", "Visitor ID", "User Name", "New/Returning", 
-      "Device", "OS", "Browser", "Traffic Source", "Landing Page", 
-      "Add to Cart", "WhatsApp Click"
+      "Device", "Browser", "Traffic Source", "Customer Journey", 
+      "Search Query", "Product Performance", "Pages Viewed", "Session Duration", 
+      "Add to Cart", "Purchase", "WhatsApp Click"
     ].join(","));
 
     visitors.forEach((v) => {
       const dateObj = new Date(v.createdAt);
-      const userName = v.userId 
-        ? (v.userId.name || v.userId.mobileNumber || "Registered User") 
-        : "Guest";
+      const userName = v.userId ? (v.userId.name || v.userId.mobileNumber || "Registered User") : "Guest";
 
       const row = [
         `"${dateObj.toLocaleDateString()}"`,
@@ -147,18 +155,22 @@ exports.exportVisitorsCSV = async (req, res) => {
         `"${userName}"`,
         `"${v.isReturning ? 'Returning' : 'New'}"`,
         `"${v.device || 'Mobile'}"`,
-        `"${v.os || 'Android'}"`,
         `"${v.browser || 'Chrome'}"`,
         `"${v.trafficSource || 'Direct'}"`,
-        `"${v.landingPage || '/'}"`,
+        `"${v.customerJourneyStage || 'Discovery'}"`,
+        `"${v.searchQuery || 'None'}"`,
+        `"${v.productName || 'N/A'} (Views: ${v.productViews})"`,
+        `"${v.pagesViewed || 1}"`,
+        `"${v.sessionDuration || '00:00'}"`,
         `"${v.addToCart || 'No'}"`,
+        `"${v.purchase || 'No'}"`,
         `"${v.whatsappClick || 'No'}"`
       ];
       csvRows.push(row.join(","));
     });
 
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
-    res.setHeader("Content-Disposition", `attachment; filename=Visitor_Report_${startDate || 'all'}_to_${endDate || 'all'}.csv`);
+    res.setHeader("Content-Disposition", `attachment; filename=Visitor_Comprehensive_Report.csv`);
     return res.status(200).send(csvRows.join("\n"));
   } catch (error) {
     console.error("EXPORT ERROR:", error);

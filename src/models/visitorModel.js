@@ -1,22 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const visitorSchema = new mongoose.Schema(
-//   {
-//     ipAddress: { type: String, default: "" },
-//     userAgent: { type: String, default: "" },
-//     path: { type: String, default: "/", },
-//     guestId: { type: String, default: null, index: true },
-//     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null, index: true },
-//   },
-//   {
-//     timestamps: true,
-//     collection: "visitors" // <-- Force exact collection name matching MongoDB Compass
-//   }
-// );
-
-// module.exports = mongoose.model("Visitor", visitorSchema);
-
-
 const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema({
@@ -39,22 +20,26 @@ const visitorSchema = new mongoose.Schema({
   trafficSource: { type: String, default: "Direct" },
   trafficMedium: { type: String, default: "None" },
   campaignName: { type: String, default: "" },
-  adName: { type: String, default: "" },
   utmSource: { type: String, default: "" },
   utmMedium: { type: String, default: "" },
   utmCampaign: { type: String, default: "" },
 
-  // Session Activity & Funnel
-  path: { type: String, required: true }, // Landing / current page
+  // Session Activity, Funnel & Advanced Reports
+  path: { type: String, required: true },
   landingPage: { type: String, default: "/" },
   exitPage: { type: String, default: "" },
   pagesViewed: { type: Number, default: 1 },
-  sessionDuration: { type: String, default: "00:00" }, // e.g. "03:42"
-  productViews: { type: Number, default: 0 },
+  sessionDuration: { type: String, default: "00:00" }, // e.g., "03:42"
+  
+  // Specific feature tracking
+  searchQuery: { type: String, default: "" }, // Product Search Report
+  productViews: { type: Number, default: 0 },   // Product Performance Report
+  productName: { type: String, default: "" },  // Viewed or interacted product name
   addToCart: { type: String, enum: ["Yes", "No"], default: "No" },
   checkoutStarted: { type: String, enum: ["Yes", "No"], default: "No" },
-  purchase: { type: String, enum: ["Yes", "No"], default: "No" },
+  purchase: { type: String, enum: ["Yes", "No"], default: "No" }, // Purchase tracking
   whatsappClick: { type: String, enum: ["Yes", "No"], default: "No" },
+  customerJourneyStage: { type: String, default: "Discovery" }, // Customer Journey / Funnel
 }, { timestamps: true });
 
 module.exports = mongoose.model("Visitor", visitorSchema);
