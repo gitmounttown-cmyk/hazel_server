@@ -4,6 +4,8 @@ const ProductVariant = require("../models/productVariantModel");
 const Order = require("../models/orderModel");
 const OrderItem = require("../models/orderItemModel");
 const Banner = require("../models/bannerModel");
+const Visitor = require("../models/visitorModel");
+const {getDateFilter, getUpdatedDateFilter}  = require("../utils/dateHelper"); 
 
 // ============================================================
 // HELPER FUNCTIONS
@@ -92,6 +94,7 @@ const getDashboardSummary = async (req, res) => {
       totalOrders,
       totalCustomers,
       totalProducts,
+      totalVisitors,
       orders
     ] = await Promise.all([
       Order.countDocuments({
@@ -103,6 +106,10 @@ const getDashboardSummary = async (req, res) => {
       }),
 
       Product.countDocuments({
+        isDeleted: { $ne: true }
+      }),
+
+      Visitor.countDocuments({
         isDeleted: { $ne: true }
       }),
 
@@ -179,249 +186,197 @@ const getDashboardSummary = async (req, res) => {
 
 const getSalesOverview = async (req, res) => {
   try {
-    const range = (
-      req.query.range || "today"
-    ).toLowerCase();
+    const range = String(req.query.range || "today").toLowerCase();
+    const { fromDate, toDate } = req.query;
+
+    const allowedRanges = ["today", "week", "month", "custom"];
+
+    if (!allowedRanges.includes(range)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid range. Use today, week, month or custom.",
+      });
+    }
+
+    if (
+      (fromDate && !toDate) ||
+      (!fromDate && toDate) ||
+      (range === "custom" && (!fromDate || !toDate))
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Both fromDate and toDate are required.",
+      });
+    }
 
     const now = new Date();
 
-    let startDate;
-    let endDate = new Date(now);
+    // Format a Date as a calendar date in India Standard Time.
+    const formatISTDate = (date) => {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date);
+    };
 
-    // --------------------------------------------------------
-    // TODAY
-    // --------------------------------------------------------
+    const isValidDateString = (value) => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) {
+        return false;
+      }
 
-    if (range === "today") {
-      startDate = new Date(now);
+      const date = new Date(`${value}T00:00:00+05:30`);
 
-      startDate.setHours(
-        0,
-        0,
-        0,
-        0
+      return (
+        !Number.isNaN(date.getTime()) &&
+        formatISTDate(date) === value
       );
+    };
 
+    let startKey;
+    let endKey;
+
+    // Prefer the exact dates selected by the frontend.
+    if (fromDate && toDate) {
+      if (
+        !isValidDateString(fromDate) ||
+        !isValidDateString(toDate) ||
+        fromDate > toDate
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid date range.",
+        });
+      }
+
+      startKey = fromDate;
+      endKey = toDate;
+    } else {
+      // Backward-compatible defaults when dates aren't supplied.
+      const today = formatISTDate(now);
+      const [year, month, day] = today.split("-").map(Number);
+
+      if (range === "today") {
+        startKey = today;
+        endKey = today;
+      } else if (range === "week") {
+        const start = new Date(year, month - 1, day);
+        const daysSinceMonday = (start.getDay() + 6) % 7;
+
+        start.setDate(start.getDate() - daysSinceMonday);
+
+        startKey = [
+          start.getFullYear(),
+          String(start.getMonth() + 1).padStart(2, "0"),
+          String(start.getDate()).padStart(2, "0"),
+        ].join("-");
+
+        endKey = today;
+      } else {
+        startKey = `${year}-${String(month).padStart(2, "0")}-01`;
+        endKey = today;
+      }
     }
 
-    // --------------------------------------------------------
-    // WEEK
-    // --------------------------------------------------------
+    // Interpret date inputs as IST midnight.
+    const startDate = new Date(`${startKey}T00:00:00+05:30`);
 
-    else if (range === "week") {
-      startDate = new Date(now);
-
-      startDate.setDate(
-        now.getDate() - 6
-      );
-
-      startDate.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-    }
-
-    // --------------------------------------------------------
-    // MONTH
-    // --------------------------------------------------------
-
-    else if (range === "month") {
-      startDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        1
-      );
-
-    }
-
-    else {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid range. Use today, week or month."
-      });
-    }
+    // Exclusive end: midnight after the selected end date.
+    const endExclusive = new Date(
+      new Date(`${endKey}T00:00:00+05:30`).getTime() +
+        24 * 60 * 60 * 1000
+    );
 
     const orders = await Order.find({
+      isDeleted: { $ne: true },
       createdAt: {
         $gte: startDate,
-        $lte: endDate
+        $lt: endExclusive,
       },
-
-      isDeleted: {
-        $ne: true
-      },
-
       orderStatus: {
-        $nin: [
-          "CANCELLED",
-          "FAILED",
-          "REFUNDED"
-        ]
-      }
+        $nin: ["CANCELLED", "FAILED", "REFUNDED"],
+      },
     }).lean();
 
-    // --------------------------------------------------------
-    // TODAY = HOURLY DATA
-    // --------------------------------------------------------
-
+    // TODAY: hourly sales in IST.
     if (range === "today") {
-      const hourlySales = {};
-
-      for (let hour = 0; hour < 24; hour++) {
-        hourlySales[hour] = 0;
-      }
-
-      orders.forEach((order) => {
-        const date = new Date(order.createdAt);
-
-        const hour = date.getHours();
-
-        const amount = getNumber(
-          order,
-          [
-            "grandTotal",
-            "finalAmount",
-            "totalAmount",
-            "amount",
-            "total"
-          ]
-        );
-
-        hourlySales[hour] += amount;
-      });
-
-      const sales = Object.keys(hourlySales).map(
-        (hour) => ({
-          hour: Number(hour),
-          label: `${hour}:00`,
-          sales: hourlySales[hour]
+      const hourlySales = Array.from(
+        { length: 24 },
+        (_, hour) => ({
+          hour,
+          label: `${String(hour).padStart(2, "0")}:00`,
+          sales: 0,
         })
       );
 
-      return res.status(200).json({
-        success: true,
-        range,
-        data: sales
-      });
-    }
-
-    // --------------------------------------------------------
-    // WEEK = DAILY DATA
-    // --------------------------------------------------------
-
-    if (range === "week") {
-      const dailySales = {};
-
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(startDate);
-
-        date.setDate(
-          startDate.getDate() + i
-        );
-
-        const key =
-          date.toISOString().split("T")[0];
-
-        dailySales[key] = {
-          date: key,
-          sales: 0
-        };
-      }
-
       orders.forEach((order) => {
         const date = new Date(order.createdAt);
 
-        const key =
-          date.toISOString().split("T")[0];
+        const hour = Number(
+          new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Asia/Kolkata",
+            hour: "2-digit",
+            hourCycle: "h23",
+          }).format(date)
+        );
 
-        if (dailySales[key]) {
-          dailySales[key].sales += getNumber(
-            order,
-            [
-              "grandTotal",
-              "finalAmount",
-              "totalAmount",
-              "amount",
-              "total"
-            ]
-          );
+        const amount = getNumber(order, ["totalAmount"]);
+
+        if (hour >= 0 && hour < 24) {
+          hourlySales[hour].sales += amount;
         }
       });
 
       return res.status(200).json({
         success: true,
         range,
-        data: Object.values(dailySales)
+        fromDate: startKey,
+        toDate: endKey,
+        data: hourlySales,
       });
     }
 
-    // --------------------------------------------------------
-    // MONTH = DAILY DATA
-    // --------------------------------------------------------
+    // WEEK, MONTH and CUSTOM: daily sales.
+    // Generate every calendar date, including dates with zero sales.
+    const dailySales = {};
 
-    const daysInMonth = new Date(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      0
-    ).getDate();
+    const cursor = new Date(`${startKey}T00:00:00+05:30`);
+    const lastDate = new Date(`${endKey}T00:00:00+05:30`);
 
-    const monthlySales = {};
+    while (cursor <= lastDate) {
+      const key = formatISTDate(cursor);
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        day
-      );
-
-      const key =
-        date.toISOString().split("T")[0];
-
-      monthlySales[key] = {
+      dailySales[key] = {
         date: key,
-        sales: 0
+        sales: 0,
       };
+
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
     }
 
     orders.forEach((order) => {
-      const date = new Date(order.createdAt);
+      const key = formatISTDate(new Date(order.createdAt));
 
-      const key =
-        date.toISOString().split("T")[0];
-
-      if (monthlySales[key]) {
-        monthlySales[key].sales += getNumber(
-          order,
-          [
-            "grandTotal",
-            "finalAmount",
-            "totalAmount",
-            "amount",
-            "total"
-          ]
-        );
+      if (dailySales[key]) {
+        dailySales[key].sales += getNumber(order, ["totalAmount"]);
       }
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       range,
-      data: Object.values(monthlySales)
+      fromDate: startKey,
+      toDate: endKey,
+      data: Object.values(dailySales),
     });
-
   } catch (error) {
-    console.error(
-      "GET SALES OVERVIEW ERROR:",
-      error
-    );
+    console.error("GET SALES OVERVIEW ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to fetch sales overview",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -925,42 +880,62 @@ const getRecentActivities = async (req, res) => {
 
 const getDashboard = async (req, res) => {
   try {
+    const { fromDate, toDate } = req.query;
+
+    // Custom range must contain both dates.
+    if ((fromDate && !toDate) || (!fromDate && toDate)) {
+      return res.status(400).json({
+        success: false,
+        message: "Both fromDate and toDate are required",
+      });
+    }
+
+    if (
+      fromDate &&
+      toDate &&
+      (
+        !/^\d{4}-\d{2}-\d{2}$/.test(fromDate) ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(toDate) ||
+        fromDate > toDate
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date range",
+      });
+    }
+
     const [
       summary,
       recentOrders,
       topProducts,
       inventory,
-      activities
+      activities,
     ] = await Promise.all([
-      getSummaryData(),
-      getRecentOrdersData(),
-      getTopProductsData(),
-      getInventoryData(),
-      getActivitiesData()
+      getSummaryData(fromDate, toDate),
+      getRecentOrdersData(fromDate, toDate),
+      getTopProductsData(fromDate, toDate),
+      getInventoryData(fromDate, toDate),
+      getActivitiesData(fromDate, toDate),
     ]);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-
       data: {
         summary,
         recentOrders,
         topSellingProducts: topProducts,
         inventory,
-        recentActivities: activities
-      }
+        recentActivities: activities,
+      },
     });
-
   } catch (error) {
-    console.error(
-      "GET COMPLETE DASHBOARD ERROR:",
-      error
-    );
+    console.error("GET COMPLETE DASHBOARD ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to fetch dashboard",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -969,85 +944,131 @@ const getDashboard = async (req, res) => {
 // INTERNAL SUMMARY FUNCTION
 // ============================================================
 
-const getSummaryData = async () => {
-  const [
-    totalOrders,
-    totalCustomers,
-    totalProducts,
-    orders
-  ] = await Promise.all([
-    Order.countDocuments({
-      isDeleted: { $ne: true }
-    }),
+const getSummaryData = async (fromDate, toDate) => {
+  const dateFilter = getDateFilter(fromDate, toDate);
 
-    User.countDocuments({
-      isDeleted: { $ne: true }
-    }),
-
-    Product.countDocuments({
-      isDeleted: { $ne: true }
-    }),
-
-    Order.find({
-      isDeleted: { $ne: true }
-    }).lean()
-  ]);
 
   const completedStatuses = [
     "CONFIRMED",
     "PROCESSING",
     "PACKED",
     "SHIPPED",
+    "OUT_FOR_DELIVERY",
     "DELIVERED",
-    "COMPLETED"
+    "COMPLETED",
   ];
 
-  const totalSales = orders.reduce(
+  const [
+    visitorIds,
+    totalOrders,
+    totalCustomers,
+    totalProducts,
+    orders,
+    newCustomers,
+  ] = await Promise.all([
+    // Unique visitors during the selected period.
+    Visitor.distinct("guestId", {
+      ...dateFilter,
+      guestId: { $exists: true, $nin: ["", null] },
+      path: { $not: /^\/admin(?:\/|$)/ },
+    }),
+
+    // Total non-deleted orders during the selected period.
+    Order.countDocuments({
+      isDeleted: { $ne: true },
+      ...dateFilter,
+    }),
+
+    // Total customers overall.
+    User.countDocuments({
+      isDeleted: { $ne: true },
+    }),
+
+    // Total products overall.
+    Product.countDocuments({
+      isDeleted: { $ne: true },
+    }),
+
+    // Fetch orders and populate referenced OrderItem documents.
+    Order.find({
+      isDeleted: { $ne: true },
+      ...dateFilter,
+    })
+      .populate("items")
+      .lean(),
+
+    // Newly registered users during the selected period.
+    User.countDocuments({
+      isDeleted: { $ne: true },
+      ...dateFilter,
+    }),
+  ]);
+
+  // Select eligible orders for sales calculations.
+  const completedOrders = orders.filter((order) => {
+    const status = String(
+      order.orderStatus || order.status || ""
+    ).toUpperCase();
+
+    return completedStatuses.includes(status);
+  });
+
+  // Total sales from eligible orders.
+  const totalSales = completedOrders.reduce((total, order) => {
+    return total + (Number(order.totalAmount) || 0);
+  }, 0);
+
+  // Total units sold from populated OrderItem documents.
+  const totalProductsSold = completedOrders.reduce(
     (total, order) => {
-      const status = String(
-        order.orderStatus ||
-        order.status ||
-        ""
-      ).toUpperCase();
+      const items = Array.isArray(order.items) ? order.items : [];
 
-      if (
-        !completedStatuses.includes(status)
-      ) {
-        return total;
-      }
+      const orderQuantity = items.reduce((sum, item) => {
+        // Ignore missing or invalid item references.
+        if (!item || typeof item !== "object") {
+          return sum;
+        }
 
-      return (
-        total +
-        getNumber(
-          order,
-          [
-            "grandTotal",
-            "finalAmount",
-            "totalAmount",
-            "amount",
-            "total"
-          ]
-        )
-      );
+        return sum + (Number(item.quantity) || 0);
+      }, 0);
+
+      return total + orderQuantity;
     },
     0
   );
 
+  // Average sale value per eligible order.
+  const averageSaleValue =
+    completedOrders.length > 0
+      ? Math.round(
+          (totalSales / completedOrders.length) * 100
+        ) / 100
+      : 0;
+
   return {
-    totalSales,
+    totalVisitors: visitorIds.length,
     totalOrders,
+    totalSales: Math.round(totalSales * 100) / 100,
     totalCustomers,
-    totalProducts
+    totalProducts,
+    totalProductsSold,
+    newCustomers,
+    averageSaleValue,
   };
 };
+
+
 
 // ============================================================
 // INTERNAL RECENT ORDERS
 // ============================================================
 
-const getRecentOrdersData = async () => {
+const getRecentOrdersData = async (fromDate, toDate) => {
+  const dateFilter = getDateFilter(fromDate, toDate);
+
   const orders = await Order.find({
-    isDeleted: { $ne: true }
+    isDeleted: { $ne: true },
+    ...dateFilter
   })
     .populate(
       "user",
@@ -1096,9 +1117,13 @@ const getRecentOrdersData = async () => {
 // INTERNAL TOP PRODUCTS
 // ============================================================
 
-const getTopProductsData = async () => {
+const getTopProductsData = async (fromDate, toDate) => {
+  const dateFilter = getDateFilter(fromDate, toDate);
+
   const orderItems =
-    await OrderItem.find()
+    await OrderItem.find({
+      ...dateFilter
+    })
       .populate(
         "product",
         "name productName title images image imageUrl thumbnail"
@@ -1190,9 +1215,11 @@ const getTopProductsData = async () => {
 // INTERNAL INVENTORY
 // ============================================================
 
-const getInventoryData = async () => {
+const getInventoryData = async (fromDate, toDate) => {
+  const dateFilter = getDateFilter(fromDate, toDate);
+
   const variants =
-    await ProductVariant.find()
+    await ProductVariant.find(dateFilter)
       .lean();
 
   let inStock = 0;
@@ -1273,7 +1300,9 @@ const getInventoryData = async () => {
 // INTERNAL ACTIVITIES
 // ============================================================
 
-const getActivitiesData = async () => {
+const getActivitiesData = async (fromDate, toDate) => {
+  const dateFilter = getDateFilter(fromDate, toDate);
+
   const [
     orders,
     products,
@@ -1281,27 +1310,32 @@ const getActivitiesData = async () => {
     banners
   ] = await Promise.all([
     Order.find({
-      isDeleted: { $ne: true }
+      isDeleted: { $ne: true },
+      ...dateFilter
     })
       .sort({ createdAt: -1 })
       .limit(5)
       .lean(),
 
     Product.find({
-      isDeleted: { $ne: true }
+      isDeleted: { $ne: true },
+      ...getUpdatedDateFilter(fromDate, toDate)
     })
       .sort({ updatedAt: -1 })
       .limit(5)
       .lean(),
 
     User.find({
-      isDeleted: { $ne: true }
+      isDeleted: { $ne: true },
+      ...dateFilter
     })
       .sort({ createdAt: -1 })
       .limit(5)
       .lean(),
 
-    Banner.find()
+    Banner.find({
+      ...getUpdatedDateFilter(fromDate, toDate)
+    })
       .sort({ updatedAt: -1 })
       .limit(5)
       .lean()
