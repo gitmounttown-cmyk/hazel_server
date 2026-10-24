@@ -977,6 +977,7 @@ const getSummaryData = async (fromDate, toDate) => {
     Order.countDocuments({
       isDeleted: { $ne: true },
       ...dateFilter,
+      "paymentStatus": "PAID"
     }),
 
     // Total customers overall.
@@ -989,10 +990,11 @@ const getSummaryData = async (fromDate, toDate) => {
       isDeleted: { $ne: true },
     }),
 
-    // Fetch orders and populate referenced OrderItem documents.
+    // Fetch orders and populate referenced OrderItem documents and only get payment status completed orders for sales calculations.
     Order.find({
       isDeleted: { $ne: true },
       ...dateFilter,
+      "paymentStatus": "PAID"
     })
       .populate("items")
       .lean(),
@@ -1068,7 +1070,8 @@ const getRecentOrdersData = async (fromDate, toDate) => {
 
   const orders = await Order.find({
     isDeleted: { $ne: true },
-    ...dateFilter
+    ...dateFilter,
+    paymentStatus: "PAID"
   })
     .populate(
       "user",
@@ -1113,26 +1116,160 @@ const getRecentOrdersData = async (fromDate, toDate) => {
   }));
 };
 
+//helper get top selling product image
+const getTopSellingProductImage = (product) => {
+  if (!product) return null;
+
+  // Find the variant whose thumbnailId matches its media _id
+  for (const variant of product.variants || []) {
+    const thumbnailId = variant.thumbnailId
+      ? String(variant.thumbnailId)
+      : null;
+
+    if (!thumbnailId) continue;
+
+    const matchingMedia = (variant.media || []).find(
+      (media) => String(media._id) === thumbnailId
+    );
+
+    if (matchingMedia?.imageURL) {
+      return matchingMedia.imageURL;
+    }
+
+    // If thumbnailId exists but no media matches, continue checking
+    // other variants.
+  }
+
+  // Fallback if no matching thumbnail is found
+  for (const variant of product.variants || []) {
+    const firstImage = (variant.media || []).find(
+      (media) => media.type === "image" && media.imageURL
+    );
+
+    if (firstImage) {
+      return firstImage.imageURL;
+    }
+  }
+
+  // Fallback for older product structures
+  return (
+    product.thumbnail ||
+    product.imageURL ||
+    product.imageUrl ||
+    product.image ||
+    product.images?.[0] ||
+    null
+  );
+};
+
 // ============================================================
 // INTERNAL TOP PRODUCTS
 // ============================================================
 
+// const getTopProductsData = async (fromDate, toDate) => {
+//   const dateFilter = getDateFilter(fromDate, toDate);
+
+//   const orderItems =
+//     await OrderItem.find({
+//       ...dateFilter
+//     })
+//       .populate(
+//         "product",
+//         "name productName title images image imageUrl thumbnail variants"
+//       )
+//       .populate(
+//         "order",
+//         "orderStatus status paymentStatus"
+//       )
+//       .lean();
+
+//   const productMap = {};
+
+//   orderItems.forEach((item) => {
+//     const order = item.order;
+
+//     if (!order || !item.product) {
+//       return;
+//     }
+
+//     const status = String(
+//       order.orderStatus ||
+//       order.status ||
+//       ""
+//     ).toUpperCase();
+
+//     if (
+//       [
+//         "CANCELLED",
+//         "FAILED",
+//         "REFUNDED"
+//       ].includes(status)
+//     ) {
+//       return;
+//     }
+
+//     const product = item.product;
+//     const id = String(product._id);
+
+//     const quantity = getNumber(
+//       item,
+//       ["quantity", "qty"],
+//       1
+//     );
+
+//     const price = getNumber(
+//       item,
+//       [
+//         "totalPrice",
+//         "subtotal",
+//         "price",
+//         "unitPrice"
+//       ]
+//     );
+
+//     if (!productMap[id]) {
+//       productMap[id] = {
+//         productId: id,
+//         product:
+//           getProductName(product),
+//         image:
+//           getProductImage(product),
+//         sold: 0,
+//         revenue: 0
+//       };
+//     }
+
+//     productMap[id].sold += quantity;
+
+//     if (
+//       item.totalPrice !== undefined ||
+//       item.subtotal !== undefined
+//     ) {
+//       productMap[id].revenue += price;
+//     } else {
+//       productMap[id].revenue +=
+//         price * quantity;
+//     }
+//   });
+
+//   return Object.values(productMap)
+//     .sort(
+//       (a, b) =>
+//         b.sold - a.sold
+//     )
+//     .slice(0, 5);
+// };
+
 const getTopProductsData = async (fromDate, toDate) => {
   const dateFilter = getDateFilter(fromDate, toDate);
 
-  const orderItems =
-    await OrderItem.find({
-      ...dateFilter
-    })
-      .populate(
-        "product",
-        "name productName title images image imageUrl thumbnail"
-      )
-      .populate(
-        "order",
-        "orderStatus status"
-      )
-      .lean();
+  const orderItems = await OrderItem.find(dateFilter)
+    .populate(
+      "product",
+      "name productName title images image imageUrl thumbnail variants"
+    )
+    .populate("order", "orderStatus status paymentStatus")
+    .lean();
 
   const productMap = {};
 
@@ -1144,17 +1281,14 @@ const getTopProductsData = async (fromDate, toDate) => {
     }
 
     const status = String(
-      order.orderStatus ||
-      order.status ||
-      ""
+      order.orderStatus || order.status || ""
     ).toUpperCase();
 
     if (
-      [
-        "CANCELLED",
-        "FAILED",
-        "REFUNDED"
-      ].includes(status)
+      ["CANCELLED", "FAILED", "REFUNDED"].includes(status) ||
+      ["FAILED", "REFUNDED"].includes(
+        String(order.paymentStatus || "").toUpperCase()
+      )
     ) {
       return;
     }
@@ -1162,31 +1296,20 @@ const getTopProductsData = async (fromDate, toDate) => {
     const product = item.product;
     const id = String(product._id);
 
-    const quantity = getNumber(
-      item,
-      ["quantity", "qty"],
-      1
-    );
+    const quantity = getNumber(item, ["quantity", "qty"], 1);
 
     const price = getNumber(
       item,
-      [
-        "totalPrice",
-        "subtotal",
-        "price",
-        "unitPrice"
-      ]
+      ["totalPrice", "subtotal", "price", "unitPrice"]
     );
 
     if (!productMap[id]) {
       productMap[id] = {
         productId: id,
-        product:
-          getProductName(product),
-        image:
-          getProductImage(product),
+        product: getProductName(product),
+        image: getTopSellingProductImage(product),
         sold: 0,
-        revenue: 0
+        revenue: 0,
       };
     }
 
@@ -1198,16 +1321,12 @@ const getTopProductsData = async (fromDate, toDate) => {
     ) {
       productMap[id].revenue += price;
     } else {
-      productMap[id].revenue +=
-        price * quantity;
+      productMap[id].revenue += price * quantity;
     }
   });
 
   return Object.values(productMap)
-    .sort(
-      (a, b) =>
-        b.sold - a.sold
-    )
+    .sort((a, b) => b.sold - a.sold)
     .slice(0, 5);
 };
 
