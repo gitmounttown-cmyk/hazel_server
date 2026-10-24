@@ -17,6 +17,7 @@ const paymentController = require("../controllers/paymentController");
 const createOrder = paymentController?.createOrder;
 const verifyPayment = paymentController?.verifyPayment;
 const getPaymentByOrder = paymentController?.getPaymentByOrder;
+const getAllPayments = paymentController?.getAllPayments;
 
 // Validate that every handler is a valid function before passing to Express
 [
@@ -47,4 +48,7 @@ router.post("/verify", optionalAuth, verifyPayment);
 // =============================================================
 // router.get("/order/:orderId", verifyToken, getPaymentByOrder);
 router.get("/order/:orderId", optionalAuth, getPaymentByOrder);
+
+//get all payments
+router.get("/", verifyToken, getAllPayments);
 module.exports = router;
