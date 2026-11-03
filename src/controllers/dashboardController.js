@@ -987,6 +987,7 @@ const getSummaryData = async (fromDate, toDate) => {
 
     // Total products overall.
     Product.countDocuments({
+      isActive: true,
       isDeleted: { $ne: true },
     }),
 

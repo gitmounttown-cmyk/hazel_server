@@ -12,13 +12,14 @@ exports.getAllProducts = async (req, res) => {
     const limit = Math.max(1, parseInt(req.query.limit, 10) || 20);
     const skip = (page - 1) * limit;
 
-    const filter = {};
+    // const filter = {};
+    const filter = {isActive: true, isDeleted: false};
     if (req.query.categoryId) filter.categoryId = req.query.categoryId;
     if (req.query.subCategoryId) filter.subCategoryId = req.query.subCategoryId;
     if (req.query.brandId) filter.brandId = req.query.brandId;
-    if (req.query.isActive !== undefined) {
-      filter.isActive = req.query.isActive === "true";
-    }
+    // if (req.query.isActive !== undefined) {
+    //   filter.isActive = req.query.isActive === "true";
+    // }
     if (req.query.search) {
       filter.name = { $regex: req.query.search, $options: "i" };
     }
