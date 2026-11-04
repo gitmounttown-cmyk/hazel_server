@@ -1261,6 +1261,76 @@ const getTopSellingProductImage = (product) => {
 //     .slice(0, 5);
 // };
 
+// const getTopProductsData = async (fromDate, toDate) => {
+//   const dateFilter = getDateFilter(fromDate, toDate);
+
+//   const orderItems = await OrderItem.find(dateFilter)
+//     .populate(
+//       "product",
+//       "name productName title images image imageUrl thumbnail variants"
+//     )
+//     .populate("order", "orderStatus status paymentStatus")
+//     .lean();
+
+//   const productMap = {};
+
+//   orderItems.forEach((item) => {
+//     const order = item.order;
+
+//     if (!order || !item.product) {
+//       return;
+//     }
+
+//     const status = String(
+//       order.orderStatus || order.status || ""
+//     ).toUpperCase();
+
+//     if (
+//       ["CANCELLED", "FAILED", "REFUNDED"].includes(status) ||
+//       ["FAILED", "REFUNDED"].includes(
+//         String(order.paymentStatus || "").toUpperCase()
+//       )
+//     ) {
+//       return;
+//     }
+
+//     const product = item.product;
+//     const id = String(product._id);
+
+//     const quantity = getNumber(item, ["quantity", "qty"], 1);
+
+//     const price = getNumber(
+//       item,
+//       ["totalPrice", "subtotal", "price", "unitPrice"]
+//     );
+
+//     if (!productMap[id]) {
+//       productMap[id] = {
+//         productId: id,
+//         product: getProductName(product),
+//         image: getTopSellingProductImage(product),
+//         sold: 0,
+//         revenue: 0,
+//       };
+//     }
+
+//     productMap[id].sold += quantity;
+
+//     if (
+//       item.totalPrice !== undefined ||
+//       item.subtotal !== undefined
+//     ) {
+//       productMap[id].revenue += price;
+//     } else {
+//       productMap[id].revenue += price * quantity;
+//     }
+//   });
+
+//   return Object.values(productMap)
+//     .sort((a, b) => b.sold - a.sold)
+//     .slice(0, 5);
+// };
+
 const getTopProductsData = async (fromDate, toDate) => {
   const dateFilter = getDateFilter(fromDate, toDate);
 
@@ -1277,20 +1347,26 @@ const getTopProductsData = async (fromDate, toDate) => {
   orderItems.forEach((item) => {
     const order = item.order;
 
+    // Skip if order or product is missing
     if (!order || !item.product) {
       return;
     }
 
-    const status = String(
+    // Only include PAID orders
+    const paymentStatus = String(
+      order.paymentStatus || ""
+    ).toUpperCase();
+
+    if (paymentStatus !== "PAID") {
+      return;
+    }
+
+    // Exclude cancelled or refunded orders
+    const orderStatus = String(
       order.orderStatus || order.status || ""
     ).toUpperCase();
 
-    if (
-      ["CANCELLED", "FAILED", "REFUNDED"].includes(status) ||
-      ["FAILED", "REFUNDED"].includes(
-        String(order.paymentStatus || "").toUpperCase()
-      )
-    ) {
+    if (["CANCELLED", "FAILED", "REFUNDED"].includes(orderStatus)) {
       return;
     }
 
@@ -1430,6 +1506,7 @@ const getActivitiesData = async (fromDate, toDate) => {
     banners
   ] = await Promise.all([
     Order.find({
+      paymentStatus: "PAID",
       isDeleted: { $ne: true },
       ...dateFilter
     })
