@@ -1292,6 +1292,8 @@ exports.createOrder = async (req, res) => {
         sizeId: cartItem.sizeId || variant.sizeId || variant._id,
         productName: product.name,
         sku: variant.sku || "",
+        size: cartItem.size || variant.size || "",
+        color: cartItem.color || variant.color || "",
         image: getVariantImage(variant),
         mrp: priceInfo.mrp,
         sellingPrice: priceInfo.sellingPrice,
@@ -1362,7 +1364,8 @@ exports.createOrder = async (req, res) => {
 
     const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
     const shippingCharge = 0;
-    const taxAmount = Math.round(amountAfterDiscount * 0.09);
+    // const taxAmount = Math.round(amountAfterDiscount * 0.09);
+    const taxAmount = 0;
 
     // USE FRONTEND UI TOTAL IF PROVIDED, OTHERWISE FALLBACK TO BACKEND CALCULATION
     const totalAmount = amount && Number(amount) > 0 ? Number(amount) : (amountAfterDiscount + shippingCharge + taxAmount);
