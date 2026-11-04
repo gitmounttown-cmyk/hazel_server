@@ -3033,15 +3033,117 @@ exports.getOrderById = async (
 // GET ALL ORDERS - ADMIN
 // =============================================================
 
-exports.getAllOrders = async (
-  req,
-  res
-) => {
+// exports.getAllOrders = async (
+//   req,
+//   res
+// ) => {
+//   try {
+//     const {
+//       status,
+//       paymentStatus,
+//       search,
+//       page = 1,
+//       limit = 20,
+//     } = req.query;
+
+//     const query = {
+//       isDeleted: false,
+//     };
+
+//     if (status) {
+//       query.orderStatus =
+//         status;
+//     }
+
+//     if (paymentStatus) {
+//       query.paymentStatus =
+//         paymentStatus;
+//     }
+
+//     if (search) {
+//       query.orderNumber = {
+//         $regex:
+//           search,
+//         $options: "i",
+//       };
+//     }
+
+//     const pageNumber =
+//       Math.max(
+//         1,
+//         Number(page)
+//       );
+
+//     const limitNumber =
+//       Math.max(
+//         1,
+//         Number(limit)
+//       );
+
+//     const skip =
+//       (pageNumber - 1) *
+//       limitNumber;
+
+//     const [
+//       orders,
+//       total,
+//     ] = await Promise.all([
+//       Order.find(query)
+//         .populate(
+//           "user",
+//           "name email mobileNumber"
+//         )
+//         .populate("items")
+//         .populate("payment")
+//         .sort({
+//           createdAt: -1,
+//         })
+//         .skip(skip)
+//         .limit(limitNumber),
+
+//       Order.countDocuments(
+//         query
+//       ),
+//     ]);
+
+//     return res.json({
+//       success: true,
+//       data:
+//         orders,
+
+//       pagination: {
+//         total,
+//         page:
+//           pageNumber,
+//         limit:
+//           limitNumber,
+//         totalPages:
+//           Math.ceil(
+//             total /
+//               limitNumber
+//           ),
+//       },
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message:
+//         "Failed to fetch orders.",
+//       error:
+//         error.message,
+//     });
+//   }
+// };
+
+
+exports.getAllOrders = async (req, res) => {
   try {
     const {
       status,
       paymentStatus,
       search,
+      fromDate,
+      toDate,
       page = 1,
       limit = 20,
     } = req.query;
@@ -3050,90 +3152,110 @@ exports.getAllOrders = async (
       isDeleted: false,
     };
 
+    // Order status filter
     if (status) {
-      query.orderStatus =
-        status;
+      query.orderStatus = status;
     }
 
+    // Payment status filter
     if (paymentStatus) {
-      query.paymentStatus =
-        paymentStatus;
+      query.paymentStatus = paymentStatus;
     }
 
+    // Order number search
     if (search) {
       query.orderNumber = {
-        $regex:
-          search,
+        $regex: search,
         $options: "i",
       };
     }
 
-    const pageNumber =
-      Math.max(
-        1,
-        Number(page)
-      );
+    // Date range filter (IST)
+    if (fromDate || toDate) {
+      const createdAtFilter = {};
 
-    const limitNumber =
-      Math.max(
-        1,
-        Number(limit)
-      );
+      if (fromDate) {
+        const startDate = new Date(
+          `${fromDate}T00:00:00.000+05:30`
+        );
 
-    const skip =
-      (pageNumber - 1) *
-      limitNumber;
+        if (isNaN(startDate.getTime())) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid from date",
+          });
+        }
 
-    const [
-      orders,
-      total,
-    ] = await Promise.all([
+        createdAtFilter.$gte = startDate;
+      }
+
+      if (toDate) {
+        const endDate = new Date(
+          `${toDate}T23:59:59.999+05:30`
+        );
+
+        if (isNaN(endDate.getTime())) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid to date",
+          });
+        }
+
+        createdAtFilter.$lte = endDate;
+      }
+
+      if (
+        createdAtFilter.$gte &&
+        createdAtFilter.$lte &&
+        createdAtFilter.$gte > createdAtFilter.$lte
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "From date cannot be later than To date",
+        });
+      }
+
+      query.createdAt = createdAtFilter;
+    }
+
+    const pageNumber = Math.max(1, Number(page) || 1);
+    const limitNumber = Math.max(1, Number(limit) || 20);
+
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const [orders, total] = await Promise.all([
       Order.find(query)
-        .populate(
-          "user",
-          "name email mobileNumber"
-        )
+        .populate("user", "name email mobileNumber")
         .populate("items")
         .populate("payment")
-        .sort({
-          createdAt: -1,
-        })
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNumber),
 
-      Order.countDocuments(
-        query
-      ),
+      Order.countDocuments(query),
     ]);
 
     return res.json({
       success: true,
-      data:
-        orders,
-
+      data: orders,
       pagination: {
         total,
-        page:
-          pageNumber,
-        limit:
-          limitNumber,
-        totalPages:
-          Math.ceil(
-            total /
-              limitNumber
-          ),
+        page: pageNumber,
+        limit: limitNumber,
+        totalPages: Math.ceil(total / limitNumber),
       },
     });
   } catch (error) {
+    console.error("getAllOrders error:", error);
+
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to fetch orders.",
-      error:
-        error.message,
+      message: "Failed to fetch orders.",
+      error: error.message,
     });
   }
 };
+
 
 // =============================================================
 // UPDATE ORDER STATUS - ADMIN
