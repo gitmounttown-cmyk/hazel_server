@@ -99,44 +99,239 @@ exports.getInventorySummary = async (
 // GET ALL INVENTORY
 // ============================================================
 
-exports.getAllInventory = async (
-  req,
-  res
-) => {
+// exports.getAllInventory = async (
+//   req,
+//   res
+// ) => {
+//   try {
+//     const page = Math.max(
+//       1,
+//       parseInt(
+//         req.query.page,
+//         10
+//       ) || 1
+//     );
+
+//     const limit = Math.max(
+//       1,
+//       parseInt(
+//         req.query.limit,
+//         10
+//       ) || 20
+//     );
+
+//     const skip =
+//       (page - 1) * limit;
+
+//     const filter = {};
+
+//     // Get only active products
+//     const activeProducts = await Product.find({
+//       isActive: true,
+//       isDeleted: { $ne: true },
+//     }).select("_id");
+
+//     const activeProductIds = activeProducts.map(
+//       (product) => product._id
+//     );
+
+//     // Always show inventory for active products only
+//     // filter.productId = {
+//     //   $in: activeProductIds,
+//     // };
+
+//     filter.productId = {
+//   $in: productIds.filter((id) =>
+//     activeProductIds.some(
+//       (activeId) => activeId.equals(id)
+//     )
+//   ),
+// };
+
+//     // ----------------------------------------------------------
+//     // STATUS
+//     // ----------------------------------------------------------
+
+//     if (req.query.status) {
+//       filter.stockStatus =
+//         req.query.status;
+//     }
+
+//     // ----------------------------------------------------------
+//     // SEARCH
+//     // ----------------------------------------------------------
+
+//     if (req.query.search) {
+//       const search =
+//         req.query.search.trim();
+
+//       if (search) {
+//         const matchingProducts =
+//           await Product.find({
+//             isActive: true,
+//             isDeleted: {
+//               $ne: true,
+//             },
+
+//             $or: [
+//               {
+//                 name: {
+//                   $regex: search,
+//                   $options: "i",
+//                 },
+//               },
+
+//               {
+//                 "variants.color": {
+//                   $regex: search,
+//                   $options: "i",
+//                 },
+//               },
+
+//               {
+//                 "variants.sizes.sku": {
+//                   $regex: search,
+//                   $options: "i",
+//                 },
+//               },
+
+//               {
+//                 "variants.sizes.barcode": {
+//                   $regex: search,
+//                   $options: "i",
+//                 },
+//               },
+//             ],
+//           }).select("_id");
+
+//         const productIds =
+//           matchingProducts.map(
+//             (product) =>
+//               product._id
+//           );
+
+//         filter.productId = {
+//           $in: productIds,
+//         };
+//       }
+//     }
+
+//     // ----------------------------------------------------------
+//     // COUNT
+//     // ----------------------------------------------------------
+
+//     const total =
+//       await Inventory.countDocuments(
+//         filter
+//       );
+
+//     // ----------------------------------------------------------
+//     // DATA
+//     // ----------------------------------------------------------
+// console.log("Filter:", filter);
+//     const inventory =
+//       await Inventory.find(filter)
+//         .populate({
+//           path: "productId",
+
+//           select:
+//             "name categoryId brandId variants isActive isDeleted",
+
+//           populate: [
+//             {
+//               path: "categoryId",
+//               select: "name",
+//             },
+
+//             {
+//               path: "brandId",
+//               select: "name",
+//             },
+//           ],
+//         })
+
+//         .sort({
+//           updatedAt: -1,
+//         })
+
+//         .skip(skip)
+
+//         .limit(limit)
+
+//         .lean();
+
+//     return res.status(200).json({
+//       success: true,
+
+//       count:
+//         inventory.length,
+
+//       total,
+
+//       page,
+
+//       pages:
+//         Math.ceil(
+//           total / limit
+//         ) || 1,
+
+//       data: inventory,
+//     });
+//   } catch (error) {
+//     console.error(
+//       "getAllInventory error:",
+//       error
+//     );
+
+//     return res.status(500).json({
+//       success: false,
+
+//       message:
+//         error.message ||
+//         "Failed to get inventory",
+//     });
+//   }
+// };
+
+exports.getAllInventory = async (req, res) => {
   try {
     const page = Math.max(
       1,
-      parseInt(
-        req.query.page,
-        10
-      ) || 1
+      parseInt(req.query.page, 10) || 1
     );
 
     const limit = Math.max(
       1,
-      parseInt(
-        req.query.limit,
-        10
-      ) || 20
+      parseInt(req.query.limit, 10) || 20
     );
 
-    const skip =
-      (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
     const filter = {};
 
-    // ----------------------------------------------------------
-    // STATUS
-    // ----------------------------------------------------------
+    // Get only active products
+    const activeProducts = await Product.find({
+      isActive: true,
+      isDeleted: { $ne: true },
+    }).select("_id");
+console.log("Active Products:", activeProducts);
+    const activeProductIds = activeProducts.map(
+      (product) => product._id
+    );
 
+    // Always restrict inventory to active products
+    filter.productId = {
+      $in: activeProductIds,
+    };
+
+    // STATUS
     if (req.query.status) {
-      filter.stockStatus =
-        req.query.status;
+      filter.stockStatus = req.query.status;
     }
 
-    // ----------------------------------------------------------
     // SEARCH
-    // ----------------------------------------------------------
+    if (req.query.search?.trim()) {
+      const search = req.query.search.trim();
 
     const productFilter = {
       isDeleted: {
@@ -191,70 +386,44 @@ exports.getAllInventory = async (
         filter
       );
 
-    // ----------------------------------------------------------
+      filter.productId = {
+        $in: productIds,
+      };
+    }
+
+    // COUNT
+    const total = await Inventory.countDocuments(filter);
+
     // DATA
-    // ----------------------------------------------------------
-
-    const inventory =
-      await Inventory.find(filter)
-        .populate({
-          path: "productId",
-
-          select:
-            "name categoryId brandId variants isActive isDeleted",
-
-          populate: [
-            {
-              path: "categoryId",
-              select: "name",
-            },
-
-            {
-              path: "brandId",
-              select: "name",
-            },
-          ],
-        })
-
-        .sort({
-          updatedAt: -1,
-        })
-
-        .skip(skip)
-
-        .limit(limit)
-
-        .lean();
+    const inventory = await Inventory.find(filter)
+      .populate({
+        path: "productId",
+        select: "name categoryId brandId variants isActive isDeleted",
+        populate: [
+          { path: "categoryId", select: "name" },
+          { path: "brandId", select: "name" },
+        ],
+      })
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return res.status(200).json({
       success: true,
-
-      count:
-        inventory.length,
-
+      count: inventory.length,
       total,
-
       page,
-
-      pages:
-        Math.ceil(
-          total / limit
-        ) || 1,
-
+      pages: Math.ceil(total / limit) || 1,
       data: inventory,
     });
+
   } catch (error) {
-    console.error(
-      "getAllInventory error:",
-      error
-    );
+    console.error("getAllInventory error:", error);
 
     return res.status(500).json({
       success: false,
-
-      message:
-        error.message ||
-        "Failed to get inventory",
+      message: error.message || "Failed to get inventory",
     });
   }
 };
