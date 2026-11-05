@@ -1,5 +1,7 @@
 const Inventory = require("../models/inventoryModel");
 const Product = require("../models/productModel");
+require("../models/categoryModel");
+require("../models/brandModel");
 
 const {
   syncProductInventory,
