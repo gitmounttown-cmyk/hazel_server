@@ -45,10 +45,12 @@ const calculateProductStock = (product) => {
 const calculateInventoryTotals = (inventory) => {
   let totalStock = 0;
 
-  inventory.variants.forEach((variant) => {
-    variant.sizes.forEach((size) => {
-      totalStock += Number(size.stockQuantity || 0);
-    });
+  (inventory.variants || []).forEach((variant) => {
+    if (Array.isArray(variant.sizes)) {
+      variant.sizes.forEach((size) => {
+        totalStock += Number(size.stockQuantity || 0);
+      });
+    }
   });
 
   const reservedStock = Number(
@@ -124,13 +126,13 @@ const syncProductInventory = async (
   // BUILD INVENTORY VARIANTS
   // ----------------------------------------------------------
 
-  inventory.variants = product.variants.map(
+  inventory.variants = (product.variants || []).map(
     (productVariant) => ({
       variantId: productVariant._id,
 
       color: productVariant.color || "",
 
-      sizes: productVariant.sizes.map(
+      sizes: (Array.isArray(productVariant.sizes) ? productVariant.sizes : []).map(
         (productSize) => ({
           sizeId: productSize._id,
 

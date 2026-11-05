@@ -135,59 +135,49 @@ exports.getAllInventory = async (
     // SEARCH
     // ----------------------------------------------------------
 
+    const productFilter = {
+      isDeleted: {
+        $ne: true,
+      },
+    };
+
     if (req.query.search) {
-      const search =
-        req.query.search.trim();
-
+      const search = req.query.search.trim();
       if (search) {
-        const matchingProducts =
-          await Product.find({
-            isDeleted: {
-              $ne: true,
+        productFilter.$or = [
+          {
+            name: {
+              $regex: search,
+              $options: "i",
             },
-
-            $or: [
-              {
-                name: {
-                  $regex: search,
-                  $options: "i",
-                },
-              },
-
-              {
-                "variants.color": {
-                  $regex: search,
-                  $options: "i",
-                },
-              },
-
-              {
-                "variants.sizes.sku": {
-                  $regex: search,
-                  $options: "i",
-                },
-              },
-
-              {
-                "variants.sizes.barcode": {
-                  $regex: search,
-                  $options: "i",
-                },
-              },
-            ],
-          }).select("_id");
-
-        const productIds =
-          matchingProducts.map(
-            (product) =>
-              product._id
-          );
-
-        filter.productId = {
-          $in: productIds,
-        };
+          },
+          {
+            "variants.color": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+          {
+            "variants.sizes.sku": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+          {
+            "variants.sizes.barcode": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        ];
       }
     }
+
+    const matchingProducts = await Product.find(productFilter).select("_id");
+    const productIds = matchingProducts.map((product) => product._id);
+    filter.productId = {
+      $in: productIds,
+    };
 
     // ----------------------------------------------------------
     // COUNT

@@ -1,6 +1,8 @@
 const Product = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const Brand = require("../models/brandModel");
+const Inventory = require("../models/inventoryModel");
+const { syncProductInventory } = require("../services/inventoryService");
 
 const formatMediaPath = (file) => `/uploads/products/${file.filename}`;
 
@@ -355,6 +357,13 @@ exports.createProduct = async (req, res) => {
     // Save after thumbnailId has been assigned.
     await newProduct.save();
 
+    // Dynamically sync to Inventory
+    try {
+      await syncProductInventory(newProduct._id);
+    } catch (invErr) {
+      console.error("Failed to sync new product to inventory:", invErr);
+    }
+
     const populatedProduct = await Product.findById(
       newProduct._id
     )
@@ -485,13 +494,19 @@ exports.updateProduct = async (req, res) => {
     if (variants === undefined) {
       await product.save();
 
+      try {
+        await syncProductInventory(productId);
+      } catch (invErr) {
+        console.error('Failed to sync updated product to inventory:', invErr);
+      }
+
       const updatedProduct = await Product.findById(productId)
-        .populate("categoryId", "name")
-        .populate("brandId", "name");
+        .populate('categoryId', 'name')
+        .populate('brandId', 'name');
 
       return res.status(200).json({
         success: true,
-        message: "Product updated successfully",
+        message: 'Product updated successfully',
         data: updatedProduct,
       });
     }
@@ -743,6 +758,12 @@ exports.updateProduct = async (req, res) => {
 
     await product.save();
 
+    try {
+      await syncProductInventory(productId);
+    } catch (invErr) {
+      console.error('Failed to sync updated product to inventory:', invErr);
+    }
+
     const updatedProduct = await Product.findById(productId)
       .populate("categoryId", "name")
       .populate("brandId", "name");
@@ -769,7 +790,7 @@ exports.deleteProduct = async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findByIdAndUpdate(
       productId,
-      { isActive: false },
+      { isActive: false, isDeleted: true },
       { new: true }
     );
 
@@ -778,6 +799,12 @@ exports.deleteProduct = async (req, res) => {
         success: false,
         message: "Product not found",
       });
+    }
+
+    try {
+      await Inventory.findOneAndDelete({ productId });
+    } catch (invErr) {
+      console.error('Failed to delete inventory record:', invErr);
     }
 
     return res.status(200).json({

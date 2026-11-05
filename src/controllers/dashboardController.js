@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
+const Inventory = require("../models/inventoryModel");
 const ProductVariant = require("../models/productVariantModel");
 const Order = require("../models/orderModel");
 const OrderItem = require("../models/orderItemModel");
@@ -630,106 +631,17 @@ const getTopSellingProducts = async (req, res) => {
 
 const getInventoryStatus = async (req, res) => {
   try {
-    const variants =
-      await ProductVariant.find()
-        .lean();
-
-    let inStock = 0;
-    let lowStock = 0;
-    let outOfStock = 0;
-
-    const LOW_STOCK_LIMIT = 10;
-
-    variants.forEach((variant) => {
-      const stock = getNumber(
-        variant,
-        [
-          "stockQuantity",
-          "quantity",
-          "stock",
-          "availableStock",
-          "inventory"
-        ]
-      );
-
-      if (stock <= 0) {
-        outOfStock++;
-      }
-
-      else if (
-        stock <= LOW_STOCK_LIMIT
-      ) {
-        lowStock++;
-      }
-
-      else {
-        inStock++;
-      }
-    });
-
-    const total =
-      inStock +
-      lowStock +
-      outOfStock;
-
+    const data = await getInventoryData();
     res.status(200).json({
       success: true,
-
-      data: {
-        totalProducts: total,
-
-        inStock: {
-          count: inStock,
-          percentage:
-            total > 0
-              ? Number(
-                  (
-                    (inStock / total) *
-                    100
-                  ).toFixed(1)
-                )
-              : 0
-        },
-
-        lowStock: {
-          count: lowStock,
-          percentage:
-            total > 0
-              ? Number(
-                  (
-                    (lowStock / total) *
-                    100
-                  ).toFixed(1)
-                )
-              : 0
-        },
-
-        outOfStock: {
-          count: outOfStock,
-          percentage:
-            total > 0
-              ? Number(
-                  (
-                    (outOfStock / total) *
-                    100
-                  ).toFixed(1)
-                )
-              : 0
-        }
-      }
+      data,
     });
-
   } catch (error) {
-    console.error(
-      "GET INVENTORY STATUS ERROR:",
-      error
-    );
-
+    console.error("GET INVENTORY STATUS ERROR:", error);
     res.status(500).json({
       success: false,
-      message:
-        "Failed to fetch inventory status",
-      error: error.message
+      message: "Failed to fetch inventory status",
+      error: error.message,
     });
   }
 };
@@ -1191,39 +1103,18 @@ const getTopProductsData = async () => {
 // ============================================================
 
 const getInventoryData = async () => {
-  const variants =
-    await ProductVariant.find()
-      .lean();
+  const activeProducts = await Product.find({
+    isDeleted: { $ne: true },
+  }).select("_id");
 
-  let inStock = 0;
-  let lowStock = 0;
-  let outOfStock = 0;
+  const productIds = activeProducts.map((p) => p._id);
 
-  variants.forEach((variant) => {
-    const stock = getNumber(
-      variant,
-      [
-        "stockQuantity",
-        "quantity",
-        "stock",
-        "availableStock",
-        "inventory"
-      ]
-    );
-
-    if (stock <= 0) {
-      outOfStock++;
-    } else if (stock <= 10) {
-      lowStock++;
-    } else {
-      inStock++;
-    }
-  });
-
-  const total =
-    inStock +
-    lowStock +
-    outOfStock;
+  const [total, inStock, lowStock, outOfStock] = await Promise.all([
+    Inventory.countDocuments({ productId: { $in: productIds } }),
+    Inventory.countDocuments({ productId: { $in: productIds }, stockStatus: "IN_STOCK" }),
+    Inventory.countDocuments({ productId: { $in: productIds }, stockStatus: "LOW_STOCK" }),
+    Inventory.countDocuments({ productId: { $in: productIds }, stockStatus: "OUT_OF_STOCK" }),
+  ]);
 
   return {
     totalProducts: total,
@@ -1231,41 +1122,26 @@ const getInventoryData = async () => {
     inStock: {
       count: inStock,
       percentage:
-        total
-          ? Number(
-              (
-                (inStock / total) *
-                100
-              ).toFixed(1)
-            )
-          : 0
+        total > 0
+          ? Number(((inStock / total) * 100).toFixed(1))
+          : 0,
     },
 
     lowStock: {
       count: lowStock,
       percentage:
-        total
-          ? Number(
-              (
-                (lowStock / total) *
-                100
-              ).toFixed(1)
-            )
-          : 0
+        total > 0
+          ? Number(((lowStock / total) * 100).toFixed(1))
+          : 0,
     },
 
     outOfStock: {
       count: outOfStock,
       percentage:
-        total
-          ? Number(
-              (
-                (outOfStock / total) *
-                100
-              ).toFixed(1)
-            )
-          : 0
-    }
+        total > 0
+          ? Number(((outOfStock / total) * 100).toFixed(1))
+          : 0,
+    },
   };
 };
 
