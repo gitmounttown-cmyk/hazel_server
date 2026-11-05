@@ -19,6 +19,7 @@ exports.getInventorySummary = async (
     // Only count inventory belonging to non-deleted products
     const activeProducts =
       await Product.find({
+        isActive: true,
         isDeleted: {
           $ne: true,
         },

@@ -66,7 +66,79 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+//get all users
+const getAllUsers = async (req, res) => {
+  try {
+    let {
+      page = 1,
+      limit = 10,
+      search = "",
+      status = "",
+    } = req.query;
+
+    page = Math.max(1, parseInt(page, 10) || 1);
+    limit = Math.min(100, Math.max(1, parseInt(limit, 10) || 10));
+
+    const query = {};
+
+    // Optional status filter
+    if (status && status !== "all") {
+      query.isActive = status;
+    }
+
+    // Search users by name, email, phone, or mobile number
+    const searchText = String(search).trim();
+
+    if (searchText) {
+      const regex = new RegExp(
+        searchText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "i",
+      );
+
+      query.$or = [
+        { name: regex },
+        { email: regex },
+        { phone: regex },
+        { mobileNumber: regex },
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+      User.find(query)
+        .select("-__v")
+        .sort({ createdAt: -1, _id: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      User.countDocuments(query),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      users,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("GET ALL USERS ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  getAllUsers,
 };

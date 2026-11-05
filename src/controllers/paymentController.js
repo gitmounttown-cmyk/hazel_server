@@ -1292,6 +1292,8 @@ exports.createOrder = async (req, res) => {
         sizeId: cartItem.sizeId || variant.sizeId || variant._id,
         productName: product.name,
         sku: variant.sku || "",
+        size: cartItem.size || variant.size || "",
+        color: cartItem.color || variant.color || "",
         image: getVariantImage(variant),
         mrp: priceInfo.mrp,
         sellingPrice: priceInfo.sellingPrice,
@@ -1362,7 +1364,8 @@ exports.createOrder = async (req, res) => {
 
     const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
     const shippingCharge = 0;
-    const taxAmount = Math.round(amountAfterDiscount * 0.09);
+    // const taxAmount = Math.round(amountAfterDiscount * 0.09);
+    const taxAmount = 0;
 
     // USE FRONTEND UI TOTAL IF PROVIDED, OTHERWISE FALLBACK TO BACKEND CALCULATION
     const totalAmount = amount && Number(amount) > 0 ? Number(amount) : (amountAfterDiscount + shippingCharge + taxAmount);
@@ -1772,3 +1775,142 @@ exports.getPaymentByOrder = async (req, res) => {
     });
   }
 };
+
+// ============================================================
+// GET ALL PAYMENTS with pagination (ADMIN ONLY)
+// ============================================================
+
+exports.getAllPayments = async (req, res) => {
+  try {
+    const page = Math.max(
+      1,
+      parseInt(req.query.page, 10) || 1
+    );
+
+    const limit = Math.max(
+      1,
+      parseInt(req.query.limit, 10) || 10
+    );
+
+    const skip = (page - 1) * limit;
+
+    const [payments, totalPayments] = await Promise.all([
+      Payment.find()
+        .populate({
+          path: "ecommerceOrder",
+          select:
+            "orderNumber user guestId shippingAddress paymentMethod paymentStatus totalAmount",
+        })
+        .populate({
+          path: "userId",
+          select: "name email mobileNumber",
+        })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      Payment.countDocuments(),
+    ]);
+
+    const formattedPayments = payments.map((payment) => {
+      const order = payment.ecommerceOrder;
+      const user = payment.userId;
+      const shipping = order?.shippingAddress;
+
+      return {
+        ...payment,
+
+        paymentId: payment._id.toString(),
+
+        // Order information
+        orderId: order
+          ? {
+              _id: order._id,
+              orderNumber: order.orderNumber || "-",
+            }
+          : null,
+
+        // Customer information: registered or guest
+        customerName:
+          user?.name ||
+          shipping?.name ||
+          "-",
+
+        customerEmail:
+          user?.email ||
+          "",
+
+        customerMobile:
+          user?.mobileNumber ||
+          shipping?.mobileNumber ||
+          "",
+
+        // Optional shipping information for payment details
+        shippingAddress: shipping
+          ? {
+              name: shipping.name,
+              mobileNumber: shipping.mobileNumber,
+              addressLine1: shipping.addressLine1,
+              addressLine2: shipping.addressLine2,
+              district: shipping.district,
+              city: shipping.city,
+              state: shipping.state,
+              pincode: shipping.pincode,
+              country: shipping.country,
+            }
+          : null,
+
+        transactionId:
+          payment.razorpayPaymentId || null,
+
+        gateway: payment.razorpayOrderId
+          ? "RAZORPAY"
+          : "OTHER",
+
+        // Preserve the existing frontend status convention
+        status: (() => {
+          const status = payment.status?.toLowerCase();
+
+          const statusMap = {
+            created: "PENDING",
+            paid: "SUCCESS",
+            failed: "FAILED",
+            cancelled: "CANCELLED",
+            refunded: "REFUNDED",
+          };
+
+          return statusMap[status] || "PENDING";
+        })(),
+
+        // Your Payment schema does not currently store
+        // paymentMethod, so get it from the associated order.
+        paymentMethod:
+          order?.paymentMethod || "OTHER",
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      payments: formattedPayments,
+      pagination: {
+        page,
+        limit,
+        totalPayments,
+        totalPages: Math.ceil(totalPayments / limit),
+      },
+    });
+  } catch (error) {
+    console.error("GET ALL PAYMENTS ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to retrieve payment details.",
+    });
+  }
+};
+
+
+
