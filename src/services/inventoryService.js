@@ -152,9 +152,9 @@ const syncProductInventory = async (
 
   calculateInventoryTotals(inventory);
 
-  await inventory.save({
-    session,
-  });
+  await inventory.save(
+    session ? { session } : {}
+  );
 
   return inventory;
 };
@@ -258,246 +258,189 @@ const updateProductSizeStock = async ({
 
 const decreaseStockAfterPayment = async ({
   orderItems,
-  session,
+  session = null,
 }) => {
-  if (!session) {
-    throw new Error(
-      "MongoDB transaction session is required"
-    );
-  }
-
   const updatedItems = [];
 
   for (const orderItem of orderItems) {
-    const productId =
-      orderItem.product;
+    const productId = orderItem.product;
+    const variantId = orderItem.variantId;
+    const sizeId = orderItem.sizeId;
+    const quantity = Number(orderItem.quantity);
 
-    const variantId =
-      orderItem.variantId;
-
-    const sizeId =
-      orderItem.sizeId;
-
-    const quantity =
-      Number(orderItem.quantity);
-
-    if (
-      !mongoose.Types.ObjectId.isValid(
-        productId
-      )
-    ) {
-      throw new Error(
-        `Invalid product ID for order item ${orderItem._id}`
-      );
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      throw new Error(`Invalid product ID for order item ${orderItem._id || ""}`);
     }
 
-    if (
-      !mongoose.Types.ObjectId.isValid(
-        variantId
-      )
-    ) {
-      throw new Error(
-        `Invalid variant ID for order item ${orderItem._id}`
-      );
+    if (!variantId || !mongoose.Types.ObjectId.isValid(variantId)) {
+      throw new Error(`Invalid variant ID for order item ${orderItem._id || ""}`);
     }
 
-    if (
-      !mongoose.Types.ObjectId.isValid(
-        sizeId
-      )
-    ) {
-      throw new Error(
-        `Invalid size ID for order item ${orderItem._id}`
-      );
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      throw new Error(`Invalid quantity for order item ${orderItem._id || ""}`);
     }
 
-    if (
-      !Number.isInteger(quantity) ||
-      quantity <= 0
-    ) {
-      throw new Error(
-        `Invalid quantity for order item ${orderItem._id}`
-      );
+    // 1. Fetch Product
+    const productQuery = Product.findById(productId);
+    if (session) productQuery.session(session);
+    const product = await productQuery;
+
+    if (!product) {
+      throw new Error(`Product not found: ${productId}`);
     }
 
-    // ========================================================
-    // 1. DECREASE PRODUCT STOCK
-    // ========================================================
-
-    const updatedProduct =
-      await Product.findOneAndUpdate(
-        {
-          _id: productId,
-
-          "variants._id": variantId,
-
-          "variants.sizes._id": sizeId,
-
-          "variants.sizes.stockQuantity": {
-            $gte: quantity,
-          },
-        },
-        {
-          $inc: {
-            "variants.$[variant].sizes.$[size].stockQuantity":
-              -quantity,
-          },
-        },
-        {
-          new: true,
-
-          session,
-
-          arrayFilters: [
-            {
-              "variant._id": variantId,
-            },
-            {
-              "size._id": sizeId,
-            },
-          ],
-        }
-      );
-
-    // ========================================================
-    // STOCK NOT AVAILABLE
-    // ========================================================
-
-    if (!updatedProduct) {
-      throw new Error(
-        `Insufficient stock for product ${productId}, variant ${variantId}, size ${sizeId}`
-      );
-    }
-
-    // ========================================================
-    // 2. RECALCULATE PRODUCT AVAILABILITY
-    // ========================================================
-
-    const totalProductStock =
-      calculateProductStock(
-        updatedProduct
-      );
-
-    updatedProduct.availability =
-      totalProductStock > 0
-        ? "In Stock"
-        : "Out of Stock";
-
-    await updatedProduct.save({
-      session,
-    });
-
-    // ========================================================
-    // 3. UPDATE INVENTORY
-    // ========================================================
-
-    const inventory =
-      await Inventory.findOne({
-        productId,
-      }).session(session);
-
-    if (!inventory) {
-      throw new Error(
-        `Inventory not found for product ${productId}`
-      );
-    }
-
-    // ========================================================
-    // FIND INVENTORY VARIANT
-    // ========================================================
-
-    const inventoryVariant =
-      inventory.variants.find(
-        (variant) =>
-          String(variant.variantId) ===
-          String(variantId)
-      );
-
-    if (!inventoryVariant) {
-      throw new Error(
-        `Inventory variant not found: ${variantId}`
-      );
-    }
-
-    // ========================================================
-    // FIND INVENTORY SIZE
-    // ========================================================
-
-    const inventorySize =
-      inventoryVariant.sizes.find(
-        (size) =>
-          String(size.sizeId) ===
-          String(sizeId)
-      );
-
-    if (!inventorySize) {
-      throw new Error(
-        `Inventory size not found: ${sizeId}`
-      );
-    }
-
-    // ========================================================
-    // DOUBLE-CHECK INVENTORY STOCK
-    // ========================================================
-
-    if (
-      Number(inventorySize.stockQuantity) <
-      quantity
-    ) {
-      throw new Error(
-        `Inventory stock is insufficient for ${orderItem.productName}`
-      );
-    }
-
-    // ========================================================
-    // DECREASE INVENTORY STOCK
-    // ========================================================
-
-    inventorySize.stockQuantity =
-      Number(
-        inventorySize.stockQuantity
-      ) - quantity;
-
-    // ========================================================
-    // RECALCULATE INVENTORY TOTALS
-    // ========================================================
-
-    calculateInventoryTotals(
-      inventory
+    // 2. Find Variant
+    const variant = (product.variants || []).find(
+      (v) => String(v._id) === String(variantId)
     );
 
-    await inventory.save({
-      session,
-    });
+    if (!variant) {
+      throw new Error(`Product variant not found: ${variantId}`);
+    }
+
+    // 3. Find Size (by sizeId or by size name fallback)
+    let targetSize = null;
+    if (Array.isArray(variant.sizes) && variant.sizes.length > 0) {
+      if (sizeId && mongoose.Types.ObjectId.isValid(sizeId)) {
+        targetSize = variant.sizes.find(
+          (s) => String(s._id) === String(sizeId)
+        );
+      }
+      if (!targetSize && orderItem.size) {
+        targetSize = variant.sizes.find(
+          (s) => String(s.size).trim().toUpperCase() === String(orderItem.size).trim().toUpperCase()
+        );
+      }
+      if (!targetSize) {
+        targetSize = variant.sizes[0];
+      }
+    }
+
+    // 4. Validate & Decrease Stock
+    if (targetSize) {
+      const currentStock = Number(targetSize.stockQuantity || 0);
+      if (currentStock < quantity) {
+        throw new Error(
+          `Insufficient stock for "${orderItem.productName || product.name}" (Size: ${targetSize.size}). Available: ${currentStock}, Requested: ${quantity}`
+        );
+      }
+      targetSize.stockQuantity = currentStock - quantity;
+      variant.quantity = variant.sizes.reduce(
+        (sum, s) => sum + (Number(s.stockQuantity) || 0),
+        0
+      );
+    } else {
+      const currentStock = Number(variant.quantity || 0);
+      if (currentStock < quantity) {
+        throw new Error(
+          `Insufficient stock for "${orderItem.productName || product.name}". Available: ${currentStock}, Requested: ${quantity}`
+        );
+      }
+      variant.quantity = currentStock - quantity;
+    }
+
+    // 5. Recalculate total product stock & availability
+    const totalProductStock = (product.variants || []).reduce(
+      (sum, v) => sum + (Number(v.quantity) || 0),
+      0
+    );
+    product.availability = totalProductStock > 0 ? "In Stock" : "Out of Stock";
+
+    await product.save(session ? { session } : {});
+
+    // 6. Synchronize Inventory collection
+    const inventory = await syncProductInventory(product._id, { session });
 
     updatedItems.push({
       orderItemId: orderItem._id,
-
       productId,
-
       variantId,
-
-      sizeId,
-
+      sizeId: targetSize ? targetSize._id : variantId,
       quantity,
-
-      remainingProductStock:
-        totalProductStock,
-
-      remainingInventoryStock:
-        inventorySize.stockQuantity,
+      remainingProductStock: totalProductStock,
+      remainingSizeStock: targetSize ? targetSize.stockQuantity : variant.quantity,
+      inventoryStatus: inventory ? inventory.stockStatus : undefined,
     });
   }
 
   return updatedItems;
 };
 
+// ============================================================
+// RESTORE STOCK ON ORDER CANCELLATION
+// ============================================================
+
+const restoreStockForOrder = async ({ orderItems, session = null }) => {
+  const restoredItems = [];
+
+  for (const orderItem of orderItems) {
+    const productId = orderItem.product;
+    const variantId = orderItem.variantId;
+    const sizeId = orderItem.sizeId;
+    const quantity = Number(orderItem.quantity);
+
+    if (!productId || !quantity || quantity <= 0) continue;
+
+    const productQuery = Product.findById(productId);
+    if (session) productQuery.session(session);
+    const product = await productQuery;
+    if (!product) continue;
+
+    const variant = (product.variants || []).find(
+      (v) => String(v._id) === String(variantId)
+    );
+    if (!variant) continue;
+
+    let targetSize = null;
+    if (Array.isArray(variant.sizes) && variant.sizes.length > 0) {
+      if (sizeId && mongoose.Types.ObjectId.isValid(sizeId)) {
+        targetSize = variant.sizes.find(
+          (s) => String(s._id) === String(sizeId)
+        );
+      }
+      if (!targetSize && orderItem.size) {
+        targetSize = variant.sizes.find(
+          (s) => String(s.size).trim().toUpperCase() === String(orderItem.size).trim().toUpperCase()
+        );
+      }
+      if (!targetSize) {
+        targetSize = variant.sizes[0];
+      }
+    }
+
+    if (targetSize) {
+      targetSize.stockQuantity = Number(targetSize.stockQuantity || 0) + quantity;
+      variant.quantity = variant.sizes.reduce(
+        (sum, s) => sum + (Number(s.stockQuantity) || 0),
+        0
+      );
+    } else {
+      variant.quantity = Number(variant.quantity || 0) + quantity;
+    }
+
+    const totalProductStock = (product.variants || []).reduce(
+      (sum, v) => sum + (Number(v.quantity) || 0),
+      0
+    );
+    product.availability = totalProductStock > 0 ? "In Stock" : "Out of Stock";
+
+    await product.save(session ? { session } : {});
+    await syncProductInventory(product._id, { session });
+
+    restoredItems.push({
+      orderItemId: orderItem._id,
+      productId,
+      restoredQuantity: quantity,
+    });
+  }
+
+  return restoredItems;
+};
+
 module.exports = {
   syncProductInventory,
-
   syncAllProductInventory,
-
   updateProductSizeStock,
-
   decreaseStockAfterPayment,
+  restoreStockForOrder,
 };
