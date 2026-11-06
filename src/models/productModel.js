@@ -390,20 +390,43 @@ const ProductSchema = new mongoose.Schema(
 // *PRE SAVE*
 // *============================================================*
 
+// ProductSchema.pre("save", function () {
+//   let totalQuantity = 0;
+
+//   if (Array.isArray(this.variants)) {
+//     this.variants.forEach((variant) => {
+//       if (Array.isArray(variant.sizes)) {
+//         variant.quantity = variant.sizes.reduce(
+//           (total, size) =>
+//             total + (Number(size.stockQuantity) || 0),
+//           0
+//         );
+//       } else {
+//         variant.quantity = 0;
+//       }
+
+//       totalQuantity += variant.quantity;
+//     });
+//   }
+
+//   this.availability =
+//     totalQuantity > 0 ? "In Stock" : "Out of Stock";
+// });
+
 ProductSchema.pre("save", function () {
   let totalQuantity = 0;
 
   if (Array.isArray(this.variants)) {
     this.variants.forEach((variant) => {
-      if (Array.isArray(variant.sizes)) {
-        variant.quantity = variant.sizes.reduce(
-          (total, size) =>
-            total + (Number(size.stockQuantity) || 0),
-          0
-        );
-      } else {
-        variant.quantity = 0;
-      }
+      const activeSizes = (variant.sizes || []).filter(
+        (size) => size.isActive !== false
+      );
+
+      variant.quantity = activeSizes.reduce(
+        (total, size) =>
+          total + (Number(size.stockQuantity) || 0),
+        0
+      );
 
       totalQuantity += variant.quantity;
     });

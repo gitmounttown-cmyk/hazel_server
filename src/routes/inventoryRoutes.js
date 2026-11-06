@@ -15,6 +15,8 @@ const {
   updateStock,
   syncInventory,
   syncAllInventory,
+  deleteInventory,
+  deleteInventorySize,
 } = require("../controllers/inventoryController");
 
 // ============================================================
@@ -86,6 +88,20 @@ router.get(
   "/:inventoryId",
   verifyToken,
   getInventoryById
+);
+
+// DELETE PRODUCT INVENTORY
+router.delete(
+  "/:inventoryId",
+  verifyToken,
+  deleteInventory
+);
+
+// DELETE PARTICULAR SIZE
+router.delete(
+  "/:inventoryId/variants/:variantId/sizes/:sizeId",
+  verifyToken,
+  deleteInventorySize
 );
 
 module.exports = router;

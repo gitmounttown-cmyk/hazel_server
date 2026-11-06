@@ -149,6 +149,12 @@ const InventorySchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    isEnabled: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
   },
 
   {

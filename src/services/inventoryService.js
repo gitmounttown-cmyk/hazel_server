@@ -26,12 +26,26 @@ const calculateStockStatus = (
 // RECALCULATE PRODUCT QUANTITY
 // ============================================================
 
+// const calculateProductStock = (product) => {
+//   let totalStock = 0;
+
+//   product.variants.forEach((variant) => {
+//     variant.sizes.forEach((size) => {
+//       totalStock += Number(size.stockQuantity || 0);
+//     });
+//   });
+
+//   return totalStock;
+// };
+
 const calculateProductStock = (product) => {
   let totalStock = 0;
 
-  product.variants.forEach((variant) => {
-    variant.sizes.forEach((size) => {
-      totalStock += Number(size.stockQuantity || 0);
+  (product.variants || []).forEach((variant) => {
+    (variant.sizes || []).forEach((size) => {
+      if (size.isActive !== false) {
+        totalStock += Number(size.stockQuantity || 0);
+      }
     });
   });
 
@@ -106,6 +120,11 @@ const syncProductInventory = async (
 
   let inventory = await inventoryQuery;
 
+  // Do not recreate disabled inventory
+  if (inventory && inventory.isEnabled === false) {
+    return inventory;
+  }
+
   // ----------------------------------------------------------
   // CREATE INVENTORY IF NOT EXISTS
   // ----------------------------------------------------------
@@ -126,29 +145,52 @@ const syncProductInventory = async (
   // BUILD INVENTORY VARIANTS
   // ----------------------------------------------------------
 
+  // inventory.variants = (product.variants || []).map(
+  //   (productVariant) => ({
+  //     variantId: productVariant._id,
+
+  //     color: productVariant.color || "",
+
+  //     sizes: (Array.isArray(productVariant.sizes) ? productVariant.sizes : []).map(
+  //       (productSize) => ({
+  //         sizeId: productSize._id,
+
+  //         size: productSize.size || "",
+
+  //         sku: productSize.sku || "",
+
+  //         barcode: productSize.barcode || "",
+
+  //         stockQuantity: Number(
+  //           productSize.stockQuantity || 0
+  //         ),
+  //       })
+  //     ),
+  //   })
+  // );
+
   inventory.variants = (product.variants || []).map(
-    (productVariant) => ({
-      variantId: productVariant._id,
+  (productVariant) => ({
+    variantId: productVariant._id,
+    color: productVariant.color || "",
 
-      color: productVariant.color || "",
-
-      sizes: (Array.isArray(productVariant.sizes) ? productVariant.sizes : []).map(
-        (productSize) => ({
-          sizeId: productSize._id,
-
-          size: productSize.size || "",
-
-          sku: productSize.sku || "",
-
-          barcode: productSize.barcode || "",
-
-          stockQuantity: Number(
-            productSize.stockQuantity || 0
-          ),
-        })
-      ),
-    })
-  );
+    sizes: (
+      Array.isArray(productVariant.sizes)
+        ? productVariant.sizes
+        : []
+    )
+      .filter((productSize) => productSize.isActive !== false)
+      .map((productSize) => ({
+        sizeId: productSize._id,
+        size: productSize.size || "",
+        sku: productSize.sku || "",
+        barcode: productSize.barcode || "",
+        stockQuantity: Number(
+          productSize.stockQuantity || 0
+        ),
+      })),
+  })
+);
 
   calculateInventoryTotals(inventory);
 

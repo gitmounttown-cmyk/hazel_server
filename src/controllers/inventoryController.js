@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Inventory = require("../models/inventoryModel");
 const Product = require("../models/productModel");
 require("../models/categoryModel");
@@ -44,6 +45,7 @@ exports.getInventorySummary = async (
         productId: {
           $in: productIds,
         },
+        isEnabled: { $ne: false },
 
         stockStatus:
           "LOW_STOCK",
@@ -331,7 +333,7 @@ console.log("Active Products:", activeProducts);
 
     // SEARCH
     if (req.query.search?.trim()) {
-      const search = req.query.search.trim();
+      // const search = req.query.search.trim();
 
     const productFilter = {
       isDeleted: {
@@ -377,14 +379,16 @@ console.log("Active Products:", activeProducts);
       $in: productIds,
     };
 
+    filter.isEnabled = { $ne: false };
+
     // ----------------------------------------------------------
     // COUNT
     // ----------------------------------------------------------
 
-    const total =
-      await Inventory.countDocuments(
-        filter
-      );
+    // const total =
+    //   await Inventory.countDocuments(
+    //     filter
+    //   );
 
       filter.productId = {
         $in: productIds,
@@ -741,6 +745,152 @@ exports.syncAllInventory = async (
       message:
         error.message ||
         "Failed to synchronize all inventory",
+    });
+  }
+};
+
+// ============================================================
+// DELETE PRODUCT FROM INVENTORY
+// ============================================================
+
+exports.deleteInventory = async (req, res) => {
+  try {
+    const { inventoryId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(inventoryId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid inventory ID",
+      });
+    }
+
+    const inventory = await Inventory.findById(inventoryId);
+
+    if (!inventory) {
+      return res.status(404).json({
+        success: false,
+        message: "Inventory not found",
+      });
+    }
+
+    if (inventory.isEnabled === false) {
+      return res.status(400).json({
+        success: false,
+        message: "Product is already removed from inventory",
+      });
+    }
+
+    // Disable inventory without deleting the Product
+    inventory.isEnabled = false;
+
+    await inventory.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Product removed from inventory successfully",
+      data: inventory,
+    });
+  } catch (error) {
+    console.error("deleteInventory error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to remove product inventory",
+    });
+  }
+};
+
+// ============================================================
+// DELETE SIZE FROM INVENTORY
+// ============================================================
+
+exports.deleteInventorySize = async (req, res) => {
+  try {
+    const {
+      inventoryId,
+      variantId,
+      sizeId,
+    } = req.params;
+
+    // Validate IDs
+    if (
+      !mongoose.Types.ObjectId.isValid(inventoryId) ||
+      !mongoose.Types.ObjectId.isValid(variantId) ||
+      !mongoose.Types.ObjectId.isValid(sizeId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid inventory, variant or size ID",
+      });
+    }
+
+    const inventory = await Inventory.findById(inventoryId);
+
+    if (!inventory || inventory.isEnabled === false) {
+      return res.status(404).json({
+        success: false,
+        message: "Active inventory not found",
+      });
+    }
+
+    // Find product
+    const product = await Product.findById(inventory.productId);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Find product variant
+    const variant = product.variants.find(
+      (item) => String(item._id) === variantId
+    );
+
+    if (!variant) {
+      return res.status(404).json({
+        success: false,
+        message: "Product variant not found",
+      });
+    }
+
+    // Find product size
+    const size = variant.sizes.find(
+      (item) => String(item._id) === sizeId
+    );
+
+    if (!size || size.isActive === false) {
+      return res.status(404).json({
+        success: false,
+        message: "Active product size not found",
+      });
+    }
+
+    // Deactivate size in Product collection
+    size.isActive = false;
+
+    await product.save();
+
+    // Synchronize inventory from Product
+    const updatedInventory = await syncProductInventory(
+      product._id
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: `Size ${size.size} removed successfully`,
+      data: {
+        inventory: updatedInventory,
+        product,
+      },
+    });
+  } catch (error) {
+    console.error("deleteInventorySize error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to remove size",
     });
   }
 };
