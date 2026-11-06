@@ -1286,13 +1286,30 @@ exports.createOrder = async (req, res) => {
       const itemTotal = priceInfo.sellingPrice * quantity;
       subtotal += itemTotal;
 
+      let resolvedSize = null;
+      if (Array.isArray(variant.sizes) && variant.sizes.length > 0) {
+        if (cartItem.sizeId && mongoose.Types.ObjectId.isValid(cartItem.sizeId)) {
+          resolvedSize = variant.sizes.find(
+            (s) => String(s._id) === String(cartItem.sizeId)
+          );
+        }
+        if (!resolvedSize && cartItem.size) {
+          resolvedSize = variant.sizes.find(
+            (s) => String(s.size).trim().toUpperCase() === String(cartItem.size).trim().toUpperCase()
+          );
+        }
+        if (!resolvedSize) {
+          resolvedSize = variant.sizes[0];
+        }
+      }
+
       orderItemsData.push({
         product: product._id,
         variantId: variant._id,
-        sizeId: cartItem.sizeId || variant.sizeId || variant._id,
+        sizeId: resolvedSize ? resolvedSize._id : (cartItem.sizeId || variant._id),
         productName: product.name,
-        sku: variant.sku || "",
-        size: cartItem.size || variant.size || "",
+        sku: (resolvedSize && resolvedSize.sku) || variant.sku || "",
+        size: (resolvedSize && resolvedSize.size) || cartItem.size || variant.size || "",
         color: cartItem.color || variant.color || "",
         image: getVariantImage(variant),
         mrp: priceInfo.mrp,
@@ -1607,7 +1624,11 @@ exports.verifyPayment = async (req, res) => {
       throw new Error("No order items found.");
     }
 
-    const stockResult = null;
+    // Decrease stock quantity on payment confirmation and sync Inventory
+    const stockResult = await decreaseStockAfterPayment({
+      orderItems,
+      session,
+    });
 
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.signature = razorpay_signature;

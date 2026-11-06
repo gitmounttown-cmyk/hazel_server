@@ -1872,6 +1872,11 @@ const Notification = require("../models/notificationModel");
 const User = require("../models/userModel");
 const Wishlist = require("../models/wishlistModel");
 const VelocityShipment = require("../models/velocityShipmentModel");
+const {
+  syncProductInventory,
+  restoreStockForOrder,
+  decreaseStockAfterPayment,
+} = require("../services/inventoryService");
 
 const VELOCITY_BASE_URL = process.env.VELOCITY_BASE_URL || "https://shazam.velocity.in";
 
@@ -2027,13 +2032,20 @@ const getVariant = (
 
 const getSize = (
   variant,
-  sizeId
+  sizeIdOrName
 ) => {
-  return variant?.sizes?.find(
-    (size) =>
-      size._id.toString() ===
-      sizeId.toString()
-  );
+  if (!variant || !Array.isArray(variant.sizes) || variant.sizes.length === 0) return null;
+  if (sizeIdOrName) {
+    const matchById = variant.sizes.find(
+      (size) => size._id?.toString() === sizeIdOrName?.toString()
+    );
+    if (matchById) return matchById;
+    const matchByName = variant.sizes.find(
+      (size) => String(size.size).trim().toUpperCase() === String(sizeIdOrName).trim().toUpperCase()
+    );
+    if (matchByName) return matchByName;
+  }
+  return variant.sizes[0] || null;
 };
 
 // =============================================================
@@ -2303,7 +2315,7 @@ exports.createOrder = async (
       const selectedSize =
         getSize(
           variant,
-          item.sizeId
+          item.sizeId || item.size
         );
 
       if (!selectedSize) {
@@ -2716,6 +2728,9 @@ exports.createOrder = async (
       await updatedProduct.save({
         session,
       });
+
+      // Synchronize Inventory collection dynamically
+      await syncProductInventory(itemData.product, { session });
     }
 
     order.items =
@@ -3339,6 +3354,17 @@ exports.updateOrderStatus =
           new Date();
       }
 
+      const existingOrder = await Order.findById(req.params.id);
+      if (!existingOrder) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Order not found.",
+        });
+      }
+
+      const prevStatus = existingOrder.orderStatus;
+
       const order =
         await Order.findByIdAndUpdate(
           req.params.id,
@@ -3350,14 +3376,6 @@ exports.updateOrderStatus =
           }
         );
 
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "Order not found.",
-        });
-      }
-
       await OrderItem.updateMany(
         {
           order:
@@ -3368,6 +3386,29 @@ exports.updateOrderStatus =
             orderStatus,
         }
       );
+
+      // Manage stock dynamically if status changed to or from CANCELLED/REFUNDED
+      const stockWasDeducted =
+        existingOrder.paymentMethod === "COD" ||
+        existingOrder.paymentStatus === "PAID";
+
+      if (stockWasDeducted) {
+        if (
+          (orderStatus === "CANCELLED" || orderStatus === "REFUNDED") &&
+          prevStatus !== "CANCELLED" &&
+          prevStatus !== "REFUNDED"
+        ) {
+          const items = await OrderItem.find({ order: order._id });
+          await restoreStockForOrder({ orderItems: items });
+        } else if (
+          (prevStatus === "CANCELLED" || prevStatus === "REFUNDED") &&
+          orderStatus !== "CANCELLED" &&
+          orderStatus !== "REFUNDED"
+        ) {
+          const items = await OrderItem.find({ order: order._id });
+          await decreaseStockAfterPayment({ orderItems: items });
+        }
+      }
 
       await Notification.create({
         user:
@@ -3572,42 +3613,11 @@ exports.cancelOrder = async (
     if (
       stockWasDeducted
     ) {
+      await restoreStockForOrder({ orderItems: items, session });
+
       for (
         const item of items
       ) {
-        await Product.findOneAndUpdate(
-          {
-            _id:
-              item.product,
-
-            "variants._id":
-              item.variantId,
-
-            "variants.sizes._id":
-              item.sizeId,
-          },
-          {
-            $inc: {
-              "variants.$[variant].sizes.$[size].stockQuantity":
-                item.quantity,
-            },
-          },
-          {
-            session,
-
-            arrayFilters: [
-              {
-                "variant._id":
-                  item.variantId,
-              },
-              {
-                "size._id":
-                  item.sizeId,
-              },
-            ],
-          }
-        );
-
         item.itemStatus =
           "CANCELLED";
 
