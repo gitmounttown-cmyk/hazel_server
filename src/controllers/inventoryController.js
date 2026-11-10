@@ -71,6 +71,38 @@ exports.getInventorySummary = async (
           "IN_STOCK",
       });
 
+      // Calculate total units from all variant sizes
+    const stockAggregation = await Product.aggregate([
+      {
+        $match: {
+          isActive: true,
+          isDeleted: { $ne: true },
+        },
+      },
+      {
+        $unwind: "$variants",
+      },
+      {
+        $unwind: "$variants.sizes",
+      },
+      {
+        $group: {
+          _id: null,
+          totalUnits: {
+            $sum: {
+              $ifNull: [
+                "$variants.sizes.stockQuantity",
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]);
+
+    const totalUnits =
+      stockAggregation[0]?.totalUnits || 0;
+
     return res.status(200).json({
       success: true,
 
@@ -79,6 +111,7 @@ exports.getInventorySummary = async (
         lowStockItems,
         outOfStockItems,
         inStockItems,
+        totalUnits,
       },
     });
   } catch (error) {
