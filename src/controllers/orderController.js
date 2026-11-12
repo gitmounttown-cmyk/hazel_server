@@ -1873,6 +1873,18 @@ const User = require("../models/userModel");
 const Wishlist = require("../models/wishlistModel");
 const VelocityShipment = require("../models/velocityShipmentModel");
 const {
+  generateInvoicePDFBuffer,
+  saveInvoicePDF,
+} = require("../services/invoiceService");
+const {
+  sendCustomerInvoiceEmail,
+  sendAdminInvoiceEmail,
+} = require("../services/emailService");
+const {
+  sendCustomerInvoiceSMS,
+  sendAdminInvoiceSMS,
+} = require("../services/SMSService");
+const {
   syncProductInventory,
   restoreStockForOrder,
   decreaseStockAfterPayment,
@@ -2556,6 +2568,10 @@ exports.createOrder = async (
             user: userId,
 
             shippingAddress,
+
+            billingAddress:
+              req.body.billingAddress ||
+              shippingAddress,
 
             subtotal,
 
@@ -3276,11 +3292,11 @@ exports.getAllOrders = async (req, res) => {
 // UPDATE ORDER STATUS - ADMIN
 // =============================================================
 
-exports.updateOrderStatus =
-  async (req, res) => {
+exports.updateOrderStatus = async (req, res) => {
     try {
       const {
         orderStatus,
+        paymentStatus,
       } = req.body;
 
       const allowedStatuses = [
@@ -3363,6 +3379,16 @@ exports.updateOrderStatus =
         });
       }
 
+      if (paymentStatus) {
+        updates.paymentStatus = paymentStatus;
+      } else if (
+        orderStatus === "DELIVERED" &&
+        existingOrder.paymentMethod === "COD" &&
+        existingOrder.paymentStatus !== "PAID"
+      ) {
+        updates.paymentStatus = "PAID";
+      }
+
       const prevStatus = existingOrder.orderStatus;
 
       const order =
@@ -3375,6 +3401,52 @@ exports.updateOrderStatus =
               true,
           }
         );
+
+      const isNewlyPaid =
+        updates.paymentStatus === "PAID" && existingOrder.paymentStatus !== "PAID";
+
+      if (isNewlyPaid) {
+        Order.findById(order._id)
+          .populate("items")
+          .populate("user", "name email mobileNumber")
+          .then(async (populated) => {
+            if (!populated) return;
+            try {
+              const { buffer: pdfBuffer } = await saveInvoicePDF(populated);
+              const host = req?.get ? req.get("host") : null;
+              const protocol = req?.protocol || (process.env.NODE_ENV === "production" ? "https" : "http");
+              const domain = host ? `${protocol}://${host}` : (process.env.NODE_ENV === "production" ? "https://hazelcart.com" : `http://localhost:${process.env.PORT || 5004}`);
+              const invoiceUrl = `${domain}/api/orders/${populated._id}/invoice?download=1`;
+              populated.invoiceUrl = invoiceUrl;
+              await populated.save();
+
+              const custMobile =
+                populated.shippingAddress?.mobileNumber ||
+                populated.billingAddress?.mobileNumber ||
+                populated.user?.mobileNumber ||
+                "";
+              const custEmail =
+                populated.shippingAddress?.email ||
+                populated.billingAddress?.email ||
+                populated.user?.email ||
+                populated.customerEmail ||
+                "";
+              const custName =
+                populated.shippingAddress?.name ||
+                populated.billingAddress?.name ||
+                populated.user?.name ||
+                "Customer";
+
+              if (custMobile) sendCustomerInvoiceSMS(populated, custMobile, invoiceUrl).catch(e => console.error(e.message));
+              if (custEmail) sendCustomerInvoiceEmail({ order: populated, pdfBuffer, recipientEmail: custEmail, customerName: custName }).catch(e => console.error(e.message));
+              sendAdminInvoiceEmail({ order: populated, pdfBuffer }).catch(e => console.error(e.message));
+              sendAdminInvoiceSMS(populated, undefined, invoiceUrl).catch(e => console.error(e.message));
+            } catch (invErr) {
+              console.error("Auto invoice generation error:", invErr.message);
+            }
+          })
+          .catch((e) => console.error("Error auto-dispatching invoice on payment completion:", e.message));
+      }
 
       await OrderItem.updateMany(
         {
@@ -3678,270 +3750,174 @@ exports.cancelOrder = async (
 // INVOICE
 // =============================================================
 
-exports.generateInvoice =
-  async (req, res) => {
+exports.generateInvoice = async (req, res) => {
     try {
-      const userId =
-        getUserId(req);
+      const orderIdOrNumber = req.params.id;
+      const isObjectId = mongoose.Types.ObjectId.isValid(orderIdOrNumber);
 
-      const query = {
-        _id:
-          req.params.id,
-        isDeleted:
-          false,
-      };
-
-      if (
-        req.user?.role !==
-        "admin"
-      ) {
-        query.user =
-          userId;
-      }
-
-      const order =
-        await Order.findOne(
-          query
-        )
-          .populate("items")
-          .populate(
-            "user",
-            "name email mobileNumber"
-          );
+      const order = await Order.findOne({
+        $or: [
+          ...(isObjectId ? [{ _id: orderIdOrNumber }] : []),
+          { orderNumber: orderIdOrNumber },
+        ],
+        isDeleted: false,
+      })
+        .populate("items")
+        .populate("user", "name email mobileNumber");
 
       if (!order) {
         return res.status(404).json({
           success: false,
-          message:
-            "Order not found.",
+          message: "Order not found.",
         });
       }
 
-      const doc =
-        new PDFDocument({
-          margin: 50,
-        });
+      const pdfBuffer = await generateInvoicePDFBuffer(order);
+      const isDownload = req.query.download === "true" || req.query.download === "1";
 
-      res.setHeader(
-        "Content-Type",
-        "application/pdf"
-      );
-
+      res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",
-        `attachment; filename=Invoice-${order.orderNumber}.pdf`
+        `${isDownload ? "attachment" : "inline"}; filename=Invoice-${order.orderNumber || order._id}.pdf`
       );
 
-      doc.pipe(res);
-
-      doc
-        .fontSize(20)
-        .text("INVOICE", {
-          align: "right",
-        });
-
-      doc
-        .fontSize(10)
-        .text(
-          `Invoice No: INV-${order.orderNumber}`,
-          {
-            align:
-              "right",
-          }
-        )
-        .text(
-          `Date: ${new Date(
-            order.createdAt
-          ).toLocaleDateString()}`,
-          {
-            align:
-              "right",
-          }
-        )
-        .moveDown();
-
-      doc
-        .fontSize(12)
-        .text(
-          "Tax Invoice / Bill of Supply",
-          {
-            underline:
-              true,
-          }
-        )
-        .moveDown(0.5);
-
-      doc
-        .fontSize(10)
-        .text(
-          `Customer Name: ${order.shippingAddress.name}`
-        )
-        .text(
-          `Phone: ${order.shippingAddress.mobileNumber}`
-        )
-        .text(
-          `Address: ${order.shippingAddress.addressLine1}, ${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.pincode}`
-        )
-        .moveDown();
-
-      const tableTop = 230;
-
-      doc
-        .font(
-          "Helvetica-Bold"
-        )
-        .text(
-          "Item",
-          50,
-          tableTop
-        )
-        .text(
-          "Qty",
-          280,
-          tableTop
-        )
-        .text(
-          "Price",
-          350,
-          tableTop
-        )
-        .text(
-          "Total",
-          450,
-          tableTop
-        );
-
-      doc
-        .moveTo(
-          50,
-          tableTop + 15
-        )
-        .lineTo(
-          550,
-          tableTop + 15
-        )
-        .stroke();
-
-      let y =
-        tableTop + 25;
-
-      doc.font(
-        "Helvetica"
-      );
-
-      order.items.forEach(
-        (item) => {
-          doc
-            .text(
-              `${item.productName} (${item.size})`,
-              50,
-              y,
-              {
-                width: 220,
-              }
-            )
-            .text(
-              `${item.quantity}`,
-              280,
-              y
-            )
-            .text(
-              `INR ${item.sellingPrice}`,
-              350,
-              y
-            )
-            .text(
-              `INR ${item.totalPrice}`,
-              450,
-              y
-            );
-
-          y += 20;
-        }
-      );
-
-      doc
-        .moveTo(
-          50,
-          y
-        )
-        .lineTo(
-          550,
-          y
-        )
-        .stroke();
-
-      y += 15;
-
-      doc.text(
-        `Subtotal: INR ${order.subtotal}`,
-        350,
-        y
-      );
-
-      y += 15;
-
-      doc.text(
-        `Discount: -INR ${order.discountAmount}`,
-        350,
-        y
-      );
-
-      y += 15;
-
-      doc.text(
-        `Shipping: INR ${order.shippingCharge}`,
-        350,
-        y
-      );
-
-      y += 15;
-
-      doc
-        .font(
-          "Helvetica-Bold"
-        )
-        .text(
-          `Total Amount: INR ${order.totalAmount}`,
-          350,
-          y
-        );
-
-      doc
-        .font(
-          "Helvetica-Oblique"
-        )
-        .fontSize(10)
-        .text(
-          "Thank you for your business!",
-          50,
-          700,
-          {
-            align:
-              "center",
-          }
-        );
-
-      doc.end();
+      return res.send(pdfBuffer);
     } catch (error) {
-      console.error(
-        "Invoice Error:",
-        error
-      );
-
+      console.error("Invoice Generation Error:", error);
       return res.status(500).json({
         success: false,
-        message:
-          "Failed to generate invoice.",
-        error:
-          error.message,
+        message: "Failed to generate invoice.",
+        error: error.message,
       });
     }
   };
 
 // =============================================================
-// DELETE ORDER
+// SEND INVOICE NOTIFICATION (ADMIN OR CUSTOMER)
 // =============================================================
+
+exports.sendInvoiceNotification = async (req, res) => {
+  try {
+    const orderIdOrNumber = req.params.id;
+    const isObjectId = mongoose.Types.ObjectId.isValid(orderIdOrNumber);
+
+    const order = await Order.findOne({
+      $or: [
+        ...(isObjectId ? [{ _id: orderIdOrNumber }] : []),
+        { orderNumber: orderIdOrNumber },
+      ],
+      isDeleted: false,
+    })
+      .populate("items")
+      .populate("user", "name email mobileNumber");
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    const {
+      adminEmail,
+      adminMobile,
+      customerEmail,
+      customerMobile,
+      sendToAdmin = true,
+      sendToCustomer = true,
+    } = req.body || {};
+
+    const { buffer: pdfBuffer } = await saveInvoicePDF(order);
+
+    const host = req?.get ? req.get("host") : null;
+    const protocol = req?.protocol || (process.env.NODE_ENV === "production" ? "https" : "http");
+    const domain = host ? `${protocol}://${host}` : (process.env.NODE_ENV === "production" ? "https://hazelcart.com" : `http://localhost:${process.env.PORT || 5004}`);
+    const invoiceUrl = `${domain}/api/orders/${order._id}/invoice?download=1`;
+
+    order.invoiceUrl = invoiceUrl;
+    await order.save();
+
+    const results = {
+      adminEmail: false,
+      adminSms: false,
+      customerEmail: false,
+      customerSms: false,
+    };
+
+    // 1. Send to Admin
+    if (sendToAdmin) {
+      const targetAdminEmail = adminEmail || process.env.ADMIN_EMAIL || "mounttowntech@gmail.com";
+      const targetAdminMobile = adminMobile || process.env.ADMIN_MOBILE || "8667301625,9629339144";
+
+      if (targetAdminEmail) {
+        const mailRes = await sendAdminInvoiceEmail({
+          order,
+          pdfBuffer,
+          adminEmail: targetAdminEmail,
+        });
+        results.adminEmail = mailRes.success;
+      }
+
+      if (targetAdminMobile) {
+        const smsRes = await sendAdminInvoiceSMS(order, targetAdminMobile, invoiceUrl);
+        results.adminSms = smsRes.success;
+      }
+    }
+
+    // 2. Send to Customer
+    if (sendToCustomer) {
+      const targetCustomerMobile =
+        customerMobile ||
+        order.shippingAddress?.mobileNumber ||
+        order.billingAddress?.mobileNumber ||
+        order.user?.mobileNumber ||
+        "";
+
+      const targetCustomerEmail =
+        customerEmail ||
+        order.shippingAddress?.email ||
+        order.billingAddress?.email ||
+        order.user?.email ||
+        order.customerEmail ||
+        "";
+
+      const customerName =
+        order.shippingAddress?.name ||
+        order.billingAddress?.name ||
+        order.user?.name ||
+        "Customer";
+
+      if (targetCustomerMobile) {
+        const smsRes = await sendCustomerInvoiceSMS(order, targetCustomerMobile, invoiceUrl);
+        results.customerSms = smsRes.success;
+      }
+
+      if (targetCustomerEmail) {
+        const mailRes = await sendCustomerInvoiceEmail({
+          order,
+          pdfBuffer,
+          recipientEmail: targetCustomerEmail,
+          customerName,
+        });
+        results.customerEmail = mailRes.success;
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Invoice generated and notification sent successfully.",
+      invoiceUrl,
+      results,
+    });
+  } catch (error) {
+    console.error("SEND INVOICE NOTIFICATION ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to dispatch invoice notifications.",
+      error: error.message,
+    });
+  }
+};
 
 exports.deleteOrder =
   async (req, res) => {

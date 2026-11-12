@@ -57,6 +57,12 @@ const orderSchema = new mongoose.Schema(
         trim: true,
       },
 
+      email: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
       addressLine1: {
         type: String,
         required: true,
@@ -91,6 +97,71 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: true,
         trim: true,
+      },
+
+      country: {
+        type: String,
+        default: "India",
+        trim: true,
+      },
+    },
+
+    // =========================================================
+    // BILLING ADDRESS SNAPSHOT
+    // =========================================================
+    billingAddress: {
+      name: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      mobileNumber: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      email: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      addressLine1: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      addressLine2: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      district: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      city: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      state: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      pincode: {
+        type: String,
+        trim: true,
+        default: "",
       },
 
       country: {
@@ -279,6 +350,18 @@ const orderSchema = new mongoose.Schema(
       default: "",
     },
 
+    invoiceUrl: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    customerEmail: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     // =========================================================
     // NOTES
     // =========================================================
@@ -325,14 +408,13 @@ const orderSchema = new mongoose.Schema(
 
 orderSchema.pre("save", function () {
   if (!this.isNew || this.orderNumber) {
-    return ;
+    return;
   }
 
   const timestamp = Date.now();
   const random = Math.floor(1000 + Math.random() * 9000);
 
   this.orderNumber = `HZL-${timestamp}-${random}`;
-
 });
 
 module.exports =

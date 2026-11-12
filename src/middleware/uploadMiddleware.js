@@ -25,6 +25,8 @@ const profileUploadDir = path.join(process.cwd(), "uploads/profiles");
 
 const videoUploadDir = path.join(process.cwd(), "uploads/videos");
 
+const sizeChartUploadDir = path.join(process.cwd(), "uploads/size-charts");
+
 // ============================================================
 // CREATE DIRECTORIES
 // ============================================================
@@ -38,6 +40,7 @@ const videoUploadDir = path.join(process.cwd(), "uploads/videos");
   bannerUploadDir,
   videoUploadDir,
   profileUploadDir,
+  sizeChartUploadDir,
 ].forEach((directory) => {
   if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, {
@@ -257,6 +260,16 @@ const profileStorage = multer.diskStorage({
   },
 });
 
+const sizeChartStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, sizeChartUploadDir);
+  },
+
+  filename: function (req, file, cb) {
+    cb(null, generateFileName(file));
+  },
+});
+
 // ============================================================
 // VIDEO STORAGE
 // ============================================================
@@ -384,6 +397,15 @@ const uploadProfileImage = multer({
   limits: {
     ...imageUploadLimits,
     files: 1,
+  },
+});
+
+const uploadSizeChartImage = multer({
+  storage: sizeChartStorage,
+  fileFilter: imageFileFilter,
+  limits: {
+    ...imageUploadLimits,
+    files: 30,
   },
 });
 
@@ -520,6 +542,8 @@ module.exports = {
   uploadNewArrivalImage,
   uploadTrendingProductImage,
   uploadBannerImage,
+  uploadProfileImage,
+  uploadSizeChartImage,
 
   // VIDEO UPLOAD
   uploadVideo,
@@ -529,7 +553,5 @@ module.exports = {
   deleteFileByUrl,
 
   // ERROR HANDLER
-  handleUploadError,
-  uploadProfileImage,
   handleUploadError,
 };

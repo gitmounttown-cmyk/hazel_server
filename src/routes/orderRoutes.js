@@ -1,10 +1,10 @@
 const express = require("express");
 
-const router =
-  express.Router();
+const router = express.Router();
 
 const {
   verifyToken,
+  optionalAuth,
 } = require("../middleware/authMiddleware");
 
 const {
@@ -13,6 +13,7 @@ const {
   getMyOrders,
   getOrderById,
   generateInvoice,
+  sendInvoiceNotification,
   getAllOrders,
   updateOrderStatus,
   cancelOrder,
@@ -21,7 +22,7 @@ const {
 } = require("../controllers/orderController");
 
 // =============================================================
-// CUSTOMER ROUTES
+// CUSTOMER & INVOICE ROUTES
 // =============================================================
 
 // User dashboard
@@ -52,11 +53,18 @@ router.patch(
   cancelOrder
 );
 
-// Invoice
+// Invoice PDF generation/download (Supports optionalAuth for direct link access)
 router.get(
   "/:id/invoice",
-  verifyToken,
+  optionalAuth,
   generateInvoice
+);
+
+// Send invoice to Admin & Customer via Email and SMS
+router.post(
+  "/:id/send-invoice",
+  optionalAuth,
+  sendInvoiceNotification
 );
 
 // Single order
@@ -94,5 +102,4 @@ router.delete(
   deleteOrder
 );
 
-module.exports =
-  router;
+module.exports = router;
