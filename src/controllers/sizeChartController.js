@@ -355,50 +355,8 @@ exports.getSizeChartByProductId = async (req, res) => {
     }
 
     const uniqueProductSizes = Array.from(new Set(productSizes));
-    const normalizedProductSizes = uniqueProductSizes.map(normalizeSize);
 
-    // 4. Extract all sizes listed in the size chart
-    const chartSizes = [];
-    if (Array.isArray(sizeChart.tables)) {
-      sizeChart.tables.forEach((t) => {
-        if (Array.isArray(t.sizes)) {
-          t.sizes.forEach((s) => {
-            if (s) chartSizes.push(String(s).trim().toUpperCase());
-          });
-        }
-      });
-    }
-
-    // If size chart has no sizes configured, cannot show
-    if (chartSizes.length === 0 || uniqueProductSizes.length === 0) {
-      return res.status(200).json({
-        success: true,
-        canShow: false,
-        reason: "No sizes found in size chart or product",
-        data: null,
-      });
-    }
-
-    // 5. Strict verification:
-    // "if any one of the size name is not available in the product then it does not shows the sizechart"
-    const missingSizes = [];
-    chartSizes.forEach((chartSize) => {
-      const normalizedChartSize = normalizeSize(chartSize);
-      if (!normalizedProductSizes.includes(normalizedChartSize)) {
-        missingSizes.push(chartSize);
-      }
-    });
-
-    if (missingSizes.length > 0) {
-      return res.status(200).json({
-        success: true,
-        canShow: false,
-        reason: `Sizes [${missingSizes.join(", ")}] in the size chart are not available in this product`,
-        data: null,
-      });
-    }
-
-    // All sizes match and are available in product
+    // A size chart is explicitly mentioned / configured for this product: show it!
     return res.status(200).json({
       success: true,
       canShow: true,
