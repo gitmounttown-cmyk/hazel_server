@@ -356,6 +356,12 @@ const orderSchema = new mongoose.Schema(
       default: "",
     },
 
+    velocityError: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     customerEmail: {
       type: String,
       trim: true,

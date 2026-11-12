@@ -254,16 +254,16 @@ const triggerVelocityManifest = async (order, shippingAddress, items, user) => {
       order_id: String(order.orderNumber || order._id),
       order_date: new Date(order.createdAt || Date.now()).toISOString().slice(0, 16).replace("T", " "),
       carrier_id: "",
-      warehouse_id: process.env.VELOCITY_WAREHOUSE_ID || "",
-      pickup_location: process.env.VELOCITY_PICKUP_LOCATION || "Primary Warehouse",
-      billing_customer_name: shippingAddress?.name || user?.name || "Customer",
+      warehouse_id: process.env.VELOCITY_WAREHOUSE_ID || "WHZUCD",
+      pickup_location: process.env.VELOCITY_PICKUP_LOCATION || "SBS TEXTILES",
+      billing_customer_name: shippingAddress?.name || shippingAddress?.fullName || user?.name || "Customer",
       billing_last_name: "",
-      billing_address: shippingAddress?.addressLine1 || shippingAddress?.address || "Address Line 1",
+      billing_address: shippingAddress?.addressLine1 || shippingAddress?.houseNo || shippingAddress?.address || "Address Line 1",
       billing_city: shippingAddress?.city || "Coimbatore",
       billing_pincode: customerPincode,
       billing_state: shippingAddress?.state || "Tamil Nadu",
       billing_country: shippingAddress?.country || "India",
-      billing_email: user?.email || "customer@example.com",
+      billing_email: user?.email || shippingAddress?.email || order?.customerEmail || "customer@example.com",
       billing_phone: customerPhone,
       shipping_is_billing: true,
       print_label: true,
@@ -314,7 +314,7 @@ const triggerVelocityManifest = async (order, shippingAddress, items, user) => {
           pincode: customerPincode,
         },
       });
-      return { success: true, awbCode: p.awb_code, shipment };
+      return { success: true, awbCode: p.awb_code, courierName: p.courier_name, shipment };
     }
 
     console.error("❌ Velocity Online Manifest Rejected:", result);
@@ -929,13 +929,19 @@ exports.verifyPayment = async (req, res) => {
     handlePaymentCompletionNotifications(order, req);
 
     // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION FOR BOTH USERS AND GUESTS
-    const userLookup = userId ? User.findById(userId) : Promise.resolve(null);
+    const userLookup = (userId && mongoose.Types.ObjectId.isValid(userId)) ? User.findById(userId) : Promise.resolve(null);
     userLookup
       .then((userObj) => {
         triggerVelocityManifest(order, order.shippingAddress, orderItems, userObj)
           .then((velocityRes) => {
             if (velocityRes?.success && velocityRes?.awbCode) {
               order.trackingNumber = velocityRes.awbCode;
+              order.courierName = velocityRes.courierName || velocityRes.shipment?.courierName || "";
+              order.trackingUrl = velocityRes.shipment?.labelUrl || "";
+              order.velocityError = "";
+              order.save();
+            } else if (velocityRes?.error) {
+              order.velocityError = typeof velocityRes.error === "object" ? JSON.stringify(velocityRes.error) : String(velocityRes.error);
               order.save();
             }
           })

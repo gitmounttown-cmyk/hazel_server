@@ -474,15 +474,24 @@
 
 
 const axios = require("axios");
+const mongoose = require("mongoose");
 const VelocityShipment = require("../models/velocityShipmentModel");
 
-const VELOCITY_BASE_URL = "https://shazam.velocity.in";
-const VELOCITY_AUTH_TOKEN = process.env.VELOCITY_AUTH_TOKEN;
+const VELOCITY_BASE_URL = process.env.VELOCITY_BASE_URL || "https://shazam.velocity.in";
 
-const getHeaders = () => ({
-  "Content-Type": "application/json",
-  Authorization: VELOCITY_AUTH_TOKEN,
-});
+const getHeaders = () => {
+  let token = process.env.VELOCITY_AUTH_TOKEN || "";
+  if (token) {
+    token = token.trim();
+    if (!token.startsWith("Bearer ")) {
+      token = `Bearer ${token}`;
+    }
+  }
+  return {
+    "Content-Type": "application/json",
+    Authorization: token,
+  };
+};
 
 // 1. CHECK SERVICEABILITY
 exports.checkServiceability = async (req, res) => {
@@ -498,7 +507,7 @@ exports.checkServiceability = async (req, res) => {
     );
     return res.json({ success: true, data: response.data });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Failed to check serviceability", error: error.message });
+    return res.status(500).json({ success: false, message: "Failed to check serviceability", error: error.response?.data || error.message });
   }
 };
 
@@ -517,36 +526,51 @@ const manifestOrderHelper = async (orderData) => {
     packageDimensions,
   } = orderData;
 
+  const customerPhone = String(customer.phone || customer.mobileNumber || "9999999999").replace(/\D/g, "").slice(-10);
+  const customerPincode = String(customer.pincode || "641301").replace(/\D/g, "").slice(0, 6);
+
+  const formattedItems = (items || []).map((i) => {
+    const pName = i.name || i.productName || "Product Item";
+    const generatedSku =
+      i.sku && String(i.sku).trim() !== ""
+        ? String(i.sku).trim()
+        : `SKU-${pName.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 6)}-${i.size || "STD"}`;
+
+    return {
+      name: pName,
+      sku: generatedSku,
+      units: Number(i.quantity || i.units || 1),
+      selling_price: Number(i.sellingPrice || i.price || i.selling_price || 0),
+      discount: 0,
+      tax: 0,
+    };
+  });
+
   const payload = {
     order_id: String(orderNumber),
     order_date: new Date().toISOString().slice(0, 16).replace("T", " "),
     carrier_id: carrierId || "",
-    billing_customer_name: customer.name,
+    billing_customer_name: customer.name || customer.fullName || "Customer",
     billing_last_name: customer.lastName || "",
-    billing_address: customer.address,
-    billing_city: customer.city,
-    billing_pincode: String(customer.pincode),
-    billing_state: customer.state,
+    billing_address: customer.address || customer.addressLine1 || "Address Line 1",
+    billing_city: customer.city || "Coimbatore",
+    billing_pincode: customerPincode,
+    billing_state: customer.state || "Tamil Nadu",
     billing_country: customer.country || "India",
     billing_email: customer.email || "customer@example.com",
-    billing_phone: String(customer.phone || customer.mobileNumber),
+    billing_phone: customerPhone,
     shipping_is_billing: true,
     print_label: true,
-    order_items: items.map((i) => ({
-      name: i.name || i.productName,
-      sku: i.sku || "SKU-DEF",
-      units: Number(i.quantity || i.units || 1),
-      selling_price: Number(i.price || i.selling_price || 0),
-    })),
+    order_items: formattedItems,
     payment_method: paymentMethod === "COD" ? "COD" : "PREPAID",
-    sub_total: Number(subTotal || totalAmount),
-    cod_collectible: paymentMethod === "COD" ? Number(totalAmount) : 0,
+    sub_total: Number(subTotal || totalAmount || 1),
+    cod_collectible: paymentMethod === "COD" ? Number(totalAmount || 0) : 0,
     length: Number(packageDimensions?.length || 10),
     breadth: Number(packageDimensions?.breadth || 10),
     height: Number(packageDimensions?.height || 10),
     weight: Number(packageDimensions?.weight || 0.5),
-    pickup_location: pickupLocation || "Primary Warehouse",
-    warehouse_id: warehouseId,
+    pickup_location: pickupLocation || process.env.VELOCITY_PICKUP_LOCATION || "SBS TEXTILES",
+    warehouse_id: warehouseId || process.env.VELOCITY_WAREHOUSE_ID || "WHZUCD",
   };
 
   const response = await axios.post(
@@ -562,19 +586,36 @@ const manifestOrderHelper = async (orderData) => {
       orderNumber: String(orderNumber),
       velocityOrderId: p.order_id,
       shipmentId: p.shipment_id,
-      awbCode: p.awb_code,
-      courierName: p.courier_name,
-      labelUrl: p.label_url,
-      manifestUrl: p.manifest_url,
+      awbCode: p.awb_code || "",
+      courierCompanyId: p.courier_company_id || "",
+      courierName: p.courier_name || "",
+      labelUrl: p.label_url || "",
+      manifestUrl: p.manifest_url || "",
       shippingAddress: {
-        name: customer.name,
-        phone: customer.phone || customer.mobileNumber,
-        address: customer.address,
+        name: customer.name || customer.fullName,
+        phone: customerPhone,
+        address: customer.address || customer.addressLine1,
         city: customer.city,
         state: customer.state,
-        pincode: customer.pincode,
+        pincode: customerPincode,
       },
     });
+
+    try {
+      const Order = require("../models/orderModel");
+      await Order.findOneAndUpdate(
+        { orderNumber: String(orderNumber) },
+        {
+          trackingNumber: p.awb_code || "",
+          courierName: p.courier_name || "",
+          trackingUrl: p.label_url || "",
+          velocityError: "",
+        }
+      );
+    } catch (dbErr) {
+      console.warn("Failed to update Order with Velocity details:", dbErr.message);
+    }
+
     return shipment;
   }
   throw new Error(result.message || "Velocity manifestation failed");
@@ -595,6 +636,93 @@ exports.manifestForwardOrder = async (req, res) => {
       success: false,
       message: "Failed to manifest shipment with Velocity",
       error: error.response?.data || error.message,
+    });
+  }
+};
+
+// 2b. MANIFEST EXISTING ORDER BY ID OR ORDER NUMBER
+exports.manifestOrderByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    if (!orderId) {
+      return res.status(400).json({ success: false, message: "Order ID or order number is required" });
+    }
+
+    const Order = require("../models/orderModel");
+    require("../models/orderItemModel");
+    const isObjectId = mongoose.Types.ObjectId.isValid(orderId);
+    const order = await Order.findOne(isObjectId ? { _id: orderId } : { orderNumber: orderId }).populate("items");
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: `Order not found for ${orderId}` });
+    }
+
+    const shippingAddress = order.shippingAddress || {};
+    const customerPhone = String(
+      shippingAddress.mobileNumber || shippingAddress.phone || "9999999999"
+    ).replace(/\D/g, "").slice(-10);
+
+    const customerPincode = String(
+      shippingAddress.pincode || "641301"
+    ).replace(/\D/g, "").slice(0, 6);
+
+    const shipment = await manifestOrderHelper({
+      orderNumber: order.orderNumber,
+      warehouseId: process.env.VELOCITY_WAREHOUSE_ID || "WHZUCD",
+      pickupLocation: process.env.VELOCITY_PICKUP_LOCATION || "SBS TEXTILES",
+      customer: {
+        name: shippingAddress.name || shippingAddress.fullName || "Customer",
+        address: shippingAddress.addressLine1 || shippingAddress.address || "Address Line 1",
+        city: shippingAddress.city || "Coimbatore",
+        state: shippingAddress.state || "Tamil Nadu",
+        pincode: customerPincode,
+        country: shippingAddress.country || "India",
+        email: order.customerEmail || shippingAddress.email || "customer@example.com",
+        phone: customerPhone,
+      },
+      items: order.items || [],
+      paymentMethod: order.paymentMethod === "COD" ? "COD" : "PREPAID",
+      subTotal: Number(order.subtotal || order.totalAmount || 1),
+      totalAmount: Number(order.totalAmount || 1),
+      packageDimensions: { length: 10, breadth: 10, height: 10, weight: 0.5 },
+    });
+
+    order.trackingNumber = shipment.awbCode || "";
+    order.courierName = shipment.courierName || "";
+    order.trackingUrl = shipment.labelUrl || "";
+    order.velocityError = "";
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order successfully manifested with Velocity Shipping",
+      data: {
+        orderNumber: order.orderNumber,
+        awbCode: shipment.awbCode,
+        courierName: shipment.courierName,
+        labelUrl: shipment.labelUrl,
+      },
+    });
+  } catch (error) {
+    console.error("Velocity Manifest Order By ID Error:", error.response?.data || error.message);
+    const Order = require("../models/orderModel");
+    const errMsg =
+      error.response?.data?.meta?.message ||
+      error.response?.data?.details ||
+      error.response?.data?.message ||
+      error.message;
+    try {
+      const isObjectId = mongoose.Types.ObjectId.isValid(req.params.orderId);
+      await Order.findOneAndUpdate(
+        isObjectId ? { _id: req.params.orderId } : { orderNumber: req.params.orderId },
+        { velocityError: String(errMsg) }
+      );
+    } catch (e) {}
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to manifest order with Velocity",
+      error: errMsg,
     });
   }
 };

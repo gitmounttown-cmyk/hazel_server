@@ -82,6 +82,7 @@ const router = express.Router();
 const {
   checkServiceability,
   manifestForwardOrder,
+  manifestOrderByOrderId,
   trackShipment,
   cancelShipment,
   trackGuestOrder,
@@ -95,6 +96,8 @@ router.post("/check-serviceability", optionalAuth, checkServiceability);
 router.post("/track-order", optionalAuth, trackGuestOrder);
 router.get("/track-by-order/:orderNumber", optionalAuth, trackUserOrder);
 router.post("/manifest-order", verifyToken, manifestForwardOrder);
+router.post("/manifest-order/:orderId", optionalAuth, manifestOrderByOrderId);
+router.post("/manifest/:orderId", optionalAuth, manifestOrderByOrderId);
 router.get("/track/:awbCode", verifyToken, trackShipment);
 router.post("/cancel", verifyToken, cancelShipment);
 
