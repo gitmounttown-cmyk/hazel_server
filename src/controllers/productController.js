@@ -1,6 +1,7 @@
 const Product = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const Brand = require("../models/brandModel");
+const SizeChart = require("../models/sizeChartModel");
 const Inventory = require("../models/inventoryModel");
 const { syncProductInventory } = require("../services/inventoryService");
 
@@ -62,6 +63,7 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.find(filter)
       .populate("categoryId", "name")
       .populate("brandId", "name")
+      .populate("sizeChartId")
       .skip(skip)
       .limit(limit)
       .sort(sortCriteria)
@@ -90,7 +92,8 @@ exports.getProductById = async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findById(productId)
       .populate("categoryId", "name")
-      .populate("brandId", "name");
+      .populate("brandId", "name")
+      .populate("sizeChartId");
 
     if (!product) {
       return res.status(404).json({
@@ -188,6 +191,7 @@ exports.createProduct = async (req, res) => {
     const {
       categoryId,
       brandId,
+      sizeChartId,
       name,
       description,
       variants,
@@ -305,6 +309,7 @@ exports.createProduct = async (req, res) => {
     const newProduct = new Product({
       categoryId: categoryId || null,
       brandId,
+      sizeChartId: sizeChartId || null,
       name,
       description: parsedDescription,
       variants: parsedVariants,
@@ -358,6 +363,16 @@ exports.createProduct = async (req, res) => {
     // Save after thumbnailId has been assigned.
     await newProduct.save();
 
+    if (newProduct.sizeChartId) {
+      try {
+        await SizeChart.findByIdAndUpdate(newProduct.sizeChartId, {
+          productId: newProduct._id,
+        });
+      } catch (scLinkErr) {
+        console.error("Failed to link size chart to product:", scLinkErr);
+      }
+    }
+
     // Dynamically sync to Inventory
     try {
       await syncProductInventory(newProduct._id);
@@ -369,7 +384,8 @@ exports.createProduct = async (req, res) => {
       newProduct._id
     )
       .populate("categoryId", "name")
-      .populate("brandId", "name");
+      .populate("brandId", "name")
+      .populate("sizeChartId");
 
     return res.status(201).json({
       success: true,
@@ -457,6 +473,7 @@ exports.updateProduct = async (req, res) => {
     const {
       categoryId,
       brandId,
+      sizeChartId,
       name,
       description,
       variants,
@@ -478,6 +495,17 @@ exports.updateProduct = async (req, res) => {
 
     if (categoryId !== undefined) {
       product.categoryId = categoryId || null;
+    }
+
+    if (sizeChartId !== undefined) {
+      const prevSizeChartId = product.sizeChartId;
+      product.sizeChartId = sizeChartId || null;
+      if (prevSizeChartId && String(prevSizeChartId) !== String(sizeChartId)) {
+        SizeChart.findByIdAndUpdate(prevSizeChartId, { productId: null }).catch(console.error);
+      }
+      if (sizeChartId) {
+        SizeChart.findByIdAndUpdate(sizeChartId, { productId: product._id }).catch(console.error);
+      }
     }
 
     if (isActive !== undefined) {
@@ -503,7 +531,8 @@ exports.updateProduct = async (req, res) => {
 
       const updatedProduct = await Product.findById(productId)
         .populate('categoryId', 'name')
-        .populate('brandId', 'name');
+        .populate('brandId', 'name')
+        .populate('sizeChartId');
 
       return res.status(200).json({
         success: true,
@@ -767,7 +796,8 @@ exports.updateProduct = async (req, res) => {
 
     const updatedProduct = await Product.findById(productId)
       .populate("categoryId", "name")
-      .populate("brandId", "name");
+      .populate("brandId", "name")
+      .populate("sizeChartId");
 
     return res.status(200).json({
       success: true,

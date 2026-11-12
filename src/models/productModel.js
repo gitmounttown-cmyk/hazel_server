@@ -254,6 +254,12 @@ const ProductSchema = new mongoose.Schema(
       default: null,
     },
 
+    sizeChartId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SizeChart",
+      default: null,
+    },
+
     // *----------------------------------------------------------*
     // *BASIC PRODUCT INFORMATION*
     // *----------------------------------------------------------*

@@ -74,6 +74,8 @@ app.use ('/api/neck-patterns', require ('./src/routes/neckPatternRoutes'));
 
 app.use ('/api/size', require ('./src/routes/sizeRoutes'));
 
+app.use ('/api/size-charts', require ('./src/routes/sizeChartRoutes'));
+
 app.use ('/api/colors', require ('./src/routes/colorRoutes'));
 
 // ==========================================================
