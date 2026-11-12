@@ -6111,3 +6111,315 @@ Require stack:
     }
   }
 }
+[2026-11-12T09:26:50.613Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-11-12T09:26:50.867Z] INFO: ========================================
+[2026-11-12T09:26:50.871Z] INFO: Hazel application starting
+[2026-11-12T09:26:50.879Z] INFO: Node version: v20.20.2
+[2026-11-12T09:26:50.884Z] INFO: Environment: production
+[2026-11-12T09:26:50.898Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:26:50.913Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:26:50.930Z] INFO: PORT: 5004
+[2026-11-12T09:26:50.942Z] INFO: ========================================
+[2026-11-12T09:26:50.951Z] INFO: ◇ injected env (0) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-11-12T09:26:54.609Z] ERROR: APPLICATION STARTUP FAILED
+[2026-11-12T09:26:54.610Z] ERROR: C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\controllers\paymentController.js:18
+const {
+^^^^^
+
+SyntaxError: Unexpected token 'const'
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\routes\paymentRoutes.js:11:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-11-12T09:27:21.010Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:27:21.128Z] INFO: ========================================
+[2026-11-12T09:27:21.150Z] INFO: Hazel application starting
+[2026-11-12T09:27:21.160Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:21.171Z] INFO: Environment: production
+[2026-11-12T09:27:21.181Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:21.186Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:21.194Z] INFO: PORT: 5004
+[2026-11-12T09:27:21.361Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-11-12T09:27:21.370Z] INFO: ========================================
+[2026-11-12T09:27:21.371Z] INFO: Hazel application starting
+[2026-11-12T09:27:21.373Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:21.374Z] INFO: Environment: production
+[2026-11-12T09:27:21.377Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:21.379Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:21.387Z] INFO: PORT: 5004
+[2026-11-12T09:27:21.393Z] INFO: ========================================
+[2026-11-12T09:27:21.401Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-11-12T09:27:23.858Z] INFO: =================================
+[2026-11-12T09:27:23.859Z] INFO: RAZORPAY CONFIG
+[2026-11-12T09:27:23.860Z] INFO: =================================
+[2026-11-12T09:27:23.861Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-11-12T09:27:23.861Z] INFO: Razorpay Secret Loaded: true
+[2026-11-12T09:27:23.863Z] INFO: =================================
+[2026-11-12T09:27:23.948Z] INFO: App loaded successfully
+[2026-11-12T09:27:23.949Z] INFO: Connecting to MongoDB...
+[2026-11-12T09:27:23.950Z] INFO: Environment: production
+[2026-11-12T09:27:23.951Z] INFO: MongoDB URI exists: true
+[2026-11-12T09:27:23.977Z] INFO: Server running on port 5004
+[2026-11-12T09:27:23.979Z] INFO: Hazel backend started successfully
+[2026-11-12T09:27:24.575Z] INFO: MongoDB Connected Successfully!!
+[2026-11-12T09:27:24.996Z] ERROR: (node:23220) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"userId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-11-12T09:27:24.999Z] ERROR: (node:23220) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"guestId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:27:25.096Z] ERROR: (node:23220) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:27:26.719Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-11-12T09:27:26.724Z] INFO: ========================================
+[2026-11-12T09:27:26.725Z] INFO: Hazel application starting
+[2026-11-12T09:27:26.726Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:26.727Z] INFO: Environment: production
+[2026-11-12T09:27:26.728Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:26.728Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:26.730Z] INFO: PORT: 5004
+[2026-11-12T09:27:26.734Z] INFO: ========================================
+[2026-11-12T09:27:26.738Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-11-12T09:27:29.203Z] INFO: =================================
+[2026-11-12T09:27:29.205Z] INFO: RAZORPAY CONFIG
+[2026-11-12T09:27:29.205Z] INFO: =================================
+[2026-11-12T09:27:29.206Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-11-12T09:27:29.210Z] INFO: Razorpay Secret Loaded: true
+[2026-11-12T09:27:29.213Z] INFO: =================================
+[2026-11-12T09:27:29.299Z] INFO: App loaded successfully
+[2026-11-12T09:27:29.301Z] INFO: Connecting to MongoDB...
+[2026-11-12T09:27:29.302Z] INFO: Environment: production
+[2026-11-12T09:27:29.304Z] INFO: MongoDB URI exists: true
+[2026-11-12T09:27:29.349Z] INFO: Server running on port 5004
+[2026-11-12T09:27:29.353Z] INFO: Hazel backend started successfully
+[2026-11-12T09:27:29.875Z] INFO: MongoDB Connected Successfully!!
+[2026-11-12T09:27:30.294Z] ERROR: (node:21728) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"userId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-11-12T09:27:30.296Z] ERROR: (node:21728) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"guestId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:27:30.313Z] ERROR: (node:21728) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:27:45.756Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-11-12T09:27:45.763Z] INFO: ========================================
+[2026-11-12T09:27:45.764Z] INFO: Hazel application starting
+[2026-11-12T09:27:45.772Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:45.774Z] INFO: Environment: production
+[2026-11-12T09:27:45.776Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:45.780Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:45.781Z] INFO: PORT: 5004
+[2026-11-12T09:27:45.789Z] INFO: ========================================
+[2026-11-12T09:27:45.796Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-11-12T09:27:48.406Z] ERROR: APPLICATION STARTUP FAILED
+[2026-11-12T09:27:48.414Z] ERROR: C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\controllers\paymentController.js:17
+const {  generateInvoicePDFBuffer,
+
+SyntaxError: Missing initializer in destructuring declaration
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\routes\paymentRoutes.js:11:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-11-12T09:27:54.642Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:27:54.655Z] INFO: ========================================
+[2026-11-12T09:27:54.655Z] INFO: Hazel application starting
+[2026-11-12T09:27:54.656Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:54.657Z] INFO: Environment: production
+[2026-11-12T09:27:54.659Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:54.672Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:54.675Z] INFO: PORT: 5004
+[2026-11-12T09:27:54.677Z] INFO: ========================================
+[2026-11-12T09:27:54.687Z] INFO: ◇ injected env (0) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-11-12T09:27:57.250Z] ERROR: APPLICATION STARTUP FAILED
+[2026-11-12T09:27:57.252Z] ERROR: C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\controllers\paymentController.js:26
+  generateInvoicePDFBuffer,
+  ^
+
+SyntaxError: Identifier 'generateInvoicePDFBuffer' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\routes\paymentRoutes.js:11:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-11-12T09:27:58.654Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ enable debugging { debug: true }[0m
+[2026-11-12T09:27:58.666Z] INFO: ========================================
+[2026-11-12T09:27:58.667Z] INFO: Hazel application starting
+[2026-11-12T09:27:58.672Z] INFO: Node version: v20.20.2
+[2026-11-12T09:27:58.675Z] INFO: Environment: production
+[2026-11-12T09:27:58.685Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:58.692Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:27:58.717Z] INFO: PORT: 5004
+[2026-11-12T09:27:58.722Z] INFO: ========================================
+[2026-11-12T09:27:58.725Z] INFO: ◇ injected env (0) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-11-12T09:28:01.067Z] INFO: ◇ injected env (26) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-11-12T09:28:01.077Z] INFO: ========================================
+[2026-11-12T09:28:01.078Z] INFO: Hazel application starting
+[2026-11-12T09:28:01.082Z] INFO: Node version: v20.20.2
+[2026-11-12T09:28:01.084Z] INFO: Environment: production
+[2026-11-12T09:28:01.091Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:01.094Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:01.097Z] INFO: PORT: 5004
+[2026-11-12T09:28:01.100Z] INFO: ========================================
+[2026-11-12T09:28:01.110Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:28:03.220Z] ERROR: APPLICATION STARTUP FAILED
+[2026-11-12T09:28:03.248Z] ERROR: C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\controllers\paymentController.js:26
+  generateInvoicePDFBuffer,
+  ^
+
+SyntaxError: Identifier 'generateInvoicePDFBuffer' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\routes\paymentRoutes.js:11:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-11-12T09:28:03.944Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:28:03.992Z] INFO: ========================================
+[2026-11-12T09:28:04.025Z] INFO: Hazel application starting
+[2026-11-12T09:28:04.060Z] INFO: Node version: v20.20.2
+[2026-11-12T09:28:04.083Z] INFO: Environment: production
+[2026-11-12T09:28:04.107Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:04.118Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:04.129Z] INFO: PORT: 5004
+[2026-11-12T09:28:04.154Z] INFO: ========================================
+[2026-11-12T09:28:04.160Z] INFO: ◇ injected env (0) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-11-12T09:28:06.384Z] ERROR: APPLICATION STARTUP FAILED
+[2026-11-12T09:28:06.394Z] ERROR: C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\controllers\paymentController.js:26
+  generateInvoicePDFBuffer,
+  ^
+
+SyntaxError: Identifier 'generateInvoicePDFBuffer' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (C:\Users\User05\Documents\Arasan_hazel\hazel_server\src\routes\paymentRoutes.js:11:27)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+[2026-11-12T09:28:51.918Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:28:51.923Z] INFO: ========================================
+[2026-11-12T09:28:51.926Z] INFO: Hazel application starting
+[2026-11-12T09:28:51.928Z] INFO: Node version: v20.20.2
+[2026-11-12T09:28:51.930Z] INFO: Environment: production
+[2026-11-12T09:28:51.937Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:51.938Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:51.939Z] INFO: PORT: 5004
+[2026-11-12T09:28:51.940Z] INFO: ========================================
+[2026-11-12T09:28:51.943Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ suppress logs { quiet: true }[0m
+[2026-11-12T09:28:54.146Z] INFO: =================================
+[2026-11-12T09:28:54.148Z] INFO: RAZORPAY CONFIG
+[2026-11-12T09:28:54.149Z] INFO: =================================
+[2026-11-12T09:28:54.149Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-11-12T09:28:54.150Z] INFO: Razorpay Secret Loaded: true
+[2026-11-12T09:28:54.152Z] INFO: =================================
+[2026-11-12T09:28:54.259Z] INFO: App loaded successfully
+[2026-11-12T09:28:54.261Z] INFO: Connecting to MongoDB...
+[2026-11-12T09:28:54.263Z] INFO: Environment: production
+[2026-11-12T09:28:54.264Z] INFO: MongoDB URI exists: true
+[2026-11-12T09:28:54.292Z] INFO: Server running on port 5004
+[2026-11-12T09:28:54.296Z] INFO: Hazel backend started successfully
+[2026-11-12T09:28:54.909Z] INFO: MongoDB Connected Successfully!!
+[2026-11-12T09:28:55.352Z] ERROR: (node:18812) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"userId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-11-12T09:28:55.353Z] ERROR: (node:18812) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"guestId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:28:55.357Z] ERROR: (node:18812) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:28:56.819Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-11-12T09:28:56.824Z] INFO: ========================================
+[2026-11-12T09:28:56.825Z] INFO: Hazel application starting
+[2026-11-12T09:28:56.826Z] INFO: Node version: v20.20.2
+[2026-11-12T09:28:56.827Z] INFO: Environment: production
+[2026-11-12T09:28:56.828Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:56.830Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:56.837Z] INFO: PORT: 5004
+[2026-11-12T09:28:56.838Z] INFO: ========================================
+[2026-11-12T09:28:56.842Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-11-12T09:28:57.712Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-11-12T09:28:57.722Z] INFO: ========================================
+[2026-11-12T09:28:57.723Z] INFO: Hazel application starting
+[2026-11-12T09:28:57.726Z] INFO: Node version: v20.20.2
+[2026-11-12T09:28:57.730Z] INFO: Environment: production
+[2026-11-12T09:28:57.732Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:57.739Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:28:57.741Z] INFO: PORT: 5004
+[2026-11-12T09:28:57.743Z] INFO: ========================================
+[2026-11-12T09:28:57.747Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-11-12T09:29:00.515Z] INFO: =================================
+[2026-11-12T09:29:00.518Z] INFO: RAZORPAY CONFIG
+[2026-11-12T09:29:00.520Z] INFO: =================================
+[2026-11-12T09:29:00.521Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-11-12T09:29:00.522Z] INFO: Razorpay Secret Loaded: true
+[2026-11-12T09:29:00.524Z] INFO: =================================
+[2026-11-12T09:29:00.618Z] INFO: App loaded successfully
+[2026-11-12T09:29:00.622Z] INFO: Connecting to MongoDB...
+[2026-11-12T09:29:00.625Z] INFO: Environment: production
+[2026-11-12T09:29:00.630Z] INFO: MongoDB URI exists: true
+[2026-11-12T09:29:00.667Z] INFO: Server running on port 5004
+[2026-11-12T09:29:00.670Z] INFO: Hazel backend started successfully
+[2026-11-12T09:29:01.288Z] INFO: MongoDB Connected Successfully!!
+[2026-11-12T09:29:01.723Z] ERROR: (node:21524) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"userId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-11-12T09:29:01.724Z] ERROR: (node:21524) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"guestId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:29:01.745Z] ERROR: (node:21524) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:56:25.139Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ override existing { override: true }[0m
+[2026-11-12T09:56:25.231Z] INFO: ========================================
+[2026-11-12T09:56:25.235Z] INFO: Hazel application starting
+[2026-11-12T09:56:25.236Z] INFO: Node version: v20.20.2
+[2026-11-12T09:56:25.238Z] INFO: Environment: production
+[2026-11-12T09:56:25.241Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:25.244Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:25.249Z] INFO: PORT: 5004
+[2026-11-12T09:56:25.253Z] INFO: ========================================
+[2026-11-12T09:56:25.267Z] INFO: ◇ injected env (0) from .env [2m// tip: ◈ encrypted .env [www.dotenvx.com][0m
+[2026-11-12T09:56:27.666Z] INFO: ◇ injected env (26) from .env [2m// tip: ◈ secrets for agents [www.dotenvx.com][0m
+[2026-11-12T09:56:27.685Z] INFO: ========================================
+[2026-11-12T09:56:27.687Z] INFO: Hazel application starting
+[2026-11-12T09:56:27.696Z] INFO: Node version: v20.20.2
+[2026-11-12T09:56:27.698Z] INFO: Environment: production
+[2026-11-12T09:56:27.701Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:27.713Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:27.728Z] INFO: PORT: 5004
+[2026-11-12T09:56:27.740Z] INFO: ========================================
+[2026-11-12T09:56:27.749Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌁ auth for agents [www.vestauth.com][0m
+[2026-11-12T09:56:30.513Z] INFO: ◇ injected env (26) from .env [2m// tip: ⌘ custom filepath { path: '/custom/path/.env' }[0m
+[2026-11-12T09:56:30.527Z] INFO: ========================================
+[2026-11-12T09:56:30.529Z] INFO: Hazel application starting
+[2026-11-12T09:56:30.531Z] INFO: Node version: v20.20.2
+[2026-11-12T09:56:30.538Z] INFO: Environment: production
+[2026-11-12T09:56:30.540Z] INFO: Working directory: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:30.541Z] INFO: __dirname: C:\Users\User05\Documents\Arasan_hazel\hazel_server
+[2026-11-12T09:56:30.544Z] INFO: PORT: 5004
+[2026-11-12T09:56:30.548Z] INFO: ========================================
+[2026-11-12T09:56:30.556Z] INFO: ◇ injected env (0) from .env [2m// tip: ⌘ multiple files { path: ['.env.local', '.env'] }[0m
+[2026-11-12T09:56:32.783Z] INFO: =================================
+[2026-11-12T09:56:32.785Z] INFO: RAZORPAY CONFIG
+[2026-11-12T09:56:32.785Z] INFO: =================================
+[2026-11-12T09:56:32.786Z] INFO: Razorpay Key ID: rzp_live_TkEVRQlJl5u5fr
+[2026-11-12T09:56:32.787Z] INFO: Razorpay Secret Loaded: true
+[2026-11-12T09:56:32.788Z] INFO: =================================
+[2026-11-12T09:56:32.931Z] INFO: App loaded successfully
+[2026-11-12T09:56:32.932Z] INFO: Connecting to MongoDB...
+[2026-11-12T09:56:32.933Z] INFO: Environment: production
+[2026-11-12T09:56:32.934Z] INFO: MongoDB URI exists: true
+[2026-11-12T09:56:32.968Z] INFO: Server running on port 5004
+[2026-11-12T09:56:32.972Z] INFO: Hazel backend started successfully
+[2026-11-12T09:56:33.624Z] INFO: MongoDB Connected Successfully!!
+[2026-11-12T09:56:34.059Z] ERROR: (node:6244) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"userId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2026-11-12T09:56:34.061Z] ERROR: (node:6244) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"guestId":1} for model "Cart". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[2026-11-12T09:56:34.081Z] ERROR: (node:6244) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"user":1} for model "Wishlist". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.

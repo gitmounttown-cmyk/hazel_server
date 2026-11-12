@@ -925,29 +925,31 @@ exports.verifyPayment = async (req, res) => {
       sendOrderNotification(order, customerMobile, userId || guestId || order.guestId || "Guest");
     }
 
-    // DISPATCH INVOICE PDF & NOTIFICATIONS (CUSTOMER EMAIL/SMS + ADMIN EMAIL/SMS)
-    handlePaymentCompletionNotifications(order, req);
+    setImmediate(() => {
+      // DISPATCH INVOICE PDF & NOTIFICATIONS (CUSTOMER EMAIL/SMS + ADMIN EMAIL/SMS)
+      handlePaymentCompletionNotifications(order, req);
 
-    // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION FOR BOTH USERS AND GUESTS
-    const userLookup = (userId && mongoose.Types.ObjectId.isValid(userId)) ? User.findById(userId) : Promise.resolve(null);
-    userLookup
-      .then((userObj) => {
-        triggerVelocityManifest(order, order.shippingAddress, orderItems, userObj)
-          .then((velocityRes) => {
-            if (velocityRes?.success && velocityRes?.awbCode) {
-              order.trackingNumber = velocityRes.awbCode;
-              order.courierName = velocityRes.courierName || velocityRes.shipment?.courierName || "";
-              order.trackingUrl = velocityRes.shipment?.labelUrl || "";
-              order.velocityError = "";
-              order.save();
-            } else if (velocityRes?.error) {
-              order.velocityError = typeof velocityRes.error === "object" ? JSON.stringify(velocityRes.error) : String(velocityRes.error);
-              order.save();
-            }
-          })
-          .catch((vErr) => console.error("Velocity Manifestation error:", vErr.message));
-      })
-      .catch((userErr) => console.error("User lookup error:", userErr.message));
+      // NON-BLOCKING BACKGROUND VELOCITY MANIFESTATION FOR BOTH USERS AND GUESTS
+      const userLookup = (userId && mongoose.Types.ObjectId.isValid(userId)) ? User.findById(userId) : Promise.resolve(null);
+      userLookup
+        .then((userObj) => {
+          triggerVelocityManifest(order, order.shippingAddress, orderItems, userObj)
+            .then((velocityRes) => {
+              if (velocityRes?.success && velocityRes?.awbCode) {
+                order.trackingNumber = velocityRes.awbCode;
+                order.courierName = velocityRes.courierName || velocityRes.shipment?.courierName || "";
+                order.trackingUrl = velocityRes.shipment?.labelUrl || "";
+                order.velocityError = "";
+                order.save();
+              } else if (velocityRes?.error) {
+                order.velocityError = typeof velocityRes.error === "object" ? JSON.stringify(velocityRes.error) : String(velocityRes.error);
+                order.save();
+              }
+            })
+            .catch((vErr) => console.error("Velocity Manifestation error:", vErr.message));
+        })
+        .catch((userErr) => console.error("User lookup error:", userErr.message));
+    });
 
     const updatedOrder = await Order.findById(order._id).populate("items");
 
