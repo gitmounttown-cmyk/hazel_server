@@ -51,15 +51,27 @@ exports.getInventorySummary = async (
           "LOW_STOCK",
       });
 
-    const outOfStockItems =
-      await Inventory.countDocuments({
-        productId: {
-          $in: productIds,
-        },
+    // const outOfStockItems =
+    //   await Inventory.countDocuments({
+    //     productId: {
+    //       $in: productIds,
+    //     },
 
-        stockStatus:
-          "OUT_OF_STOCK",
-      });
+    //     stockStatus:
+    //       "OUT_OF_STOCK",
+    //   });
+
+      const outOfStockItems =
+  await Inventory.countDocuments({
+    productId: {
+      $in: productIds,
+    },
+    isEnabled: { $ne: false },
+
+    "variants.sizes.stockQuantity": {
+      $lte: 0,
+    },
+  });
 
     const inStockItems =
       await Inventory.countDocuments({
@@ -328,110 +340,220 @@ exports.getInventorySummary = async (
 //   }
 // };
 
+// exports.getAllInventory = async (req, res) => {
+//   try {
+//     const page = Math.max(
+//       1,
+//       parseInt(req.query.page, 10) || 1
+//     );
+
+//     const limit = Math.max(
+//       1,
+//       parseInt(req.query.limit, 10) || 20
+//     );
+
+//     const skip = (page - 1) * limit;
+
+//     const filter = {};
+
+//     // Get only active products
+//     const activeProducts = await Product.find({
+//       isActive: true,
+//       isDeleted: { $ne: true },
+//     }).select("_id");
+// console.log("Active Products:", activeProducts);
+//     const activeProductIds = activeProducts.map(
+//       (product) => product._id
+//     );
+
+//     // Always restrict inventory to active products
+//     filter.productId = {
+//       $in: activeProductIds,
+//     };
+
+//     // STATUS
+//     if (req.query.status) {
+//       filter.stockStatus = req.query.status;
+//     }
+
+//     // SEARCH
+//     if (req.query.search?.trim()) {
+//       // const search = req.query.search.trim();
+
+//     const productFilter = {
+//       isDeleted: {
+//         $ne: true,
+//       },
+//     };
+
+//     if (req.query.search) {
+//       const search = req.query.search.trim();
+//       if (search) {
+//         productFilter.$or = [
+//           {
+//             name: {
+//               $regex: search,
+//               $options: "i",
+//             },
+//           },
+//           {
+//             "variants.color": {
+//               $regex: search,
+//               $options: "i",
+//             },
+//           },
+//           {
+//             "variants.sizes.sku": {
+//               $regex: search,
+//               $options: "i",
+//             },
+//           },
+//           {
+//             "variants.sizes.barcode": {
+//               $regex: search,
+//               $options: "i",
+//             },
+//           },
+//         ];
+//       }
+//     }
+
+//     const matchingProducts = await Product.find(productFilter).select("_id");
+//     const productIds = matchingProducts.map((product) => product._id);
+//     filter.productId = {
+//       $in: productIds,
+//     };
+
+//     filter.isEnabled = { $ne: false };
+
+//     // ----------------------------------------------------------
+//     // COUNT
+//     // ----------------------------------------------------------
+
+//     // const total =
+//     //   await Inventory.countDocuments(
+//     //     filter
+//     //   );
+
+//       filter.productId = {
+//         $in: productIds,
+//       };
+//     }
+
+//     // COUNT
+//     const total = await Inventory.countDocuments(filter);
+
+//     // DATA
+//     const inventory = await Inventory.find(filter)
+//       .populate({
+//         path: "productId",
+//         select: "name categoryId brandId variants isActive isDeleted",
+//         populate: [
+//           { path: "categoryId", select: "name" },
+//           { path: "brandId", select: "name" },
+//         ],
+//       })
+//       .sort({ updatedAt: -1 })
+//       .skip(skip)
+//       .limit(limit)
+//       .lean();
+
+//     return res.status(200).json({
+//       success: true,
+//       count: inventory.length,
+//       total,
+//       page,
+//       pages: Math.ceil(total / limit) || 1,
+//       data: inventory,
+//     });
+
+//   } catch (error) {
+//     console.error("getAllInventory error:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message || "Failed to get inventory",
+//     });
+//   }
+// };
+
+
 exports.getAllInventory = async (req, res) => {
   try {
-    const page = Math.max(
-      1,
-      parseInt(req.query.page, 10) || 1
-    );
-
-    const limit = Math.max(
-      1,
-      parseInt(req.query.limit, 10) || 20
-    );
-
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit, 10) || 20);
     const skip = (page - 1) * limit;
 
-    const filter = {};
+    const status = req.query.status;
+    const search = req.query.search?.trim();
 
-    // Get only active products
-    const activeProducts = await Product.find({
-      isActive: true,
-      isDeleted: { $ne: true },
-    }).select("_id");
-console.log("Active Products:", activeProducts);
-    const activeProductIds = activeProducts.map(
-      (product) => product._id
-    );
-
-    // Always restrict inventory to active products
-    filter.productId = {
-      $in: activeProductIds,
-    };
-
-    // STATUS
-    if (req.query.status) {
-      filter.stockStatus = req.query.status;
-    }
-
-    // SEARCH
-    if (req.query.search?.trim()) {
-      // const search = req.query.search.trim();
+    // --------------------------------------------------
+    // PRODUCT FILTER
+    // --------------------------------------------------
 
     const productFilter = {
-      isDeleted: {
-        $ne: true,
-      },
+      isActive: true,
+      isDeleted: { $ne: true },
     };
 
-    if (req.query.search) {
-      const search = req.query.search.trim();
-      if (search) {
-        productFilter.$or = [
-          {
-            name: {
-              $regex: search,
-              $options: "i",
+    // OUT OF STOCK:
+    // Check every active variant and active size.
+    if (status === "OUT_OF_STOCK") {
+      productFilter.variants = {
+        $elemMatch: {
+          isActive: { $ne: false },
+          sizes: {
+            $elemMatch: {
+              stockQuantity: 0,
+              isActive: { $ne: false },
             },
           },
-          {
-            "variants.color": {
-              $regex: search,
-              $options: "i",
-            },
-          },
-          {
-            "variants.sizes.sku": {
-              $regex: search,
-              $options: "i",
-            },
-          },
-          {
-            "variants.sizes.barcode": {
-              $regex: search,
-              $options: "i",
-            },
-          },
-        ];
-      }
-    }
-
-    const matchingProducts = await Product.find(productFilter).select("_id");
-    const productIds = matchingProducts.map((product) => product._id);
-    filter.productId = {
-      $in: productIds,
-    };
-
-    filter.isEnabled = { $ne: false };
-
-    // ----------------------------------------------------------
-    // COUNT
-    // ----------------------------------------------------------
-
-    // const total =
-    //   await Inventory.countDocuments(
-    //     filter
-    //   );
-
-      filter.productId = {
-        $in: productIds,
+        },
       };
     }
 
+    // SEARCH
+    if (search) {
+      productFilter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { "variants.color": { $regex: search, $options: "i" } },
+        { "variants.sizes.sku": { $regex: search, $options: "i" } },
+        { "variants.sizes.barcode": { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Get matching product IDs
+    const matchingProducts = await Product.find(productFilter)
+      .select("_id")
+      .lean();
+
+    const productIds = matchingProducts.map((p) => p._id);
+
+    // --------------------------------------------------
+    // INVENTORY FILTER
+    // --------------------------------------------------
+
+    const filter = {
+      productId: { $in: productIds },
+      isEnabled: { $ne: false },
+    };
+
+    // For other statuses, use inventory-level status.
+    // OUT_OF_STOCK is checked using product size quantities.
+    if (status && status !== "OUT_OF_STOCK") {
+      filter.stockStatus = status;
+    }
+
+    // --------------------------------------------------
     // COUNT
+    // --------------------------------------------------
+
     const total = await Inventory.countDocuments(filter);
 
-    // DATA
+    // --------------------------------------------------
+    // FETCH INVENTORY
+    // --------------------------------------------------
+
     const inventory = await Inventory.find(filter)
       .populate({
         path: "productId",
@@ -445,6 +567,30 @@ console.log("Active Products:", activeProducts);
       .skip(skip)
       .limit(limit)
       .lean();
+
+    // --------------------------------------------------
+    // OUT OF STOCK: RETURN ONLY ZERO-STOCK SIZES
+    // --------------------------------------------------
+
+    if (status === "OUT_OF_STOCK") {
+      inventory.forEach((item) => {
+        const product = item.productId;
+
+        if (!product) return;
+
+        product.variants = (product.variants || [])
+          .filter((variant) => variant.isActive !== false)
+          .map((variant) => ({
+            ...variant,
+            sizes: (variant.sizes || []).filter(
+              (size) =>
+                size.stockQuantity === 0 &&
+                size.isActive !== false
+            ),
+          }))
+          .filter((variant) => variant.sizes.length > 0);
+      });
+    }
 
     return res.status(200).json({
       success: true,
