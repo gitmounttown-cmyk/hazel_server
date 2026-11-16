@@ -2,6 +2,20 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    isGuest: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    // ------------------------------------------------------
+    // GUEST
+    // ------------------------------------------------------
+    guestId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+
     name: {
       type: String,
       trim: true,
@@ -9,7 +23,7 @@ const userSchema = new mongoose.Schema(
     },
     mobileNumber: {
       type: String,
-      unique: true,
+      // unique: true,
       sparse: true,
       trim: true,
     },
@@ -17,7 +31,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true,
+      // unique: true,
       sparse: true,
       default: "",
     },
@@ -52,6 +66,41 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+
+userSchema.index(
+  { guestId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      isGuest: true,
+      guestId: { $type: "string" },
+    },
+  }
+);
+
+userSchema.index(
+  { mobileNumber: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      isGuest: false,
+      mobileNumber: { $gt: "" },
+    },
+  }
+);
+
+userSchema.index(
+  { email: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      isGuest: false,
+      email: { $gt: "" },
+    },
+  }
+);
+
 
 module.exports =
   mongoose.models.User || mongoose.model("User", userSchema);

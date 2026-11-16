@@ -1,6 +1,17 @@
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
+const regularFont = path.join(__dirname, "../fonts/NotoSansTamil-Regular.ttf");
+const boldFont = path.join(__dirname, "../fonts/NotoSansTamil-Bold.ttf");
+
+// Check font files before generating invoice
+if (!fs.existsSync(regularFont)) {
+  throw new Error(`Tamil Regular font not found: ${regularFont}`);
+}
+
+if (!fs.existsSync(boldFont)) {
+  throw new Error(`Tamil Bold font not found: ${boldFont}`);
+}
 
 const formatINR = (val) => {
   const num = Number(val) || 0;
@@ -56,6 +67,11 @@ const generateInvoicePDFBuffer = (order) => {
           Subject: "Tax Invoice",
         },
       });
+
+      // Register fonts
+      doc.registerFont("Tamil-Regular", regularFont);
+      doc.registerFont("Tamil-Bold", boldFont);
+      doc.registerFont("InvoiceFont", regularFont); // Use Tamil-Regular for invoice text
 
       const buffers = [];
       doc.on("data", (chunk) => buffers.push(chunk));
@@ -250,13 +266,13 @@ const generateInvoicePDFBuffer = (order) => {
 
       doc
         .fontSize(9.5)
-        .font("Helvetica-Bold")
+        .font("InvoiceFont")
         .fillColor(primaryColor)
         .text(billingName, 50, addressBoxY + 22, { width: 230, ellipsis: true });
 
       doc
         .fontSize(7.5)
-        .font("Helvetica")
+        .font("InvoiceFont")
         .fillColor(secondaryColor)
         .text(billingAddressLines || customerAddressLines || "Billing address on file", 50, addressBoxY + 36, {
           width: 230,
@@ -308,13 +324,13 @@ const generateInvoicePDFBuffer = (order) => {
 
       doc
         .fontSize(9.5)
-        .font("Helvetica-Bold")
+        .font("InvoiceFont")
         .fillColor(primaryColor)
         .text(customerName, 315, addressBoxY + 22, { width: 230, ellipsis: true });
 
       doc
         .fontSize(7.5)
-        .font("Helvetica")
+        .font("InvoiceFont")
         .fillColor(secondaryColor)
         .text(customerAddressLines || "Shipping address on file", 315, addressBoxY + 36, {
           width: 230,
@@ -324,7 +340,7 @@ const generateInvoicePDFBuffer = (order) => {
 
       doc
         .fontSize(8)
-        .font("Helvetica-Bold")
+        .font("InvoiceFont")
         .fillColor(primaryColor)
         .text("Ph no:", 315, addressBoxY + 71);
 

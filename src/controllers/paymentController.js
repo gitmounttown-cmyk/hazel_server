@@ -14,6 +14,7 @@ const Address = require("../models/addressModel");
 const Coupon = require("../models/couponModel");
 const Notification = require("../models/notificationModel");
 const VelocityShipment = require("../models/velocityShipmentModel");
+const {createOrUpdateGuestUser} = require("../utils/guestUserUtils");
 
 const {
   decreaseStockAfterPayment,
@@ -850,6 +851,55 @@ exports.verifyPayment = async (req, res) => {
     if (!orderItems || orderItems.length === 0) {
       throw new Error("No order items found.");
     }
+
+
+    // =====================================================
+    // CREATE / UPDATE GUEST USER
+    // =====================================================
+
+    let guestUser = null;
+
+    const effectiveGuestId =  guestId || payment.guestId || order.guestId;
+
+    if (!userId && !order.user && effectiveGuestId) {
+
+      const shipping = order.shippingAddress || {};
+      const billing = order.billingAddress || {};
+
+      guestUser = await createOrUpdateGuestUser({
+        guestId: effectiveGuestId,
+
+        name:
+          shipping.fullName ||
+          shipping.name ||
+          billing.fullName ||
+          billing.name ||
+          "",
+
+        mobileNumber:
+          shipping.mobileNumber ||
+          shipping.phone ||
+          billing.mobileNumber ||
+          billing.phone ||
+          "",
+
+        email:
+          shipping.email ||
+          billing.email ||
+          "",
+
+        session,
+      });
+
+      // Link guest User record with Order
+      order.user = guestUser._id;
+
+      console.log(
+        "Guest User linked with Order:",
+        guestUser._id
+      );
+    }
+
 
     // Decrease stock quantity on payment confirmation and sync Inventory
     const stockResult = await decreaseStockAfterPayment({
