@@ -161,3 +161,31 @@ exports.resendOTP = async (req, res) => {
     return res.status(500).json({ success: false, message: "Unable to resend OTP." });
   }
 };
+
+// Additional controller to get user details
+exports.getMe = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name || null,
+        mobileNumber: user.mobileNumber || null,
+        email: user.email || null,
+        role: user.role,
+        profileImage: user.profileImage || null,
+        isVerified: user.isVerified,
+        isActive: user.isActive,
+      },
+    });
+  } catch (error) {
+    console.error("GET ME CONTROLLER ERROR:", error);
+    return res.status(500).json({ success: false, message: "Unable to retrieve user details." });
+  }
+}

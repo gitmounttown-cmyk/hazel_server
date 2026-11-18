@@ -44,6 +44,11 @@ const updateUserProfile = async (req, res) => {
     if (name !== undefined) user.name = name;
     if (email !== undefined) user.email = email;
 
+    // Handle profile image upload
+    if (req.file) {
+      user.profileImage = `uploads/profiles/${req.file.filename}`; // Save the filename of the uploaded image
+    }
+
     await user.save();
 
     return res.status(200).json({
@@ -54,7 +59,9 @@ const updateUserProfile = async (req, res) => {
         name: user.name,
         mobileNumber: user.mobileNumber,
         email: user.email,
+        profileImage: user.profileImage || null,
         isVerified: user.isVerified,
+        isActive: user.isActive,
       },
     });
   } catch (error) {
