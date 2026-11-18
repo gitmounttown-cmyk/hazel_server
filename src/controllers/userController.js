@@ -59,6 +59,7 @@ const updateUserProfile = async (req, res) => {
         name: user.name,
         mobileNumber: user.mobileNumber,
         email: user.email,
+        role: user.role,
         profileImage: user.profileImage || null,
         isVerified: user.isVerified,
         isActive: user.isActive,
