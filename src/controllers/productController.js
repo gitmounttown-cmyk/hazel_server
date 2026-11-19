@@ -90,7 +90,7 @@ exports.getAllProducts = async (req, res) => {
 exports.getProductById = async (req, res) => {
   try {
     const { productId } = req.params;
-    const product = await Product.findById(productId)
+    const product = await Product.findById({ _id: productId,isActive: true, isDeleted: false })
       .populate("categoryId", "name")
       .populate("brandId", "name")
       .populate("sizeChartId");
@@ -106,6 +106,7 @@ exports.getProductById = async (req, res) => {
       categoryId: product.categoryId,
       brandId: product.brandId,
       _id: { $ne: product._id },
+      isActive: true,
       isDeleted: false,
     })
       .populate("categoryId")
